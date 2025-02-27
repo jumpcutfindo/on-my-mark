@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "on-my-mark",
+	"version": "${version}",
+	"name": "On My Mark",
+	"description": "Find and locate your friends more easily on your mark!",
+	"authors": [
+		"jumpcutfindo"
+	],
+	"contact": {
+		"homepage": "https://github.com/jumpcutfindo"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/modid/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.example.OnMyMarkMod"
+		],
+		"client": [
+			"com.example.OnMyMarkClient"
+		]
+	},
+	"mixins": [
+		"modid.mixins.json",
+		{
+			"config": "modid.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
