@@ -20,6 +20,7 @@
 			"com.jumpcutfindo.onmymark.network.ServerNetworkSender"
 		],
 		"client": [
+			"com.jumpcutfindo.onmymark.input.InputListener",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkReceiver",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkSender"
 		]

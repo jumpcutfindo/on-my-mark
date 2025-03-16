@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.party;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.exceptions.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -26,6 +27,8 @@ public class PartyManager {
         this.parties.add(party);
 
         partyLeader.setCurrentParty(party);
+
+        OnMyMarkMod.LOGGER.info("\"{}\" created a new party \"{}\"", partyLeader.displayName(), party.partyName());
 
         return party;
     }

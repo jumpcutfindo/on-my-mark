@@ -20,6 +20,7 @@ public class OnMyMarkMod implements ModInitializer {
 				.register(this::onServerStarted);
 
 		// Debugging stuff, remove after development is completed
+
 	}
 
 	public void onServerStarted(MinecraftServer server) {
