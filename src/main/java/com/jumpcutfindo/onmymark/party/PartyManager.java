@@ -27,6 +27,7 @@ public class PartyManager {
         this.parties.add(party);
 
         partyLeader.setCurrentParty(party);
+        party.addPartyMember(partyLeader);
 
         OnMyMarkMod.LOGGER.info("\"{}\" created a new party \"{}\"", partyLeader.displayName(), party.partyName());
 
