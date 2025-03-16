@@ -1,9 +1,8 @@
 package com.jumpcutfindo.onmymark.party;
 
-import java.util.UUID;
+import java.util.Objects;
 
 public class PartyInvite {
-    private UUID id;
     private Party party;
     private PartyMember from, to;
 
@@ -26,12 +25,13 @@ public class PartyInvite {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof PartyInvite pi) && this.id == pi.id;
+    public boolean equals(Object o) {
+        if (!(o instanceof PartyInvite that)) return false;
+        return Objects.equals(party, that.party) && Objects.equals(from, that.from) && Objects.equals(to, that.to);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hash(party, from, to);
     }
 }

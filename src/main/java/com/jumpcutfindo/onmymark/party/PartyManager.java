@@ -97,7 +97,7 @@ public class PartyManager {
         this.partyInvites.add(new PartyInvite(party, partyLeader, invitee));
     }
 
-    public void acceptInvite(UUID inviteId, ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
+    public void acceptInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
         PartyMember invitee = this.getOrCreate(player);
 
         Optional<PartyInvite> piOpt = this.partyInvites.stream()
@@ -105,7 +105,7 @@ public class PartyManager {
                 .findFirst();
 
         if (piOpt.isEmpty()) {
-            throw new PartyInviteNotFoundException(inviteId, invitee.displayName());
+            throw new PartyInviteNotFoundException(invitee.displayName());
         }
 
         PartyInvite partyInvite = piOpt.get();
@@ -114,7 +114,7 @@ public class PartyManager {
         this.addPlayerToParty(partyInvite.party().partyId(), partyInvite.from().player(), partyInvite.to().player());
     }
 
-    public void rejectInvite(UUID inviteId, ServerPlayerEntity player) throws PartyInviteNotFoundException {
+    public void rejectInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException {
         PartyMember invitee = this.getOrCreate(player);
 
         Optional<PartyInvite> piOpt = this.partyInvites.stream()
@@ -122,7 +122,7 @@ public class PartyManager {
                 .findFirst();
 
         if (piOpt.isEmpty()) {
-            throw new PartyInviteNotFoundException(inviteId, invitee.displayName());
+            throw new PartyInviteNotFoundException(invitee.displayName());
         }
 
         PartyInvite partyInvite = piOpt.get();
