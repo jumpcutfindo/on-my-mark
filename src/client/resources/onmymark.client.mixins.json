@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "com.example.mixin",
+	"package": "com.jumpcutfindo.onmymark.mixin.client",
 	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ExampleMixin"
+	"client": [
+		"OnMyMarkClientMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
