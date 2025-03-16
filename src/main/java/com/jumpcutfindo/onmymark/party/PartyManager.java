@@ -1,9 +1,6 @@
 package com.jumpcutfindo.onmymark.party;
 
-import com.jumpcutfindo.onmymark.exceptions.InvalidPartyPermissionsException;
-import com.jumpcutfindo.onmymark.exceptions.PartyNotFoundException;
-import com.jumpcutfindo.onmymark.exceptions.PlayerAlreadyInPartyException;
-import com.jumpcutfindo.onmymark.exceptions.RemovePartyLeaderException;
+import com.jumpcutfindo.onmymark.exceptions.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
@@ -17,12 +14,14 @@ public class PartyManager {
 
     private final List<PartyMember> partyMembers;
     private final List<Party> parties;
+    private final List<PartyInvite> partyInvites;
 
     public PartyManager(ServerWorld serverWorld) {
         this.serverWorld = serverWorld;
 
         this.partyMembers = new ArrayList<>();
         this.parties = new ArrayList<>();
+        this.partyInvites = new ArrayList<>();
     }
 
     public Party createParty(ServerPlayerEntity creator, String name) {
@@ -39,7 +38,7 @@ public class PartyManager {
     public void addPlayerToParty(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, PlayerAlreadyInPartyException {
         Party party = getPartyById(partyId);
 
-        PartyMember partyLeader = this.getOrCreate(player);
+        PartyMember partyLeader = this.getOrCreate(leader);
         if (!party.isPartyLeader(partyLeader)) {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
         }
@@ -88,6 +87,51 @@ public class PartyManager {
         if (party.partyMembers().isEmpty()) {
             this.disbandParty(party);
         }
+    }
+
+    public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException {
+        PartyMember partyLeader = this.getOrCreate(leader);
+        PartyMember invitee = this.getOrCreate(player);
+
+        Party party = this.getPartyById(partyId);
+
+        if (!party.isPartyLeader(partyLeader)) {
+            throw new InvalidPartyPermissionsException(partyLeader.displayName());
+        }
+
+        this.partyInvites.add(new PartyInvite(party, partyLeader, invitee));
+    }
+
+    public void acceptInvite(UUID inviteId, ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
+        PartyMember invitee = this.getOrCreate(player);
+
+        Optional<PartyInvite> piOpt = this.partyInvites.stream()
+                .filter(partyInvite -> partyInvite.to().equals(invitee))
+                .findFirst();
+
+        if (piOpt.isEmpty()) {
+            throw new PartyInviteNotFoundException(inviteId, invitee.displayName());
+        }
+
+        PartyInvite partyInvite = piOpt.get();
+        this.partyInvites.remove(partyInvite);
+
+        this.addPlayerToParty(partyInvite.party().partyId(), partyInvite.from().player(), partyInvite.to().player());
+    }
+
+    public void rejectInvite(UUID inviteId, ServerPlayerEntity player) throws PartyInviteNotFoundException {
+        PartyMember invitee = this.getOrCreate(player);
+
+        Optional<PartyInvite> piOpt = this.partyInvites.stream()
+                .filter(partyInvite -> partyInvite.to().equals(invitee))
+                .findFirst();
+
+        if (piOpt.isEmpty()) {
+            throw new PartyInviteNotFoundException(inviteId, invitee.displayName());
+        }
+
+        PartyInvite partyInvite = piOpt.get();
+        this.partyInvites.remove(partyInvite);
     }
 
     private void disbandParty(Party party) {
