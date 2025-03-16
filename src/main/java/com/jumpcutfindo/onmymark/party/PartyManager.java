@@ -71,6 +71,29 @@ public class PartyManager {
         partyMember.removeCurrentParty();
     }
 
+    public void leaveParty(ServerPlayerEntity player) {
+        PartyMember partyMember = this.getOrCreate(player);
+
+        if (partyMember.state() == PartyMember.State.AVAILABLE) {
+            // Party member wasn't in party, just return
+            return;
+        }
+
+        Party party = partyMember.currentParty();
+
+        party.removePartyMember(partyMember);
+        partyMember.removeCurrentParty();
+
+        // Disband party if there are no members left
+        if (party.partyMembers().isEmpty()) {
+            this.disbandParty(party);
+        }
+    }
+
+    private void disbandParty(Party party) {
+        this.parties.remove(party);
+    }
+
     public Party getPartyById(UUID partyId) throws PartyNotFoundException {
         Optional<Party> partyOpt = this.parties.stream()
                 .filter((party) -> party.partyId().equals(partyId))

@@ -23,6 +23,8 @@ public class PartyMember {
     }
 
     public void setCurrentParty(Party party) {
+        assert (party != null): "Use `PartyMember#removeCurrentParty` if you wish to remove the player's current party";
+
         this.currentParty = party;
         this.state = State.IN_PARTY;
     }

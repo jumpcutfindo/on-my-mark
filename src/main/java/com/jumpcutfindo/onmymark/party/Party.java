@@ -38,6 +38,13 @@ public class Party {
 
     public void removePartyMember(PartyMember partyMember) {
         this.partyMembers.remove(partyMember);
+
+        // Hand off party leadership to someone else
+        if (this.isPartyLeader(partyMember)) {
+            this.partyLeader = partyMembers.getFirst();
+
+            // TODO: Add handling of member states, e.g. player offline cannot get party leadership
+        }
     }
 
     public boolean isPartyLeader(PartyMember partyMember) {
