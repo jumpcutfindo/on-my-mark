@@ -150,10 +150,16 @@ public class PartyManager {
     }
 
     private PartyMember getOrCreate(ServerPlayerEntity player) {
-        Optional<PartyMember> partyMember = this.partyMembers.stream()
+        Optional<PartyMember> partyMemberOpt = this.partyMembers.stream()
                 .filter(pm -> pm.player().equals(player))
                 .findFirst();
 
-        return partyMember.orElseGet(() -> new PartyMember(player));
+        if (partyMemberOpt.isEmpty()) {
+            PartyMember partyMember = new PartyMember(player);
+            this.partyMembers.add(partyMember);
+            return partyMember;
+        } else {
+            return partyMemberOpt.get();
+        }
     }
 }
