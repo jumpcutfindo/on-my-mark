@@ -2,7 +2,6 @@ package com.jumpcutfindo.onmymark.party;
 
 import com.jumpcutfindo.onmymark.exceptions.*;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +9,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PartyManager {
-    private final ServerWorld serverWorld;
-
     private final List<PartyMember> partyMembers;
     private final List<Party> parties;
     private final List<PartyInvite> partyInvites;
 
-    public PartyManager(ServerWorld serverWorld) {
-        this.serverWorld = serverWorld;
-
+    public PartyManager() {
         this.partyMembers = new ArrayList<>();
         this.parties = new ArrayList<>();
         this.partyInvites = new ArrayList<>();
