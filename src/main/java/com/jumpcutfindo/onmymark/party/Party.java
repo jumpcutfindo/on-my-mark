@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.party;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,8 @@ public class Party {
 
         this.partyName = partyName;
         this.partyLeader = partyLeader;
+
+        this.partyMembers = new ArrayList<>();
     }
 
     public UUID partyId() {
@@ -40,7 +43,7 @@ public class Party {
         this.partyMembers.remove(partyMember);
 
         // Hand off party leadership to someone else
-        if (this.isPartyLeader(partyMember)) {
+        if (this.isPartyLeader(partyMember) && !this.partyMembers.isEmpty()) {
             this.partyLeader = partyMembers.getFirst();
 
             // TODO: Add handling of member states, e.g. player offline cannot get party leadership

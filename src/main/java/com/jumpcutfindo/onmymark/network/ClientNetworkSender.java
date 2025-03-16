@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -17,5 +18,9 @@ public class ClientNetworkSender implements ClientModInitializer {
         buffer.writeString(partyName);
 
         ClientPlayNetworking.send(new CreatePartyPacket(buffer));
+    }
+
+    public static void leaveParty() {
+        ClientPlayNetworking.send(new LeavePartyPacket(PacketByteBufs.create()));
     }
 }

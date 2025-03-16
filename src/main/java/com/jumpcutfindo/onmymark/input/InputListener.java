@@ -28,6 +28,7 @@ public class InputListener implements ClientModInitializer {
             if (client.player != null) {
                 while (DEBUG_BINDING.wasPressed()) {
                     ClientNetworkSender.createParty("New party name");
+                    ClientNetworkSender.leaveParty();
                 }
             }
         });

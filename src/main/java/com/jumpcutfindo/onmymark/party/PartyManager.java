@@ -82,9 +82,12 @@ public class PartyManager {
         party.removePartyMember(partyMember);
         partyMember.removeCurrentParty();
 
+        OnMyMarkMod.LOGGER.info("\"{}\" left party \"{}\"", partyMember.displayName(), party.partyName());
+
         // Disband party if there are no members left
         if (party.partyMembers().isEmpty()) {
             this.disbandParty(party);
+            OnMyMarkMod.LOGGER.info("\"{}\" was disbanded as last player left", party.partyName());
         }
     }
 

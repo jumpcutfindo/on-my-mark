@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -14,11 +15,18 @@ public class ServerNetworkReceiver implements ModInitializer {
     public void onInitialize() {
         // Register all receivers
         this.onCreateParty();
+        this.onLeaveParty();
     }
 
     private void onCreateParty() {
         this.registerAndHandle(CreatePartyPacket.PACKET_ID, CreatePartyPacket.PACKET_CODEC, (payload, context) -> {
             OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
+        });
+    }
+
+    private void onLeaveParty() {
+        this.registerAndHandle(LeavePartyPacket.PACKET_ID, LeavePartyPacket.PACKET_CODEC, (payload, context) -> {
+            OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
         });
     }
 
