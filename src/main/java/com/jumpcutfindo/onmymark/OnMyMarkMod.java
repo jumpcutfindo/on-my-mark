@@ -18,6 +18,8 @@ public class OnMyMarkMod implements ModInitializer {
 		ServerLifecycleEvents
 				.SERVER_STARTED
 				.register(this::onServerStarted);
+
+		// Debugging stuff, remove after development is completed
 	}
 
 	public void onServerStarted(MinecraftServer server) {

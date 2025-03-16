@@ -15,18 +15,17 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.jumpcutfindo.onmymark.OnMyMarkMod"
+			"com.jumpcutfindo.onmymark.OnMyMarkMod",
+			"com.jumpcutfindo.onmymark.network.ServerNetworkReceiver",
+			"com.jumpcutfindo.onmymark.network.ServerNetworkSender"
 		],
 		"client": [
-			"com.jumpcutfindo.onmymark.OnMyMarkClient"
+			"com.jumpcutfindo.onmymark.network.ClientNetworkReceiver",
+			"com.jumpcutfindo.onmymark.network.ClientNetworkSender"
 		]
 	},
 	"mixins": [
-      "onmymark.mixins.json",
-		{
-			"config": "onmymark.client.mixins.json",
-			"environment": "client"
-		}
+      "onmymark.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.10",
