@@ -23,7 +23,7 @@
 			"com.jumpcutfindo.onmymark.input.InputListener",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkReceiver",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkSender",
-			"com.jumpcutfindo.onmymark.graphics.MarkerDrawer"
+			"com.jumpcutfindo.onmymark.graphics.MarkerRenderer"
 		]
 	},
 	"mixins": [
