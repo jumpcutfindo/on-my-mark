@@ -20,10 +20,10 @@
 			"com.jumpcutfindo.onmymark.network.ServerNetworkSender"
 		],
 		"client": [
+			"com.jumpcutfindo.onmymark.client.OnMyMarkClientMod",
 			"com.jumpcutfindo.onmymark.input.InputListener",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkReceiver",
-			"com.jumpcutfindo.onmymark.network.ClientNetworkSender",
-			"com.jumpcutfindo.onmymark.graphics.MarkerRenderer"
+			"com.jumpcutfindo.onmymark.network.ClientNetworkSender"
 		]
 	},
 	"mixins": [

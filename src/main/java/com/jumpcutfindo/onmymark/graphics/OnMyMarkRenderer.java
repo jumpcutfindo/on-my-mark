@@ -1,11 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics;
 
-import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.utils.ObjectDrawer;
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -15,32 +11,17 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector4f;
 
-public class MarkerRenderer implements ClientModInitializer {
+public class OnMyMarkRenderer {
     private MinecraftClient client;
     private float fovMultiplier, lastFovMultiplier;
     
-    public MarkerRenderer() {
-        this.client = MinecraftClient.getInstance();
-
+    public OnMyMarkRenderer(MinecraftClient client) {
         this.fovMultiplier = 1.0f;
         this.lastFovMultiplier = 1.0f;
-    }
-    
-    @Override
-    public void onInitializeClient() {
-        // Register the marker drawer
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> 
-                layeredDrawer.attachLayerAfter(
-                        IdentifiedLayer.MISC_OVERLAYS,
-                        Identifier.of(OnMyMarkMod.MOD_ID, "marker_render_overlay"),
-                        this::render
-                )
-        );
     }
 
     /**
@@ -48,7 +29,7 @@ public class MarkerRenderer implements ClientModInitializer {
      * @param drawContext Draw context
      * @param tickCounter Tick counter
      */
-    private void render(DrawContext drawContext, RenderTickCounter tickCounter) {
+    public void render(DrawContext drawContext, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
 
         if (client.player == null || client.world == null) return;
