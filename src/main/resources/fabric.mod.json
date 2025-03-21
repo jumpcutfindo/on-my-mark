@@ -21,7 +21,6 @@
 		],
 		"client": [
 			"com.jumpcutfindo.onmymark.client.OnMyMarkClientMod",
-			"com.jumpcutfindo.onmymark.client.InputListener",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkReceiver",
 			"com.jumpcutfindo.onmymark.network.ClientNetworkSender"
 		]
