@@ -118,7 +118,7 @@ public class PartyManager {
         PartyInvite partyInvite = piOpt.get();
         this.partyInvites.remove(partyInvite);
 
-        this.addPlayerToParty(partyInvite.party().partyId(), partyInvite.from().player(), partyInvite.to().player());
+        this.addPlayerToParty(partyInvite.party().partyId(), (ServerPlayerEntity) partyInvite.from().player(), (ServerPlayerEntity) partyInvite.to().player());
     }
 
     public void rejectInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException {

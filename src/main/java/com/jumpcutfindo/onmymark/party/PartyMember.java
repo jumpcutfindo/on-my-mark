@@ -1,16 +1,15 @@
 package com.jumpcutfindo.onmymark.party;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Objects;
 
 public class PartyMember {
     private Party currentParty;
-    private ServerPlayerEntity player;
+    private PlayerEntity player;
     private PartyMember.State state;
 
-    public PartyMember(ServerPlayerEntity player) {
+    public PartyMember(PlayerEntity player) {
         this.player = player;
         this.state = State.AVAILABLE;
     }
