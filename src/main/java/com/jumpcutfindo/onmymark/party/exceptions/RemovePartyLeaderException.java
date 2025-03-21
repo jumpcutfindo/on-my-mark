@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.exceptions;
+package com.jumpcutfindo.onmymark.party.exceptions;
 
 public class RemovePartyLeaderException extends OnMyMarkException {
     public RemovePartyLeaderException(String playerName) {

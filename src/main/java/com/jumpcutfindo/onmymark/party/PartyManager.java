@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.party;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
-import com.jumpcutfindo.onmymark.exceptions.*;
+import com.jumpcutfindo.onmymark.party.exceptions.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;
