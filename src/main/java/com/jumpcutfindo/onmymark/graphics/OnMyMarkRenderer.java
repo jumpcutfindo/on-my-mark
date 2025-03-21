@@ -18,10 +18,13 @@ import org.joml.Vector4f;
 
 public class OnMyMarkRenderer {
     private MinecraftClient client;
+    private final ClientMarkerManager clientMarkerManager;
+
     private float fovMultiplier, lastFovMultiplier;
     
-    public OnMyMarkRenderer(MinecraftClient client) {
+    public OnMyMarkRenderer(MinecraftClient client, ClientMarkerManager clientMarkerManager) {
         this.client = client;
+        this.clientMarkerManager = clientMarkerManager;
 
         this.fovMultiplier = 1.0f;
         this.lastFovMultiplier = 1.0f;
@@ -32,7 +35,7 @@ public class OnMyMarkRenderer {
      * @param drawContext Draw context
      * @param tickCounter Tick counter
      */
-    public void render(ClientMarkerManager clientMarkerManager, DrawContext drawContext, RenderTickCounter tickCounter) {
+    public void render(DrawContext drawContext, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
 
         if (client.player == null || client.world == null) return;

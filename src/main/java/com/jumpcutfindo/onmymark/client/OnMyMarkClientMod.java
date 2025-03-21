@@ -17,8 +17,8 @@ public class OnMyMarkClientMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        this.renderer = new OnMyMarkRenderer(MinecraftClient.getInstance());
-        this.inputListener = new InputListener();
+        this.renderer = new OnMyMarkRenderer(MinecraftClient.getInstance(), clientMarkerManager);
+        this.inputListener = new InputListener(clientMarkerManager);
 
         this.clientMarkerManager = new ClientMarkerManager();
 
@@ -31,9 +31,7 @@ public class OnMyMarkClientMod implements ClientModInitializer {
                 layeredDrawer.attachLayerAfter(
                         IdentifiedLayer.MISC_OVERLAYS,
                         Identifier.of(OnMyMarkMod.MOD_ID, "render_overlay"),
-                        (drawContext, tickCounter) -> {
-                            renderer.render(clientMarkerManager, drawContext, tickCounter);
-                        }
+                        renderer::render
                 )
         );
     }

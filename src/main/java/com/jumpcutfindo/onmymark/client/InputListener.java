@@ -29,6 +29,12 @@ public class InputListener {
                 )
     );
 
+    private final ClientMarkerManager clientMarkerManager;
+
+    public InputListener(ClientMarkerManager clientMarkerManager) {
+        this.clientMarkerManager = clientMarkerManager;
+    }
+
     public void onInput(MinecraftClient client) {
         if (client.player != null) {
             while (DEBUG_BINDING.wasPressed()) {
@@ -38,7 +44,7 @@ public class InputListener {
 
             while (MARK_BINDING.wasPressed()) {
                 // TODO: Add cooldown to marking
-                InputHandler inputHandler = new OnPlayerMarkInputHandler();
+                InputHandler inputHandler = new OnPlayerMarkInputHandler(clientMarkerManager);
                 inputHandler.execute(client);
             }
         }

@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.party;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class PartyMember {
         this.state = State.AVAILABLE;
     }
 
-    public ServerPlayerEntity player() {
+    public PlayerEntity player() {
         return player;
     }
 

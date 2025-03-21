@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.input;
 
+import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -15,6 +16,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class OnPlayerMarkInputHandler implements InputHandler {
+    private final ClientMarkerManager clientMarkerManager;
+
+    public OnPlayerMarkInputHandler(ClientMarkerManager clientMarkerManager) {
+        this.clientMarkerManager = clientMarkerManager;
+    }
+    
     @Override
     public void execute(MinecraftClient client) {
         HitResult hitResult = findCrosshairTarget(client, client.getCameraEntity(), 1.0f);
@@ -22,6 +29,7 @@ public class OnPlayerMarkInputHandler implements InputHandler {
         if (hitResult.getType() == HitResult.Type.ENTITY) {
             EntityHitResult entityHitResult = (EntityHitResult) hitResult;
             Entity entity = entityHitResult.getEntity();
+
             System.out.println(entity.getDisplayName());
         } else if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
