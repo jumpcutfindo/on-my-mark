@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.input;
+package com.jumpcutfindo.onmymark.client;
 
 
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
