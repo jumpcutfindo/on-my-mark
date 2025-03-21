@@ -17,10 +17,10 @@ public class OnMyMarkClientMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        this.clientMarkerManager = new ClientMarkerManager();
+
         this.renderer = new OnMyMarkRenderer(MinecraftClient.getInstance(), clientMarkerManager);
         this.inputListener = new InputListener(clientMarkerManager);
-
-        this.clientMarkerManager = new ClientMarkerManager();
 
         this.registerRenderer();
         this.registerInputListener();

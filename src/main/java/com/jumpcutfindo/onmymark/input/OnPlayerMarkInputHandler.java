@@ -1,9 +1,13 @@
 package com.jumpcutfindo.onmymark.input;
 
 import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
+import com.jumpcutfindo.onmymark.marker.BlockMarker;
+import com.jumpcutfindo.onmymark.marker.EntityMarker;
+import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -24,6 +28,7 @@ public class OnPlayerMarkInputHandler implements InputHandler {
     
     @Override
     public void execute(MinecraftClient client) {
+        AbstractClientPlayerEntity clientPlayer = client.player;
         HitResult hitResult = findCrosshairTarget(client, client.getCameraEntity(), 1.0f);
 
         if (hitResult.getType() == HitResult.Type.ENTITY) {
@@ -31,6 +36,9 @@ public class OnPlayerMarkInputHandler implements InputHandler {
             Entity entity = entityHitResult.getEntity();
 
             System.out.println(entity.getDisplayName());
+
+            // TODO: Change this so that the party member is some instance
+            clientMarkerManager.addMarker(new EntityMarker(new PartyMember(clientPlayer), entity));
         } else if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
             BlockPos blockPos = blockHitResult.getBlockPos();
@@ -40,6 +48,9 @@ public class OnPlayerMarkInputHandler implements InputHandler {
             BlockState blockState = client.world.getBlockState(blockPos);
             Block block = blockState.getBlock();
             System.out.println(block.getName());
+
+            // TODO: Change this so that the party member is some instance
+            clientMarkerManager.addMarker(new BlockMarker(new PartyMember(clientPlayer), blockPos, blockState));
         } else if (hitResult.getType() == HitResult.Type.MISS) {
             System.out.println("lol you missed");
         }

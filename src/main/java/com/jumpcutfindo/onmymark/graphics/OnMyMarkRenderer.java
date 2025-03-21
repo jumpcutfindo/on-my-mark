@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.graphics;
 import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.graphics.utils.ObjectDrawer;
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
+import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -46,16 +47,15 @@ public class OnMyMarkRenderer {
         // Update the FOV multiplier every render tick
         this.updateFovMultiplier();
 
-        // TODO: Implement handling of markers and drawing of markers
+        // Render only if available
+        if (clientMarkerManager == null) return;
 
-        // FIXME: Remove this debug example
-        // Example world position
-        Vec3d worldPos = new Vec3d(-67.5, 86, -33.5);
-        float fovMultiplier = this.getFov(camera, tickCounter.getTickDelta(true));
-
-        Vector4f screenPos = RenderMath.worldToScreenPos(client, worldPos, fovMultiplier);
-
-        ObjectDrawer.drawTriangle(drawContext, screenPos.x(), screenPos.y(), 30, 0xFF0000FF);
+        for (Marker marker : clientMarkerManager.markers()) {
+            Vec3d worldPos = marker.getExactPosition();
+            float fovMultiplier = this.getFov(camera, tickCounter.getTickDelta(true));
+            Vector4f screenPos = RenderMath.worldToScreenPos(client, worldPos, fovMultiplier);
+            ObjectDrawer.drawTriangle(drawContext, screenPos.x(), screenPos.y(), 30, 0xFF0000FF);
+        }
     }
 
     /**
