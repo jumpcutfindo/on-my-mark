@@ -12,6 +12,10 @@ public class EntityMarker extends Marker {
         this.entity = entity;
     }
 
+    public Entity entity() {
+        return entity;
+    }
+
     @Override
     public Vec3d getExactPosition() {
         return entity.getPos();

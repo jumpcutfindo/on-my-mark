@@ -1,8 +1,11 @@
 package com.jumpcutfindo.onmymark.graphics;
 
 import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
-import com.jumpcutfindo.onmymark.graphics.utils.ObjectDrawer;
-import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
+import com.jumpcutfindo.onmymark.graphics.markers.BlockMarkerRenderer;
+import com.jumpcutfindo.onmymark.graphics.markers.EntityMarkerRenderer;
+import com.jumpcutfindo.onmymark.graphics.markers.MarkerRenderer;
+import com.jumpcutfindo.onmymark.marker.BlockMarker;
+import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
@@ -14,18 +17,23 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import org.joml.Vector4f;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class OnMyMarkRenderer {
     private MinecraftClient client;
     private final ClientMarkerManager clientMarkerManager;
+
+    private final Map<Marker, MarkerRenderer> markerRendererMap;
 
     private float fovMultiplier, lastFovMultiplier;
     
     public OnMyMarkRenderer(MinecraftClient client, ClientMarkerManager clientMarkerManager) {
         this.client = client;
         this.clientMarkerManager = clientMarkerManager;
+
+        this.markerRendererMap = new HashMap<>();
 
         this.fovMultiplier = 1.0f;
         this.lastFovMultiplier = 1.0f;
@@ -38,11 +46,10 @@ public class OnMyMarkRenderer {
      */
     public void render(DrawContext drawContext, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
+        Camera camera = client.gameRenderer.getCamera();
 
         if (client.player == null || client.world == null) return;
         else this.client = client;
-
-        Camera camera = client.gameRenderer.getCamera();
 
         // Update the FOV multiplier every render tick
         this.updateFovMultiplier();
@@ -51,17 +58,46 @@ public class OnMyMarkRenderer {
         if (clientMarkerManager == null) return;
 
         for (Marker marker : clientMarkerManager.markers()) {
-            Vec3d worldPos = marker.getExactPosition();
-            float fovMultiplier = this.getFov(camera, tickCounter.getTickDelta(true));
+            MarkerRenderer markerRenderer = this.getOrCreateRenderer(marker);
 
-            Vector4f screenPos = RenderMath.worldToScreenPos(client, worldPos, fovMultiplier);
-
-            // Render current marker only if screen pos was provided
-            if (screenPos == null) continue;
+            if (markerRenderer == null) continue;
             else {
-                ObjectDrawer.drawTriangle(drawContext, screenPos.x(), screenPos.y(), 30, 0xFF0000FF);
+                float tickDelta = tickCounter.getTickDelta(false);
+                float fovMultiplier = this.getFov(camera, tickCounter.getTickDelta(true));
+
+                // Update the marker's position and stuff
+                markerRenderer.renderTick(tickDelta, fovMultiplier);
+
+                if (markerRenderer.shouldDraw()) {
+                    markerRenderer.draw(drawContext);
+                }
             }
         }
+    }
+
+    private MarkerRenderer getOrCreateRenderer(Marker marker) {
+        MarkerRenderer renderer = this.markerRendererMap.get(marker);
+
+        if (renderer != null) {
+            return renderer;
+        }
+
+        MarkerRenderer newRenderer = null;
+        if (marker instanceof BlockMarker blockMarker) {
+            newRenderer = new BlockMarkerRenderer(client, blockMarker);
+            this.markerRendererMap.put(marker, newRenderer);
+
+
+        } else if (marker instanceof EntityMarker entityMarker) {
+            newRenderer = new EntityMarkerRenderer(client, entityMarker);
+            this.markerRendererMap.put(marker, newRenderer);
+        }
+
+        if (newRenderer == null) {
+            System.err.println("Unexpected state; did you handle all different possible markers?");
+        }
+
+        return newRenderer;
     }
 
     /**
