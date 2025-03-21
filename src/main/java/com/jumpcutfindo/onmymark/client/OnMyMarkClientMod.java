@@ -9,10 +9,12 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
 public class OnMyMarkClientMod implements ClientModInitializer {
+    private ClientMarkerManager clientMarkerManager;
     private OnMyMarkRenderer renderer;
 
     @Override
     public void onInitializeClient() {
+        this.clientMarkerManager = new ClientMarkerManager();
         this.renderer = new OnMyMarkRenderer(MinecraftClient.getInstance());
 
         this.registerRenderer();
@@ -23,7 +25,9 @@ public class OnMyMarkClientMod implements ClientModInitializer {
                 layeredDrawer.attachLayerAfter(
                         IdentifiedLayer.MISC_OVERLAYS,
                         Identifier.of(OnMyMarkMod.MOD_ID, "render_overlay"),
-                        renderer::render
+                        (drawContext, tickCounter) -> {
+                            renderer.render(clientMarkerManager, drawContext, tickCounter);
+                        }
                 )
         );
     }

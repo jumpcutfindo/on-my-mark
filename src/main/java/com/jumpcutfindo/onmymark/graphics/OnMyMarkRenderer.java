@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.graphics;
 
+import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.graphics.utils.ObjectDrawer;
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
 import net.minecraft.block.enums.CameraSubmersionType;
@@ -31,7 +32,7 @@ public class OnMyMarkRenderer {
      * @param drawContext Draw context
      * @param tickCounter Tick counter
      */
-    public void render(DrawContext drawContext, RenderTickCounter tickCounter) {
+    public void render(ClientMarkerManager clientMarkerManager, DrawContext drawContext, RenderTickCounter tickCounter) {
         MinecraftClient client = MinecraftClient.getInstance();
 
         if (client.player == null || client.world == null) return;
