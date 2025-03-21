@@ -53,8 +53,14 @@ public class OnMyMarkRenderer {
         for (Marker marker : clientMarkerManager.markers()) {
             Vec3d worldPos = marker.getExactPosition();
             float fovMultiplier = this.getFov(camera, tickCounter.getTickDelta(true));
+
             Vector4f screenPos = RenderMath.worldToScreenPos(client, worldPos, fovMultiplier);
-            ObjectDrawer.drawTriangle(drawContext, screenPos.x(), screenPos.y(), 30, 0xFF0000FF);
+
+            // Render current marker only if screen pos was provided
+            if (screenPos == null) continue;
+            else {
+                ObjectDrawer.drawTriangle(drawContext, screenPos.x(), screenPos.y(), 30, 0xFF0000FF);
+            }
         }
     }
 

@@ -28,7 +28,7 @@ public class RenderMath {
 
         // Perspective divide
         // If w is negative, is behind player
-        if (vec.w <= 0) return new Vector4f();
+        if (vec.w <= 0) return null;
 
         vec.x /= vec.w;
         vec.y /= vec.w;
