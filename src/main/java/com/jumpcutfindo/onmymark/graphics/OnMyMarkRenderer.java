@@ -20,6 +20,8 @@ public class OnMyMarkRenderer {
     private float fovMultiplier, lastFovMultiplier;
     
     public OnMyMarkRenderer(MinecraftClient client) {
+        this.client = client;
+
         this.fovMultiplier = 1.0f;
         this.lastFovMultiplier = 1.0f;
     }
