@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.graphics.markers;
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector4f;
 
@@ -17,11 +18,23 @@ public abstract class MarkerRenderer {
         this.prevScreenPos = null;
     }
 
-    public void renderTick(float tickDelta, float fovMultiplier) {
+    public void renderTick(float tickDelta, float fovDegrees) {
         prevScreenPos = screenPos;
 
         Vec3d markerPos = this.getMarkerWorldPos();
-        screenPos = RenderMath.worldToScreenPos(client, markerPos, fovMultiplier);
+        Vector4f newScreenPos = RenderMath.worldToScreenPos(client, markerPos, fovDegrees);
+
+        if (newScreenPos == null || prevScreenPos == null) {
+            screenPos = newScreenPos;
+            return;
+        }
+
+        screenPos = new Vector4f(
+                MathHelper.lerp(tickDelta, prevScreenPos.x(), newScreenPos.x()),
+                MathHelper.lerp(tickDelta, prevScreenPos.y(), newScreenPos.y()),
+                MathHelper.lerp(tickDelta, prevScreenPos.z(), newScreenPos.z()),
+                MathHelper.lerp(tickDelta, prevScreenPos.w(), newScreenPos.w())
+        );
     }
 
     public boolean shouldDraw() {
