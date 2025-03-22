@@ -18,7 +18,7 @@ public abstract class MarkerRenderer {
         this.prevScreenPos = null;
     }
 
-    public void renderTick(float tickDelta, float fovDegrees) {
+    public void renderTick(float tickDelta, float fovDegrees, boolean isFovChanging) {
         prevScreenPos = screenPos;
 
         Vec3d markerPos = this.getMarkerWorldPos();
