@@ -63,10 +63,10 @@ public class OnMyMarkRenderer {
             if (markerRenderer == null) continue;
             else {
                 float tickDelta = tickCounter.getTickDelta(false);
-                float fovMultiplier = this.getFov(camera, tickCounter.getTickDelta(true));
+                float fov = this.getFov(camera, tickCounter.getTickDelta(true));
 
                 // Update the marker's position and stuff
-                markerRenderer.renderTick(tickDelta, fovMultiplier);
+                markerRenderer.renderTick(tickDelta, fov);
 
                 if (markerRenderer.shouldDraw()) {
                     markerRenderer.draw(drawContext);
