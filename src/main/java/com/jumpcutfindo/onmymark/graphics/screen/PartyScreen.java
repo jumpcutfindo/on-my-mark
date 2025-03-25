@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.graphics.screen;
 
+import com.jumpcutfindo.onmymark.graphics.screen.components.IconButton;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyMemberListView;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -10,6 +11,7 @@ public class PartyScreen extends OnMyMarkScreen {
     private int x, y;
 
     private PartyMemberListView partyMemberListView;
+    private IconButton createPartyButton, leavePartyButton;
 
     private Party party;
 
@@ -26,6 +28,9 @@ public class PartyScreen extends OnMyMarkScreen {
 
         // Recreate the relevant views
         this.partyMemberListView = new PartyMemberListView(this, this.party, x, y);
+
+        this.createPartyButton = new IconButton(this, x + 137, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
+        this.leavePartyButton = new IconButton(this, x + 155, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
     }
 
     @Override
@@ -37,6 +42,20 @@ public class PartyScreen extends OnMyMarkScreen {
         if (this.partyMemberListView != null) {
             this.partyMemberListView.renderBackground(context, mouseX, mouseY);
             this.partyMemberListView.renderItems(context, mouseX, mouseY);
+        }
+
+        this.drawButtons(context, mouseX, mouseY);
+    }
+
+    private void drawButtons(DrawContext context, int mouseX, int mouseY) {
+        // Render buttons
+        this.createPartyButton.render(context, mouseX, mouseY, 0);
+        this.leavePartyButton.render(context, mouseX, mouseY, 0);
+
+        // Render button tooltips
+        if (!this.isWindowOpen()) {
+            this.createPartyButton.renderTooltip(context, mouseX, mouseY, 0);
+            this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
         }
     }
 
@@ -73,5 +92,13 @@ public class PartyScreen extends OnMyMarkScreen {
 
     private boolean isMouseInList(double mouseX, double mouseY) {
         return ScreenUtils.isWithin(mouseX, mouseY, this.x, this.y, this.partyMemberListView.getWidth(), this.partyMemberListView.getHeight());
+    }
+
+    private void onCreateParty() {
+
+    }
+
+    private void onLeaveParty() {
+
     }
 }
