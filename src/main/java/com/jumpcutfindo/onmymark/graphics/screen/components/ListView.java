@@ -53,13 +53,13 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         this.selectedIndices = new HashSet<>();
     }
 
-    protected ListView<T> setPosition(int x, int y) {
+    public ListView<T> setPosition(int x, int y) {
         this.x = x;
         this.y = y;
         return this;
     }
 
-    protected ListView<T> setTexture(Identifier texture, int textureWidth, int textureHeight, int u, int v, int width, int height) {
+    public ListView<T> setTexture(Identifier texture, int textureWidth, int textureHeight, int u, int v, int width, int height) {
         this.texture = texture;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
@@ -70,13 +70,13 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         return this;
     }
 
-    protected ListView<T> setListPosition(int x, int y) {
+    public ListView<T> setListPosition(int x, int y) {
         this.listX = x;
         this.listY = y;
         return this;
     }
 
-    protected ListView<T> setScrollbar(int x, int y, int u, int v, int width, int height) {
+    public ListView<T> setScrollbar(int x, int y, int u, int v, int width, int height) {
         this.scrollbarX = x;
         this.scrollbarY = y;
         this.scrollbarU = u;
@@ -86,7 +86,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         return this;
     }
 
-    protected ListView<T> setList(List<T> listItems, int maxItems) {
+    public ListView<T> setList(List<T> listItems, int maxItems) {
         this.listItems = listItems;
         this.maxItems = maxItems;
         this.visibleItems = new ArrayList<>();
@@ -95,7 +95,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         return this;
     }
 
-    protected ListView<T> setSingleSelect(boolean isSingleSelect) {
+    public ListView<T> setSingleSelect(boolean isSingleSelect) {
         this.isSingleSelect = isSingleSelect;
         return this;
     }

@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.client;
 
 
+import com.jumpcutfindo.onmymark.graphics.screen.PartyScreen;
 import com.jumpcutfindo.onmymark.input.InputHandler;
 import com.jumpcutfindo.onmymark.input.OnPlayerMarkInputHandler;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
@@ -55,6 +56,10 @@ public class InputListener {
                 // TODO: Add cooldown to marking
                 InputHandler inputHandler = new OnPlayerMarkInputHandler(clientMarkerManager);
                 inputHandler.execute(client);
+            }
+
+            while (GUI_BINDING.wasPressed()) {
+                client.setScreen(new PartyScreen());
             }
         }
     }

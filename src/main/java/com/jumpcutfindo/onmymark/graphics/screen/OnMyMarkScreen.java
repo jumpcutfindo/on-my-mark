@@ -15,7 +15,7 @@ import org.lwjgl.glfw.GLFW;
  * Mod specific screen that introduces some helper methods for use throughout the application.
  * Adds support for Windows that can be added on top of the existing interface.
  */
-public class OnMyMarkScreen extends Screen {
+public abstract class OnMyMarkScreen extends Screen {
     OnMyMarkWindow activeWindow;
     boolean isStandalone;
 
