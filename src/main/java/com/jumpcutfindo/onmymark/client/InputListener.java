@@ -11,6 +11,15 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 public class InputListener {
+    public static final KeyBinding GUI_BINDING = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding(
+                    "key.onmymark.party",
+                    InputUtil.Type.KEYSYM,
+                    GLFW.GLFW_KEY_O,
+                    "category.onmymark.keybinds"
+            )
+    );
+
     private static final KeyBinding MARK_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
                     "key.onmymark.mark",
