@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics.screen;
 
 import com.jumpcutfindo.onmymark.graphics.screen.components.IconButton;
+import com.jumpcutfindo.onmymark.graphics.screen.party.CreatePartyWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyMemberListView;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -35,8 +36,6 @@ public class PartyScreen extends OnMyMarkScreen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-
         this.drawBackgroundGradient(context);
 
         if (this.partyMemberListView != null) {
@@ -45,6 +44,8 @@ public class PartyScreen extends OnMyMarkScreen {
         }
 
         this.drawButtons(context, mouseX, mouseY);
+
+        super.render(context, mouseX, mouseY, delta);
     }
 
     private void drawButtons(DrawContext context, int mouseX, int mouseY) {
@@ -61,11 +62,16 @@ public class PartyScreen extends OnMyMarkScreen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (isWindowOpen()) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+
         if (isMouseInList(mouseX, mouseY)) {
             return this.partyMemberListView.mouseClicked((int) mouseX, (int) mouseY, button);
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button)
+                || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
     }
 
     @Override
@@ -91,11 +97,11 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     private boolean isMouseInList(double mouseX, double mouseY) {
-        return ScreenUtils.isWithin(mouseX, mouseY, this.x, this.y, this.partyMemberListView.getWidth(), this.partyMemberListView.getHeight());
+        return ScreenUtils.isWithin(mouseX, mouseY, this.x + 7, this.y + 25, this.x + 189, this.y + 171);
     }
 
     private void onCreateParty() {
-
+        this.setActiveWindow(new CreatePartyWindow(this));
     }
 
     private void onLeaveParty() {
