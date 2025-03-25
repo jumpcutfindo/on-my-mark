@@ -1,6 +1,8 @@
 package com.jumpcutfindo.onmymark.graphics.screen;
 
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyMemberListView;
+import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
+import com.jumpcutfindo.onmymark.party.Party;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
@@ -9,8 +11,12 @@ public class PartyScreen extends OnMyMarkScreen {
 
     private PartyMemberListView partyMemberListView;
 
-    public PartyScreen() {
+    private Party party;
+
+    public PartyScreen(Party party) {
         super(Text.translatable("onmymark.party.title"));
+
+        this.party = party;
     }
 
     @Override
@@ -19,7 +25,7 @@ public class PartyScreen extends OnMyMarkScreen {
         this.y = (this.height - 178) / 2;
 
         // Recreate the relevant views
-        this.partyMemberListView = new PartyMemberListView(this, null, x, y);
+        this.partyMemberListView = new PartyMemberListView(this, this.party, x, y);
     }
 
     @Override
@@ -32,5 +38,40 @@ public class PartyScreen extends OnMyMarkScreen {
             this.partyMemberListView.renderBackground(context, mouseX, mouseY);
             this.partyMemberListView.renderItems(context, mouseX, mouseY);
         }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (isMouseInList(mouseX, mouseY)) {
+            return this.partyMemberListView.mouseClicked((int) mouseX, (int) mouseY, button);
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (isMouseInList(mouseX, mouseY)) {
+            return this.partyMemberListView.mouseDragged((int) mouseX, (int) mouseY, button, deltaX, deltaY);
+        }
+
+        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (isMouseInList(mouseX, mouseY)) {
+            return this.partyMemberListView.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+    }
+
+    public void setParty(Party party) {
+        this.party = party;
+    }
+
+    private boolean isMouseInList(double mouseX, double mouseY) {
+        return ScreenUtils.isWithin(mouseX, mouseY, this.x, this.y, this.partyMemberListView.getWidth(), this.partyMemberListView.getHeight());
     }
 }

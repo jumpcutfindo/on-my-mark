@@ -17,7 +17,7 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
     public PartyMemberListItem(OnMyMarkScreen screen, PartyMember partyMember, int index) {
         super(screen, partyMember, index);
 
-        this.setBackground(TEXTURE, 0, 178, 180, 16, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        this.setBackground(TEXTURE, 0, 178, 180, 18, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
         this.item = partyMember;
         this.index = index;
@@ -26,7 +26,7 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
     @Override
     public void renderContent(DrawContext context, int x, int y, int mouseX, int mouseY) {
         String displayName = this.item.displayName();
-        context.drawText(this.screen.getTextRenderer(), Text.literal(StringUtils.truncatedName(displayName, 14)), (x + 19), (y + 5), 8453920, false);
+        context.drawText(this.screen.getTextRenderer(), Text.literal(StringUtils.truncatedName(displayName, 14)), (x + 6), (y + 5), index % 2 == 0 ? 0xFF000000 : 0xFFFF0000, false);
     }
 
     @Override

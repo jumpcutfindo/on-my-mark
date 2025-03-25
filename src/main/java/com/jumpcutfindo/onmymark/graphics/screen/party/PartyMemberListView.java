@@ -17,11 +17,17 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
     protected static final int TEXTURE_WIDTH = 256;
     protected static final int TEXTURE_HEIGHT = 256;
 
+    private static final int MAX_ITEMS = 8;
+
+    private Party party;
+
     private int titleX, titleY;
     private Text title;
 
     public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
         super(screen);
+
+        this.party = party;
 
         this.title = Text.of("Hello world");
         this.titleX = 7;
@@ -30,8 +36,8 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
         this.setPosition(x, y)
                 .setTexture(TEXTURE, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0, 0, 216, 178)
                 .setListPosition(8, 26)
-                .setScrollbar(139, 26, 160, 0, 14, 144)
-                .setList(createItems(screen, party), 8)
+                .setScrollbar(195, 26, 216, 0, 14, 144)
+                .setList(createItems(screen, party), MAX_ITEMS)
                 .setSingleSelect(true);
     }
 
@@ -60,6 +66,13 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
     @Override
     public boolean charTyped(char chr, int modifiers) {
         return false;
+    }
+
+    public void setParty(Party party) {
+        this.party = party;
+
+        // Update list of items
+        this.setList(createItems(this.screen, party), MAX_ITEMS);
     }
 
     private static List<PartyMemberListItem> createItems(OnMyMarkScreen screen, Party party) {
