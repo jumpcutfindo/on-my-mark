@@ -1,10 +1,29 @@
 package com.jumpcutfindo.onmymark.network;
 
+import com.jumpcutfindo.onmymark.client.ClientPartyManager;
+import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
+import com.jumpcutfindo.onmymark.graphics.screen.PartyScreen;
+import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
+import com.jumpcutfindo.onmymark.party.Party;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class ClientNetworkReceiver implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        onPartyInfo();
+    }
 
+    public static void onPartyInfo() {
+        ClientPlayNetworking.registerGlobalReceiver(PartyInfoPacket.PACKET_ID, ((partyInfoPacket, context) -> {
+            ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
+            Party party = partyInfoPacket.toParty(context.player().getWorld());
+            partyManager.setParty(party);
+
+            // Update screen if the player is looking
+            if (context.client().currentScreen instanceof PartyScreen partyScreen) {
+                partyScreen.setParty(party);
+            }
+        }));
     }
 }

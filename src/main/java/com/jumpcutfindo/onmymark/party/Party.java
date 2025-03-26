@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Party {
-    private final UUID partyId;
+    private UUID partyId;
     private String partyName;
     private PartyMember partyLeader;
     private List<PartyMember> partyMembers;
@@ -17,6 +17,13 @@ public class Party {
         this.partyLeader = partyLeader;
 
         this.partyMembers = new ArrayList<>();
+    }
+
+    public static Party withPartyId(UUID partyId, String partyName, PartyMember partyLeader) {
+        Party party = new Party(partyName, partyLeader);
+        party.partyId = partyId;
+
+        return party;
     }
 
     public UUID partyId() {

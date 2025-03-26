@@ -5,8 +5,6 @@ import com.jumpcutfindo.onmymark.graphics.screen.PartyScreen;
 import com.jumpcutfindo.onmymark.input.InputHandler;
 import com.jumpcutfindo.onmymark.input.OnPlayerMarkInputHandler;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
-import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
@@ -41,9 +39,11 @@ public class InputListener {
                 )
     );
 
+    private final ClientPartyManager clientPartyManager;
     private final ClientMarkerManager clientMarkerManager;
 
-    public InputListener(ClientMarkerManager clientMarkerManager) {
+    public InputListener(ClientPartyManager clientPartyManager, ClientMarkerManager clientMarkerManager) {
+        this.clientPartyManager = clientPartyManager;
         this.clientMarkerManager = clientMarkerManager;
     }
 
@@ -61,15 +61,7 @@ public class InputListener {
             }
 
             while (GUI_BINDING.wasPressed()) {
-                // TODO: Remove this sample set of players
-                PartyMember exampleMember = new PartyMember(MinecraftClient.getInstance().player);
-                Party party = new Party("Some party name", exampleMember);
-                for (int i = 0; i < 20; i++) {
-                    PartyMember newMember = new PartyMember(MinecraftClient.getInstance().player);
-                    party.addPartyMember(newMember);
-                }
-
-                client.setScreen(new PartyScreen(party));
+                client.setScreen(new PartyScreen(clientPartyManager.party()));
             }
         }
     }

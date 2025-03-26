@@ -3,12 +3,16 @@ package com.jumpcutfindo.onmymark.network;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
+import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 public class ServerNetworkReceiver implements ModInitializer {
     @Override
@@ -20,7 +24,10 @@ public class ServerNetworkReceiver implements ModInitializer {
 
     private void onCreateParty() {
         this.registerAndHandle(CreatePartyPacket.PACKET_ID, CreatePartyPacket.PACKET_CODEC, (payload, context) -> {
-            OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
+            Party party = OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
+
+            sendMessageToParty(party, String.format("Created party with name \"%s\"", party.partyName()));
+            syncPartyInfo(party);
         });
     }
 
@@ -28,6 +35,18 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.registerAndHandle(LeavePartyPacket.PACKET_ID, LeavePartyPacket.PACKET_CODEC, (payload, context) -> {
             OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
         });
+    }
+
+    private void syncPartyInfo(Party party) {
+        for (PartyMember partyMember : party.partyMembers()) {
+            ServerNetworkSender.sendPartyInfo((ServerPlayerEntity) partyMember.player(), party);
+        }
+    }
+
+    private void sendMessageToParty(Party party, String message) {
+        for (PartyMember partyMember : party.partyMembers()) {
+            partyMember.player().sendMessage(Text.literal(message), false);
+        }
     }
 
     /**

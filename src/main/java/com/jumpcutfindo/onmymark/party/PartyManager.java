@@ -69,12 +69,12 @@ public class PartyManager {
         partyMember.removeCurrentParty();
     }
 
-    public void leaveParty(ServerPlayerEntity player) {
+    public Party leaveParty(ServerPlayerEntity player) {
         PartyMember partyMember = this.getOrCreate(player);
 
         if (partyMember.state() == PartyMember.State.AVAILABLE) {
             // Party member wasn't in party, just return
-            return;
+            return null;
         }
 
         Party party = partyMember.currentParty();
@@ -88,7 +88,10 @@ public class PartyManager {
         if (party.partyMembers().isEmpty()) {
             this.disbandParty(party);
             OnMyMarkMod.LOGGER.info("\"{}\" was disbanded as last player left", party.partyName());
+            return null;
         }
+
+        return party;
     }
 
     public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException {
