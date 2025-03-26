@@ -12,7 +12,7 @@ public class PartyScreen extends OnMyMarkScreen {
     private int x, y;
 
     private PartyMemberListView partyMemberListView;
-    private IconButton createPartyButton, leavePartyButton;
+    private IconButton createPartyButton, leavePartyButton, invitePlayerButton;
 
     private Party party;
 
@@ -32,6 +32,7 @@ public class PartyScreen extends OnMyMarkScreen {
 
         this.createPartyButton = new IconButton(this, x + 192, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
         this.leavePartyButton = new IconButton(this, x + 192, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
+        this.invitePlayerButton = new IconButton(this, x + 174, y + 6, 32, 16, this::onInvitePlayer, Text.translatable("onmymark.menu.invitePlayer.tooltip"));
     }
 
     @Override
@@ -53,6 +54,7 @@ public class PartyScreen extends OnMyMarkScreen {
         if (this.party == null) {
             this.createPartyButton.render(context, mouseX, mouseY, 0);
         } else {
+            this.invitePlayerButton.render(context, mouseX, mouseY, 0);
             this.leavePartyButton.render(context, mouseX, mouseY, 0);
         }
 
@@ -61,6 +63,7 @@ public class PartyScreen extends OnMyMarkScreen {
             if (this.party == null) {
                 this.createPartyButton.renderTooltip(context, mouseX, mouseY, 0);
             } else {
+                this.invitePlayerButton.renderTooltip(context, mouseX, mouseY, 0);
                 this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
             }
         }
@@ -79,7 +82,7 @@ public class PartyScreen extends OnMyMarkScreen {
         if (this.party == null) {
             return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
         } else {
-            return this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+            return this.invitePlayerButton.mouseClicked((int) mouseX, (int) mouseY, button) || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
         }
     }
 
@@ -117,5 +120,10 @@ public class PartyScreen extends OnMyMarkScreen {
 
     private void onLeaveParty() {
         ClientNetworkSender.leaveParty();
+    }
+
+    private void onInvitePlayer() {
+        // TODO: Implement window and selection of player to add
+        System.out.println("Inviting player!");
     }
 }
