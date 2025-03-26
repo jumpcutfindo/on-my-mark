@@ -14,24 +14,24 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class CreatePartyWindow extends OnMyMarkWindow {
-    public static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/create_party_window.png");
+public class InvitePlayerWindow extends OnMyMarkWindow {
+    public static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/invite_player_window.png");
     public static final int TEXTURE_WIDTH = 256, TEXTURE_HEIGHT = 256;
 
     public static final int WINDOW_WIDTH = 138, WINDOW_HEIGHT = 92;
 
-    private final TextFieldWidget partyNameField;
+    private final TextFieldWidget playerNameField;
     private final OnMyMarkButton submitButton;
 
-    public CreatePartyWindow(OnMyMarkScreen screen) {
-        super(screen, Text.translatable("onmymark.menu.createParty.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT, screen.getWindowX(WINDOW_WIDTH), screen.getWindowY(WINDOW_HEIGHT));
+    public InvitePlayerWindow(OnMyMarkScreen screen) {
+        super(screen, Text.translatable("onmymark.menu.invitePlayer.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT, screen.getWindowX(WINDOW_WIDTH), screen.getWindowY(WINDOW_HEIGHT));
 
         // Create text field
-        this.partyNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("onmymark.menu.createParty.textWidget"));
-        this.partyNameField.setMaxLength(20);
-        this.partyNameField.setEditableColor(16777215);
+        this.playerNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("onmymark.menu.invitePlayer.textWidget"));
+        this.playerNameField.setMaxLength(20);
+        this.playerNameField.setEditableColor(16777215);
 
-        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.createParty.submitButton"), (widget) -> {
+        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.invitePlayer.submitButton"), (widget) -> {
             this.createParty();
             this.screen.setActiveWindow(null);
         });
@@ -47,11 +47,11 @@ public class CreatePartyWindow extends OnMyMarkWindow {
         context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
 
         // Party name entry
-        context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.createParty.title"), (x + this.titleX), (y + 25), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.invitePlayer.title"), (x + this.titleX), (y + 25), 0x404040, false);
 
-        this.partyNameField.setX(x + 7);
-        this.partyNameField.setY(y + 36);
-        this.partyNameField.render(context, mouseX, mouseY, 0);
+        this.playerNameField.setX(x + 7);
+        this.playerNameField.setY(y + 36);
+        this.playerNameField.render(context, mouseX, mouseY, 0);
 
         // Button rendering
         this.submitButton.setX(x + 67);
@@ -59,7 +59,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
         this.submitButton.render(context, mouseX, mouseY, 0);
         this.submitButton.active = this.isValidInput();
 
-        this.partyNameField.setFocused(true);
+        this.playerNameField.setFocused(true);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         return super.mouseClicked(mouseX, mouseY, button)
-                || this.partyNameField.mouseClicked(mouseX, mouseY, button)
+                || this.playerNameField.mouseClicked(mouseX, mouseY, button)
                 || this.submitButton.mouseClicked(mouseX, mouseY, button);
     }
 
@@ -86,24 +86,24 @@ public class CreatePartyWindow extends OnMyMarkWindow {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return this.partyNameField.keyPressed(keyCode, scanCode, modifiers);
+        return this.playerNameField.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     public boolean charTyped(char chr, int modifiers) {
-        return this.partyNameField.charTyped(chr, modifiers);
+        return this.playerNameField.charTyped(chr, modifiers);
     }
 
     @Override
     public List<ClickableWidget> getWidgets() {
-        return List.of(this.partyNameField, this.submitButton);
+        return List.of(this.playerNameField, this.submitButton);
     }
 
     private boolean isValidInput() {
-        return !this.partyNameField.getText().isEmpty() || !this.partyNameField.getText().isBlank();
+        return !this.playerNameField.getText().isEmpty() || !this.playerNameField.getText().isBlank();
     }
 
     private void createParty() {
-        ClientNetworkSender.createParty(this.partyNameField.getText());
+        ClientNetworkSender.inviteToParty(this.playerNameField.getText());
     }
 }

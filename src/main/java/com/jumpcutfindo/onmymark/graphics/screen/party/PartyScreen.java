@@ -123,7 +123,6 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     private void onInvitePlayer() {
-        // TODO: Implement window and selection of player to add
-        System.out.println("Inviting player!");
+        this.setActiveWindow(new InvitePlayerWindow(this));
     }
 }
