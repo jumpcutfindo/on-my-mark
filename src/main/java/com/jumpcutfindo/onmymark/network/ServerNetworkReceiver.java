@@ -2,9 +2,13 @@ package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsException;
+import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -12,6 +16,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
 public class ServerNetworkReceiver implements ModInitializer {
@@ -20,6 +25,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         // Register all receivers
         this.onCreateParty();
         this.onLeaveParty();
+        this.onInviteToParty();
     }
 
     private void onCreateParty() {
@@ -41,6 +47,47 @@ public class ServerNetworkReceiver implements ModInitializer {
                 sendMessageToPlayer(context.player(), "As the last player left the party, the party has been disbanded.");
             } else {
                 syncPartyInfo(party);
+            }
+        });
+    }
+
+    private void onInviteToParty() {
+        this.registerAndHandle(InviteToPartyPacket.PACKET_ID, InviteToPartyPacket.PACKET_CODEC, (payload, context) -> {
+            // Find the player if they exist in any world
+            ServerPlayerEntity invitee = null;
+            for (ServerWorld world : context.server().getWorlds()) {
+                for (ServerPlayerEntity player : world.getPlayers()) {
+                    if (player.getName().getLiteralString().equals(payload.playerName())) {
+                        invitee = player;
+                        break;
+                    }
+                }
+
+                if (invitee != null) break;
+            }
+
+            if (invitee == null) {
+                sendMessageToPlayer(context.player(), "Unable to find the specified player");
+                ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
+                return;
+            }
+
+            try {
+                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                OnMyMarkMod.PARTY_MANAGER.createInvite(party.partyId(), context.player(), invitee);
+
+                // Inform the requester of the result
+                ServerNetworkSender.sendInviteToPartyResponse(context.player(), true);
+                sendMessageToPlayer(context.player(), String.format("An invitation has been sent to %s", invitee.getName().getLiteralString()));
+
+                // Inform invitee of invitation
+
+            } catch (PartyNotFoundException e) {
+                sendMessageToPlayer(context.player(), "Unable to perform that action as you are not in a party");
+                ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
+            } catch (InvalidPartyPermissionsException e) {
+                sendMessageToPlayer(context.player(), "Unable to perform that action as you do not have valid permissions");
+                ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             }
         });
     }

@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.network;
 import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
+import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
 import com.jumpcutfindo.onmymark.network.packets.RemovePartyInfoPacket;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -14,6 +15,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
     public void onInitializeClient() {
         onPartyInfo();
         onRemovePartyInfo();
+        onInviteToPartyResponse();
     }
 
     public static void onPartyInfo() {
@@ -38,6 +40,12 @@ public class ClientNetworkReceiver implements ClientModInitializer {
             if (context.client().currentScreen instanceof PartyScreen partyScreen) {
                 partyScreen.setParty(null);
             }
+        }));
+    }
+
+    public static void onInviteToPartyResponse() {
+        ClientPlayNetworking.registerGlobalReceiver(InviteToPartyResponsePacket.PACKET_ID, ((inviteToPartyResponsePacket, context) -> {
+            // TODO: Update window to close if invite was successful; if not, maybe show error?
         }));
     }
 }

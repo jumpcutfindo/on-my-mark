@@ -1,5 +1,7 @@
 package com.jumpcutfindo.onmymark.network;
 
+import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
 import com.jumpcutfindo.onmymark.network.packets.RemovePartyInfoPacket;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -18,6 +20,7 @@ public class ServerNetworkSender implements ModInitializer {
     private static void initializeSenders() {
         PayloadTypeRegistry.playS2C().register(PartyInfoPacket.PACKET_ID, PartyInfoPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(RemovePartyInfoPacket.PACKET_ID, RemovePartyInfoPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(InviteToPartyResponsePacket.PACKET_ID, InviteToPartyResponsePacket.PACKET_CODEC);
     }
 
     public static void sendPartyInfo(ServerPlayerEntity player, Party party) {
@@ -26,5 +29,11 @@ public class ServerNetworkSender implements ModInitializer {
 
     public static void removePartyInfo(ServerPlayerEntity player) {
         ServerPlayNetworking.send(player, new RemovePartyInfoPacket(PacketByteBufs.create()));
+    }
+
+    public static void sendInviteToPartyResponse(ServerPlayerEntity player, boolean isSuccessful) {
+        ServerPlayNetworking.send(player,
+                isSuccessful ? InviteToPartyResponsePacket.successful() : InviteToPartyResponsePacket.unsuccessful()
+        );
     }
 }
