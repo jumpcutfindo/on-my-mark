@@ -33,7 +33,15 @@ public class ServerNetworkReceiver implements ModInitializer {
 
     private void onLeaveParty() {
         this.registerAndHandle(LeavePartyPacket.PACKET_ID, LeavePartyPacket.PACKET_CODEC, (payload, context) -> {
-            OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
+            Party party = OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
+
+            sendMessageToPlayer(context.player(), "You have left the party.");
+            removePartyInfo(context.player());
+            if (party == null) {
+                sendMessageToPlayer(context.player(), "As the last player left the party, the party has been disbanded.");
+            } else {
+                syncPartyInfo(party);
+            }
         });
     }
 
@@ -41,6 +49,14 @@ public class ServerNetworkReceiver implements ModInitializer {
         for (PartyMember partyMember : party.partyMembers()) {
             ServerNetworkSender.sendPartyInfo((ServerPlayerEntity) partyMember.player(), party);
         }
+    }
+
+    private void removePartyInfo(ServerPlayerEntity player) {
+        ServerNetworkSender.removePartyInfo(player);
+    }
+
+    private void sendMessageToPlayer(ServerPlayerEntity player, String message) {
+        player.sendMessage(Text.literal(message));
     }
 
     private void sendMessageToParty(Party party, String message) {

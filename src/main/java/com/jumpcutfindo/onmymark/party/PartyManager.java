@@ -72,11 +72,6 @@ public class PartyManager {
     public Party leaveParty(ServerPlayerEntity player) {
         PartyMember partyMember = this.getOrCreate(player);
 
-        if (partyMember.state() == PartyMember.State.AVAILABLE) {
-            // Party member wasn't in party, just return
-            return null;
-        }
-
         Party party = partyMember.currentParty();
 
         party.removePartyMember(partyMember);
@@ -153,6 +148,10 @@ public class PartyManager {
         }
 
         return partyOpt.get();
+    }
+
+    public Party getPartyOfPlayer(ServerPlayerEntity player) throws PartyNotFoundException {
+        return this.getOrCreate(player).currentParty();
     }
 
     private PartyMember getOrCreate(ServerPlayerEntity player) {
