@@ -2,7 +2,7 @@ package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
-import com.jumpcutfindo.onmymark.graphics.screen.PartyScreen;
+import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
 import com.jumpcutfindo.onmymark.network.packets.RemovePartyInfoPacket;
 import com.jumpcutfindo.onmymark.party.Party;

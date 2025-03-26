@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.client;
 
 
-import com.jumpcutfindo.onmymark.graphics.screen.PartyScreen;
+import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.input.InputHandler;
 import com.jumpcutfindo.onmymark.input.OnPlayerMarkInputHandler;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;

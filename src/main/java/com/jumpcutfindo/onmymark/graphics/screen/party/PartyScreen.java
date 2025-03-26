@@ -1,8 +1,7 @@
-package com.jumpcutfindo.onmymark.graphics.screen;
+package com.jumpcutfindo.onmymark.graphics.screen.party;
 
+import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.IconButton;
-import com.jumpcutfindo.onmymark.graphics.screen.party.CreatePartyWindow;
-import com.jumpcutfindo.onmymark.graphics.screen.party.PartyMemberListView;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -18,7 +17,7 @@ public class PartyScreen extends OnMyMarkScreen {
     private Party party;
 
     public PartyScreen(Party party) {
-        super(Text.translatable("onmymark.party.title"));
+        super(party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.menu.modName"));
 
         this.party = party;
     }
@@ -31,8 +30,8 @@ public class PartyScreen extends OnMyMarkScreen {
         // Recreate the relevant views
         this.partyMemberListView = new PartyMemberListView(this, this.party, x, y);
 
-        this.createPartyButton = new IconButton(this, x + 137, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
-        this.leavePartyButton = new IconButton(this, x + 155, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
+        this.createPartyButton = new IconButton(this, x + 192, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
+        this.leavePartyButton = new IconButton(this, x + 192, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
     }
 
     @Override
@@ -51,13 +50,19 @@ public class PartyScreen extends OnMyMarkScreen {
 
     private void drawButtons(DrawContext context, int mouseX, int mouseY) {
         // Render buttons
-        this.createPartyButton.render(context, mouseX, mouseY, 0);
-        this.leavePartyButton.render(context, mouseX, mouseY, 0);
+        if (this.party == null) {
+            this.createPartyButton.render(context, mouseX, mouseY, 0);
+        } else {
+            this.leavePartyButton.render(context, mouseX, mouseY, 0);
+        }
 
         // Render button tooltips
         if (!this.isWindowOpen()) {
-            this.createPartyButton.renderTooltip(context, mouseX, mouseY, 0);
-            this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
+            if (this.party == null) {
+                this.createPartyButton.renderTooltip(context, mouseX, mouseY, 0);
+            } else {
+                this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
+            }
         }
     }
 
@@ -71,8 +76,11 @@ public class PartyScreen extends OnMyMarkScreen {
             return this.partyMemberListView.mouseClicked((int) mouseX, (int) mouseY, button);
         }
 
-        return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button)
-                || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+        if (this.party == null) {
+            return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+        } else {
+            return this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+        }
     }
 
     @Override
@@ -95,6 +103,7 @@ public class PartyScreen extends OnMyMarkScreen {
 
     public void setParty(Party party) {
         this.party = party;
+        this.partyMemberListView.setParty(party);
     }
 
     private boolean isMouseInList(double mouseX, double mouseY) {
