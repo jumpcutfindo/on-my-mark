@@ -18,7 +18,8 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
+import net.minecraft.util.Formatting;
 
 public class ServerNetworkReceiver implements ModInitializer {
     @Override
@@ -82,6 +83,8 @@ public class ServerNetworkReceiver implements ModInitializer {
                 sendMessageToPlayer(context.player(), String.format("An invitation has been sent to %s", invitee.getName().getLiteralString()));
 
                 // Inform invitee of invitation
+                ServerNetworkSender.sendInvitationRequest(invitee, party);
+                invitee.sendMessage(Text.literal(String.format("%s has invited you to join their party!", context.player().getName().getLiteralString())));
 
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), "Unable to perform that action as you are not in a party");

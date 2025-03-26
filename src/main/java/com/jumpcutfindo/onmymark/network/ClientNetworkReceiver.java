@@ -5,6 +5,7 @@ import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
+import com.jumpcutfindo.onmymark.network.packets.PartyInvitationRequestPacket;
 import com.jumpcutfindo.onmymark.network.packets.RemovePartyInfoPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import net.fabricmc.api.ClientModInitializer;
@@ -16,6 +17,8 @@ public class ClientNetworkReceiver implements ClientModInitializer {
         onPartyInfo();
         onRemovePartyInfo();
         onInviteToPartyResponse();
+
+        onPartyInvitation();
     }
 
     public static void onPartyInfo() {
@@ -47,5 +50,11 @@ public class ClientNetworkReceiver implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(InviteToPartyResponsePacket.PACKET_ID, ((inviteToPartyResponsePacket, context) -> {
             // TODO: Update window to close if invite was successful; if not, maybe show error?
         }));
+    }
+
+    public static void onPartyInvitation() {
+        ClientPlayNetworking.registerGlobalReceiver(PartyInvitationRequestPacket.PACKET_ID, (packet, context) -> {
+            // TODO: Implement storing of this invite somewhere
+        });
     }
 }
