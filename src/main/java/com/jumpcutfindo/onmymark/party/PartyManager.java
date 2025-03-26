@@ -89,7 +89,7 @@ public class PartyManager {
         return party;
     }
 
-    public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException {
+    public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, ExistingInviteException {
         PartyMember partyLeader = this.getOrCreate(leader);
         PartyMember invitee = this.getOrCreate(player);
 
@@ -97,6 +97,10 @@ public class PartyManager {
 
         if (!party.isPartyLeader(partyLeader)) {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
+        }
+
+        if (this.hasExistingInvite(invitee)) {
+            throw new ExistingInviteException(invitee.displayName());
         }
 
         this.partyInvites.add(new PartyInvite(party, partyLeader, invitee));
@@ -121,17 +125,29 @@ public class PartyManager {
 
     public void rejectInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException {
         PartyMember invitee = this.getOrCreate(player);
+        PartyInvite existingInvite = this.getInviteOfInvitee(invitee);
 
+        if (existingInvite == null) {
+            throw new PartyInviteNotFoundException(invitee.displayName());
+        }
+
+        this.partyInvites.remove(existingInvite);
+    }
+
+    private PartyInvite getInviteOfInvitee(PartyMember invitee) {
         Optional<PartyInvite> piOpt = this.partyInvites.stream()
                 .filter(partyInvite -> partyInvite.to().equals(invitee))
                 .findFirst();
 
-        if (piOpt.isEmpty()) {
-            throw new PartyInviteNotFoundException(invitee.displayName());
-        }
+        return piOpt.orElse(null);
+    }
 
-        PartyInvite partyInvite = piOpt.get();
-        this.partyInvites.remove(partyInvite);
+    public boolean hasExistingInvite(PartyMember invitee) {
+        Optional<PartyInvite> piOpt = this.partyInvites.stream()
+                .filter(partyInvite -> partyInvite.to().equals(invitee))
+                .findFirst();
+
+        return piOpt.isPresent();
     }
 
     private void disbandParty(Party party) {

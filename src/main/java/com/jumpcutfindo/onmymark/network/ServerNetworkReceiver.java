@@ -7,6 +7,7 @@ import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.party.exceptions.ExistingInviteException;
 import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsException;
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import net.fabricmc.api.ModInitializer;
@@ -87,6 +88,9 @@ public class ServerNetworkReceiver implements ModInitializer {
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             } catch (InvalidPartyPermissionsException e) {
                 sendMessageToPlayer(context.player(), "Unable to perform that action as you do not have valid permissions");
+                ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
+            } catch (ExistingInviteException e) {
+                sendMessageToPlayer(context.player(), "The player already has a pending invite to another party");
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             }
         });
