@@ -54,6 +54,6 @@ public class PartyInvitationRequestPacket implements CustomPayload {
 
     @Override
     public Id<? extends CustomPayload> getId() {
-        return null;
+        return PACKET_ID;
     }
 }
