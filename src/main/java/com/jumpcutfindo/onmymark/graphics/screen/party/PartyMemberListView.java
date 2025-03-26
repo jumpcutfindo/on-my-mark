@@ -29,7 +29,7 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
 
         this.party = party;
 
-        this.title = party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.menu.modName");
+        this.title = party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.modName");
         this.titleX = 7;
         this.titleY = 10;
 
@@ -72,7 +72,7 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
         this.party = party;
 
         // Update list of items
-        this.title = party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.menu.modName");
+        this.title = party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.modName");
         this.setList(createItems(this.screen, party), MAX_ITEMS);
     }
 

@@ -17,7 +17,7 @@ public class PartyScreen extends OnMyMarkScreen {
     private Party party;
 
     public PartyScreen(Party party) {
-        super(party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.menu.modName"));
+        super(party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.modName"));
 
         this.party = party;
     }

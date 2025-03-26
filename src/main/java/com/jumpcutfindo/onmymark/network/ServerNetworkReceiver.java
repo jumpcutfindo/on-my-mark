@@ -7,6 +7,7 @@ import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.party.exceptions.AlreadyInPartyException;
 import com.jumpcutfindo.onmymark.party.exceptions.ExistingInviteException;
 import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsException;
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
@@ -34,7 +35,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.registerAndHandle(CreatePartyPacket.PACKET_ID, CreatePartyPacket.PACKET_CODEC, (payload, context) -> {
             Party party = OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
 
-            sendMessageToParty(party, String.format("Created party with name \"%s\"", party.partyName()));
+            sendMessageToParty(party, Text.translatable("onmymark.action.onCreateParty", party.partyName()));
             syncPartyInfo(party);
         });
     }
@@ -43,10 +44,11 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.registerAndHandle(LeavePartyPacket.PACKET_ID, LeavePartyPacket.PACKET_CODEC, (payload, context) -> {
             Party party = OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
 
-            sendMessageToPlayer(context.player(), "You have left the party.");
+            sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.self"));
+            sendMessageToParty(party, Text.translatable("onmymark.action.onOtherPlayerLeaveParty.other", context.player().getName()));
             removePartyInfo(context.player());
             if (party == null) {
-                sendMessageToPlayer(context.player(), "As the last player left the party, the party has been disbanded.");
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.disbanded"));
             } else {
                 syncPartyInfo(party);
             }
@@ -69,7 +71,7 @@ public class ServerNetworkReceiver implements ModInitializer {
             }
 
             if (invitee == null) {
-                sendMessageToPlayer(context.player(), "Unable to find the specified player");
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.playerNotFound"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
                 return;
             }
@@ -80,20 +82,23 @@ public class ServerNetworkReceiver implements ModInitializer {
 
                 // Inform the requester of the result
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), true);
-                sendMessageToPlayer(context.player(), String.format("An invitation has been sent to %s", invitee.getName().getLiteralString()));
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.successful", invitee.getName().getLiteralString()));
 
                 // Inform invitee of invitation
                 ServerNetworkSender.sendInvitationRequest(invitee, party);
-                invitee.sendMessage(Text.literal(String.format("%s has invited you to join their party!", context.player().getName().getLiteralString())));
+                sendMessageToPlayer(invitee, Text.translatable("onmymark.action.onInviteToParty.gotInvited", context.player().getName()));
 
             } catch (PartyNotFoundException e) {
-                sendMessageToPlayer(context.player(), "Unable to perform that action as you are not in a party");
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.invalidParty"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             } catch (InvalidPartyPermissionsException e) {
-                sendMessageToPlayer(context.player(), "Unable to perform that action as you do not have valid permissions");
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.invalidPermissions"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             } catch (ExistingInviteException e) {
-                sendMessageToPlayer(context.player(), "The player already has a pending invite to another party");
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.existingInvite"));
+                ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
+            } catch (AlreadyInPartyException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.alreadyInParty"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             }
         });
@@ -109,13 +114,13 @@ public class ServerNetworkReceiver implements ModInitializer {
         ServerNetworkSender.removePartyInfo(player);
     }
 
-    private void sendMessageToPlayer(ServerPlayerEntity player, String message) {
-        player.sendMessage(Text.literal(message));
+    private void sendMessageToPlayer(ServerPlayerEntity player, Text message) {
+        player.sendMessage(message);
     }
 
-    private void sendMessageToParty(Party party, String message) {
+    private void sendMessageToParty(Party party, Text message) {
         for (PartyMember partyMember : party.partyMembers()) {
-            partyMember.player().sendMessage(Text.literal(message), false);
+            partyMember.player().sendMessage(message, false);
         }
     }
 

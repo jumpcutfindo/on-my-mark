@@ -1,0 +1,29 @@
+{
+  "onmymark.modName": "On My Mark",
+
+  "onmymark.menu.createParty.tooltip": "Create a party",
+  "onmymark.menu.leaveParty.tooltip": "Leave party",
+  "onmymark.menu.invitePlayer.tooltip": "Invite a player",
+
+  "onmymark.menu.createParty.windowTitle": "Create a party",
+  "onmymark.menu.createParty.partyNameLabel": "Party name",
+  "onmymark.menu.createParty.textWidget": "Party name field",
+  "onmymark.menu.createParty.submitButton": "Create",
+  "onmymark.menu.invitePlayer.windowTitle": "Invite a player",
+  "onmymark.menu.invitePlayer.playerNameLabel": "Player name",
+  "onmymark.menu.invitePlayer.textWidget": "Player name field",
+  "onmymark.menu.invitePlayer.submitButton": "Invite",
+
+  "onmymark.action.onCreatedParty": "Created party \"%s\"",
+  "onmymark.action.onLeaveParty.self": "You have left the party",
+  "onmymark.action.onLeaveParty.other": "%s has left the party",
+  "onmymark.action.onLeaveParty.disbanded": "As the last player left the party, the party has been disbanded",
+
+  "onmymark.action.onInviteToParty.successful": "An invitation has been sent to %s",
+  "onmymark.action.onInviteToParty.gotInvited": "%s has invited you to join their party",
+  "onmymark.action.onInviteToParty.playerNotFound": "Unable to find the specified player",
+  "onmymark.action.onInviteToParty.invalidParty": "Unable to perform that action as you are not in a party",
+  "onmymark.action.onInviteToParty.invalidPermissions": "Unable to perform that action as you do not have valid permissions",
+  "onmymark.action.onInviteToParty.existingInvite": "The player already has a pending invite to another party",
+  "onmymark.action.onInviteToParty.alreadyInParty": "The specified player is already in your party"
+}

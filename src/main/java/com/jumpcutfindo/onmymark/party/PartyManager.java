@@ -89,7 +89,7 @@ public class PartyManager {
         return party;
     }
 
-    public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, ExistingInviteException {
+    public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, ExistingInviteException, AlreadyInPartyException {
         PartyMember partyLeader = this.getOrCreate(leader);
         PartyMember invitee = this.getOrCreate(player);
 
@@ -97,6 +97,10 @@ public class PartyManager {
 
         if (!party.isPartyLeader(partyLeader)) {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
+        }
+
+        if (invitee.currentParty().equals(party)) {
+            throw new AlreadyInPartyException(invitee.displayName());
         }
 
         if (this.hasExistingInvite(invitee)) {

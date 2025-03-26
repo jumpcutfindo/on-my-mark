@@ -24,7 +24,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
     private final OnMyMarkButton submitButton;
 
     public CreatePartyWindow(OnMyMarkScreen screen) {
-        super(screen, Text.translatable("onmymark.menu.createParty.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT, screen.getWindowX(WINDOW_WIDTH), screen.getWindowY(WINDOW_HEIGHT));
+        super(screen, getStyledTitle(Text.translatable("onmymark.menu.createParty.windowTitle")), WINDOW_WIDTH, WINDOW_HEIGHT, screen.getWindowX(WINDOW_WIDTH), screen.getWindowY(WINDOW_HEIGHT));
 
         // Create text field
         this.partyNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("onmymark.menu.createParty.textWidget"));
@@ -47,7 +47,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
         context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
 
         // Party name entry
-        context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.createParty.title"), (x + this.titleX), (y + 25), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.createParty.partyNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
 
         this.partyNameField.setX(x + 7);
         this.partyNameField.setY(y + 36);

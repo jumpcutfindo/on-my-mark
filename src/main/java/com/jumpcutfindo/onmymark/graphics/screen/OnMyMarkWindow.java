@@ -4,7 +4,10 @@ import com.jumpcutfindo.onmymark.graphics.screen.components.Interactable;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 
 import java.util.List;
 
@@ -82,5 +85,9 @@ public abstract class OnMyMarkWindow implements Interactable {
 
     private void renderBackgroundGradient(DrawContext context) {
         screen.drawBackgroundGradient(context);
+    }
+
+    protected static Text getStyledTitle(MutableText text) {
+        return text.styled((style) -> style.withBold(true));
     }
 }
