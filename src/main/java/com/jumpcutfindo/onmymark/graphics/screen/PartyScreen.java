@@ -4,6 +4,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.components.IconButton;
 import com.jumpcutfindo.onmymark.graphics.screen.party.CreatePartyWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyMemberListView;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
+import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -101,10 +102,11 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     private void onCreateParty() {
+        // Delegate action to the window
         this.setActiveWindow(new CreatePartyWindow(this));
     }
 
     private void onLeaveParty() {
-
+        ClientNetworkSender.leaveParty();
     }
 }

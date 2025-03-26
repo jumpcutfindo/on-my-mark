@@ -4,6 +4,7 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.components.OnMyMarkButton;
+import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -103,7 +104,6 @@ public class CreatePartyWindow extends OnMyMarkWindow {
     }
 
     private void createParty() {
-        OnMyMarkMod.LOGGER.info("Created party with name \"{}\"", this.partyNameField.getText());
-        // TODO: Implement party creation logic
+        ClientNetworkSender.createParty(this.partyNameField.getText());
     }
 }
