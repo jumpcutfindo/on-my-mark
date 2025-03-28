@@ -4,8 +4,10 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
+import com.jumpcutfindo.onmymark.graphics.screen.utils.SoundUtils;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.StringUtils;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderLayer;
@@ -42,7 +44,7 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
         if (this.item.isPartyLeader()) {
             int displayNameWidth = this.screen.getTextRenderer().getWidth(displayName);
             int partyLeaderCrownX = x + displayNameWidth + 19, partyLeaderCrownY = y;
-            context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, partyLeaderCrownX, partyLeaderCrownY, 0, 196, 16, 16, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+            context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, partyLeaderCrownX, partyLeaderCrownY, 180, 178, 16, 16, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
             if (
                     !this.screen.isWindowOpen()
@@ -50,13 +52,23 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
             ) {
                 context.drawTooltip(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.party.partyLeader"), mouseX, mouseY);
             }
-        } else {
-
         }
     }
 
     @Override
+    public void renderSelectedBackground(DrawContext context, int x, int y, int mouseX, int mouseY) {
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 196, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+    }
+
+    @Override
     public boolean mouseClicked(int x, int y, double mouseX, double mouseY) {
+        if (ScreenUtils.isWithin(mouseX, mouseY, x, y, this.width, this.height)) {
+            this.isSelected = !this.isSelected;
+            SoundUtils.playClickSound(MinecraftClient.getInstance().getSoundManager());
+            return true;
+        }
+
+
         return false;
     }
 
