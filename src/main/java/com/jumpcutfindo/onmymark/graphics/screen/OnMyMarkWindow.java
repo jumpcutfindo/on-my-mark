@@ -5,9 +5,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
 
 import java.util.List;
 
@@ -18,9 +16,9 @@ public abstract class OnMyMarkWindow implements Interactable {
     protected Text title;
     protected int titleX, titleY;
 
-    public OnMyMarkWindow(OnMyMarkScreen screen, Text title, int width, int height, int x, int y) {
+    public OnMyMarkWindow(OnMyMarkScreen screen, MutableText title, int width, int height) {
         this.screen = screen;
-        this.title = title;
+        this.title = getStyledTitle(title);
 
         this.titleX = 7;
         this.titleY = 9;
@@ -28,12 +26,11 @@ public abstract class OnMyMarkWindow implements Interactable {
         this.width = width;
         this.height = height;
 
-        this.x = x;
-        this.y = y;
+        this.x = screen.getWindowX(width);
+        this.y = screen.getWindowY(height);
     }
 
     public void render(DrawContext context, int mouseX, int mouseY) {
-        this.renderBackgroundGradient(context);
         this.renderBackground(context);
         this.renderContent(context, mouseX, mouseY);
     }
@@ -59,14 +56,25 @@ public abstract class OnMyMarkWindow implements Interactable {
         return height;
     }
 
-    public abstract void renderBackground(DrawContext context);
-    public abstract void renderContent(DrawContext context, int mouseX, int mouseY);
+    public void renderBackground(DrawContext context) {
+        this.renderBackgroundGradient(context);
+    }
 
-    public abstract void tick();
+    public void renderContent(DrawContext context, int mouseX, int mouseY) {
+        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
+    }
 
-    public abstract boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount);
+    public void tick() {
 
-    public abstract boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY);
+    }
+
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        return false;
+    }
+
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        return false;
+    }
 
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         if (!ScreenUtils.isWithin(mouseX, mouseY, x, y, width, height)) {
@@ -77,9 +85,13 @@ public abstract class OnMyMarkWindow implements Interactable {
         return false;
     }
 
-    public abstract boolean keyPressed(int keyCode, int scanCode, int modifiers);
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return false;
+    }
 
-    public abstract boolean charTyped(char chr, int modifiers);
+    public boolean charTyped(char chr, int modifiers) {
+        return false;
+    }
 
     public abstract List<ClickableWidget> getWidgets();
 
@@ -87,7 +99,7 @@ public abstract class OnMyMarkWindow implements Interactable {
         screen.drawBackgroundGradient(context);
     }
 
-    protected static Text getStyledTitle(MutableText text) {
+    private static Text getStyledTitle(MutableText text) {
         return text.styled((style) -> style.withBold(true));
     }
 }

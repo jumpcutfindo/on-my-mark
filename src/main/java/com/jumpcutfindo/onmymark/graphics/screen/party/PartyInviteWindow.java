@@ -18,7 +18,6 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 public class PartyInviteWindow extends OnMyMarkWindow {
-
     public static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/party_invitation_window.png");
     public static final int TEXTURE_WIDTH = 256, TEXTURE_HEIGHT = 256;
 
@@ -28,7 +27,7 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     private final PartyInvite partyInvite;
 
     public PartyInviteWindow(OnMyMarkScreen screen, PartyInvite partyInvite) {
-        super(screen, getStyledTitle(Text.translatable("onmymark.menu.partyInvite.windowTitle")), WINDOW_WIDTH, WINDOW_HEIGHT, screen.getWindowX(WINDOW_WIDTH), screen.getWindowY(WINDOW_HEIGHT));
+        super(screen, Text.translatable("onmymark.menu.partyInvite.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         this.partyInvite = partyInvite;
 
@@ -45,11 +44,13 @@ public class PartyInviteWindow extends OnMyMarkWindow {
 
     @Override
     public void renderBackground(DrawContext context) {
+        super.renderBackground(context);
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
+        super.renderContent(context, mouseX, mouseY);
         context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
 
         context.drawWrappedText(
@@ -75,35 +76,10 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         return super.mouseClicked(mouseX, mouseY, button)
                 || this.acceptButton.mouseClicked(mouseX, mouseY, button)
                 || this.rejectButton.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return false;
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return false;
-    }
-
-    @Override
-    public boolean charTyped(char chr, int modifiers) {
-        return false;
     }
 
     @Override

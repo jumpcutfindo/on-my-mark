@@ -24,7 +24,7 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
     private final OnMyMarkButton submitButton;
 
     public InvitePlayerWindow(OnMyMarkScreen screen) {
-        super(screen, getStyledTitle(Text.translatable("onmymark.menu.invitePlayer.windowTitle")), WINDOW_WIDTH, WINDOW_HEIGHT, screen.getWindowX(WINDOW_WIDTH), screen.getWindowY(WINDOW_HEIGHT));
+        super(screen, Text.translatable("onmymark.menu.invitePlayer.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // Create text field
         this.playerNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("onmymark.menu.invitePlayer.textWidget"));
@@ -39,12 +39,13 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
 
     @Override
     public void renderBackground(DrawContext context) {
+        super.renderBackground(context);
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
+        super.renderContent(context, mouseX, mouseY);
 
         // Party name entry
         context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.invitePlayer.playerNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
@@ -63,25 +64,10 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
     }
 
     @Override
-    public void tick() {
-
-    }
-
-    @Override
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         return super.mouseClicked(mouseX, mouseY, button)
                 || this.playerNameField.mouseClicked(mouseX, mouseY, button)
                 || this.submitButton.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return false;
     }
 
     @Override
