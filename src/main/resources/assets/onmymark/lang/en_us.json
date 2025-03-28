@@ -33,11 +33,12 @@
   "onmymark.action.exception.partyNotFound": "Unable to find the specified party",
   "onmymark.action.exception.invalidParty": "Unable to perform that action as you are not in a party",
   "onmymark.action.exception.invalidPermissions": "Unable to perform that action as you do not have valid permissions",
-  "onmymark.action.exception.alreadyInParty": "The specified player is already in your party",
+  "onmymark.action.exception.alreadyInParty": "The specified player is already in a party",
   "onmymark.action.exception.existingInvite": "The player already has a pending invite to another party",
   "onmymark.action.exception.invalidInvite": "Unable to perform that action as there was no party invite pending",
 
   "onmymark.action.onInviteToParty.successful": "An invitation has been sent to %s",
   "onmymark.action.onInviteToParty.gotInvited": "%s has invited you to join their party",
-  "onmymark.action.onInviteToParty.accepted": "%s has joined the party"
+  "onmymark.action.onInviteToParty.accepted": "%s has joined the party",
+  "onmymark.action.onInviteToParty.rejected": "%s has rejected your invitation"
 }

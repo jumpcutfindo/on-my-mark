@@ -5,6 +5,7 @@ import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListView;
 import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -93,6 +94,13 @@ public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
 
     @Override
     public boolean canSelect() {
-        return OnMyMarkClientMod.INSTANCE.clientPartyManager().partyMember().isPartyLeader();
+        PartyMember partyMember = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyMember();
+
+        if (partyMember == null) {
+            return true;
+        }
+        else {
+            return partyMember.isPartyLeader();
+        }
     }
 }

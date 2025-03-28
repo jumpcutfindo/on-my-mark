@@ -99,7 +99,7 @@ public class PartyManager {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
         }
 
-        if (invitee.currentParty() != null && invitee.currentParty().equals(party)) {
+        if (invitee.currentParty() != null) {
             throw new AlreadyInPartyException(invitee.displayName());
         }
 
