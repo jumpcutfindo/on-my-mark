@@ -86,6 +86,7 @@ public abstract class ListItem<T> {
 
     public abstract void renderContent(DrawContext context, int x, int y, int mouseX, int mouseY);
 
-    public abstract boolean mouseClicked(int x, int y, double mouseX, double mouseY);
-    public abstract boolean mouseSelected(int x, int y, double mouseX, double mouseY);
+    public boolean mouseClicked(int x, int y, double mouseX, double mouseY) {
+        return ScreenUtils.isWithin(mouseX, mouseY, x, y, this.width, this.height);
+    }
 }

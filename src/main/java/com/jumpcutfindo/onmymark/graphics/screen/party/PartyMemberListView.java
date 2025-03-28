@@ -24,7 +24,7 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
     private int titleX, titleY;
     private Text title;
 
-    public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
+public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
         super(screen);
 
         this.party = party;
@@ -38,7 +38,7 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
                 .setListPosition(8, 26)
                 .setScrollbar(195, 26, 216, 0, 14, 144)
                 .setList(createItems(screen, party), MAX_ITEMS)
-                .setSingleSelect(true);
+                .setSelectType(SelectType.SINGLE);
     }
 
     @Override

@@ -29,7 +29,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
     protected int scrollbarWidth, scrollbarHeight, scrollbarU, scrollbarV, scrollbarX, scrollbarY;
     protected int maxItems;
 
-    private boolean isSingleSelect;
+    private SelectType selectType;
 
     private int step;
     private int maxSteps;
@@ -95,8 +95,8 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         return this;
     }
 
-    public ListView<T> setSingleSelect(boolean isSingleSelect) {
-        this.isSingleSelect = isSingleSelect;
+    public ListView<T> setSelectType(SelectType selectType) {
+        this.selectType = selectType;
         return this;
     }
 
@@ -132,22 +132,22 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
             return true;
         }
 
+        // If nothing can be selected, don't even check any items
+        if (this.selectType == SelectType.NONE) {
+            return false;
+        }
+
         int offsetY = 0;
         for (int i = step; i < step + maxItems; i++) {
             if (i >= this.listItems.size()) break;
 
             T item = this.listItems.get(i);
 
-            if (item.mouseSelected(x + listX, y + listY + offsetY, mouseX, mouseY)) {
+            if (item.mouseClicked(x + listX, y + listY + offsetY, mouseX, mouseY)) {
                 SoundUtils.playClickSound(MinecraftClient.getInstance().getSoundManager());
                 this.toggleSelected(i);
                 return true;
             }
-
-            if (item.mouseClicked(x + listX, y + listY + offsetY, mouseX, mouseY)) {
-                return true;
-            }
-
 
             offsetY += item.getHeight();
         }
@@ -193,29 +193,26 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         return height;
     }
 
-    public void setSelected(int index, boolean selected) {
-        if (index < listItems.size()) {
-            T item = listItems.get(index);
-            item.setSelected(selected);
-            selectedItems.add(item);
-            selectedIndices.add(index);
-        }
-    }
-
     public boolean toggleSelected(int index) {
-        if (index >= this.listItems.size()) return false;
+        if (index >= this.listItems.size()) {
+            return false;
+        }
 
         T item = this.listItems.get(index);
 
-        if (isSingleSelect) {
-            this.resetSelection();
-            this.selectedItems.add(item);
-            this.selectedIndices.add(index);
-            item.setSelected(true);
+        if (selectType == SelectType.SINGLE) {
+            if (!this.selectedItems.isEmpty()) {
+                this.resetSelection();
+                item.setSelected(false);
+            } else {
+                this.selectedItems.add(item);
+                this.selectedIndices.add(index);
+                item.setSelected(true);
+            }
         } else {
             if (item.isSelected()) {
                 this.selectedItems.remove(item);
-                this.selectedIndices.remove((Integer) index);
+                this.selectedIndices.remove(index);
                 item.setSelected(false);
             } else {
                 this.selectedItems.add(item);
@@ -276,4 +273,8 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
      * Applies a given set of settings to the ListView.
      */
     public abstract void applySettings(NbtCompound settings);
+
+    public enum SelectType {
+        NONE, SINGLE, MULTIPLE
+    }
 }

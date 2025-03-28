@@ -4,10 +4,8 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
-import com.jumpcutfindo.onmymark.graphics.screen.utils.SoundUtils;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.StringUtils;
 import com.jumpcutfindo.onmymark.party.PartyMember;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderLayer;
@@ -58,22 +56,5 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
     @Override
     public void renderSelectedBackground(DrawContext context, int x, int y, int mouseX, int mouseY) {
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 196, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
-    }
-
-    @Override
-    public boolean mouseClicked(int x, int y, double mouseX, double mouseY) {
-        if (ScreenUtils.isWithin(mouseX, mouseY, x, y, this.width, this.height)) {
-            this.isSelected = !this.isSelected;
-            SoundUtils.playClickSound(MinecraftClient.getInstance().getSoundManager());
-            return true;
-        }
-
-
-        return false;
-    }
-
-    @Override
-    public boolean mouseSelected(int x, int y, double mouseX, double mouseY) {
-        return false;
     }
 }

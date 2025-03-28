@@ -7,21 +7,27 @@ import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
+import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+
+import java.util.List;
 
 public class PartyScreen extends OnMyMarkScreen {
     private int x, y;
 
     private PartyMemberListView partyMemberListView;
-    private IconButton createPartyButton, leavePartyButton, invitePlayerButton;
+    private IconButton createPartyButton, leavePartyButton, invitePlayerButton, kickPlayerButton;
 
     private Party party;
+
+    private PartyScreen.State state;
 
     public PartyScreen(Party party) {
         super(party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.modName"));
 
         this.party = party;
+        this.state = State.NO_PARTY;
     }
 
     @Override
@@ -35,11 +41,36 @@ public class PartyScreen extends OnMyMarkScreen {
         this.createPartyButton = new IconButton(this, x + 192, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
         this.leavePartyButton = new IconButton(this, x + 192, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
         this.invitePlayerButton = new IconButton(this, x + 174, y + 6, 32, 16, this::onInvitePlayer, Text.translatable("onmymark.menu.invitePlayer.tooltip"));
+        this.kickPlayerButton = new IconButton(this, x + 192, y + 6, 48, 16, () -> {
+            List<PartyMemberListItem> selectedPartyMembers = this.partyMemberListView.getSelectedItems();
+            if (selectedPartyMembers.isEmpty()) {
+                return;
+            }
+            this.onKickPlayer(selectedPartyMembers.getFirst().getItem());
+        }, Text.translatable("onmymark.menu.kickPlayer.tooltip"));
 
         // If there is a pending invite, we show immediately
         PartyInvite existingPartyInvite = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyInvite();
         if (existingPartyInvite != null) {
             this.setActiveWindow(new PartyInviteWindow(this, existingPartyInvite));
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        // Calculate the state
+        if (this.party == null) {
+            state = State.NO_PARTY;
+        } else if (OnMyMarkClientMod.INSTANCE.clientPartyManager().partyMember().isPartyLeader()) {
+            if (this.partyMemberListView.isAnySelected()) {
+                state = State.IN_PARTY_AS_LEADER_MEMBER_SELECTED;
+            } else {
+                state = State.IN_PARTY_AS_LEADER;
+            }
+        } else {
+            state = State.IN_PARTY_AS_MEMBER;
         }
     }
 
@@ -53,28 +84,50 @@ public class PartyScreen extends OnMyMarkScreen {
         }
 
         this.drawButtons(context, mouseX, mouseY);
+        this.drawButtonTooltips(context, mouseX, mouseY);
 
         super.render(context, mouseX, mouseY, delta);
     }
 
     private void drawButtons(DrawContext context, int mouseX, int mouseY) {
-        // Render buttons
-        if (this.party == null) {
-            this.createPartyButton.render(context, mouseX, mouseY, 0);
-        } else {
-            this.invitePlayerButton.render(context, mouseX, mouseY, 0);
-            this.leavePartyButton.render(context, mouseX, mouseY, 0);
+        switch (this.state) {
+            case NO_PARTY -> {
+                this.createPartyButton.render(context, mouseX, mouseY, 0);
+            }
+            case IN_PARTY_AS_MEMBER -> {
+                this.leavePartyButton.render(context, mouseX, mouseY, 0);
+            }
+            case IN_PARTY_AS_LEADER -> {
+                this.invitePlayerButton.render(context, mouseX, mouseY, 0);
+                this.leavePartyButton.render(context, mouseX, mouseY, 0);
+            }
+            case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
+                this.kickPlayerButton.render(context, mouseX, mouseY, 0);
+            }
+        }
+    }
+
+    private void drawButtonTooltips(DrawContext context, int mouseX, int mouseY) {
+        if (this.isWindowOpen()) {
+            return;
         }
 
-        // Render button tooltips
-        if (!this.isWindowOpen()) {
-            if (this.party == null) {
+        switch (this.state) {
+            case NO_PARTY -> {
                 this.createPartyButton.renderTooltip(context, mouseX, mouseY, 0);
-            } else {
+            }
+            case IN_PARTY_AS_MEMBER -> {
+                this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
+            }
+            case IN_PARTY_AS_LEADER -> {
                 this.invitePlayerButton.renderTooltip(context, mouseX, mouseY, 0);
                 this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
             }
+            case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
+                this.kickPlayerButton.renderTooltip(context, mouseX, mouseY, 0);
+            }
         }
+
     }
 
     @Override
@@ -87,11 +140,23 @@ public class PartyScreen extends OnMyMarkScreen {
             return this.partyMemberListView.mouseClicked((int) mouseX, (int) mouseY, button);
         }
 
-        if (this.party == null) {
-            return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
-        } else {
-            return this.invitePlayerButton.mouseClicked((int) mouseX, (int) mouseY, button) || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+        switch (this.state) {
+            case NO_PARTY -> {
+                return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+            }
+            case IN_PARTY_AS_MEMBER -> {
+                return this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+            }
+            case IN_PARTY_AS_LEADER -> {
+                return this.invitePlayerButton.mouseClicked((int) mouseX, (int) mouseY, button)
+                        || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+            }
+            case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
+                return this.kickPlayerButton.mouseClicked((int) mouseX, (int) mouseY, button);
+            }
         }
+
+        return false;
     }
 
     @Override
@@ -132,5 +197,13 @@ public class PartyScreen extends OnMyMarkScreen {
 
     private void onInvitePlayer() {
         this.setActiveWindow(new InvitePlayerWindow(this));
+    }
+
+    private void onKickPlayer(PartyMember partyMember) {
+        // TODO: Implement kicking of player
+    }
+
+    private enum State {
+        NO_PARTY, IN_PARTY_AS_MEMBER, IN_PARTY_AS_LEADER, IN_PARTY_AS_LEADER_MEMBER_SELECTED
     }
 }
