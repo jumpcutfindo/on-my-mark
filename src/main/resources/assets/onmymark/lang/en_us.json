@@ -14,6 +14,9 @@
   "onmymark.menu.invitePlayer.textWidget": "Player name field",
   "onmymark.menu.invitePlayer.submitButton": "Invite",
 
+  "onmymark.toast.partyInvite.title": "New party invitation",
+  "onmymark.toast.partyInvite.description": "%s wants you to join their party",
+
   "onmymark.action.onCreateParty": "Created party \"%s\"",
   "onmymark.action.onLeaveParty.self": "You have left the party",
   "onmymark.action.onLeaveParty.other": "%s has left the party",

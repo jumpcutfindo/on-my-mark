@@ -3,11 +3,13 @@ package com.jumpcutfindo.onmymark.network;
 import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
+import com.jumpcutfindo.onmymark.graphics.screen.toast.OnMyMarkToast;
 import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
 import com.jumpcutfindo.onmymark.network.packets.PartyInvitationRequestPacket;
 import com.jumpcutfindo.onmymark.network.packets.RemovePartyInfoPacket;
 import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
@@ -54,7 +56,12 @@ public class ClientNetworkReceiver implements ClientModInitializer {
 
     public static void onPartyInvitation() {
         ClientPlayNetworking.registerGlobalReceiver(PartyInvitationRequestPacket.PACKET_ID, (packet, context) -> {
-            // TODO: Implement storing of this invite somewhere
+            ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
+            PartyInvite partyInvite = packet.toPartyInvite(context.player().getWorld(), context.player());
+
+            partyManager.setPartyInvite(partyInvite);
+
+            OnMyMarkToast.addPartyInvitationToast(context.client(), partyInvite);
         });
     }
 }

@@ -3,7 +3,6 @@ package com.jumpcutfindo.onmymark.network;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
 import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
@@ -19,8 +18,7 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.*;
-import net.minecraft.util.Formatting;
+import net.minecraft.text.Text;
 
 public class ServerNetworkReceiver implements ModInitializer {
     @Override
@@ -87,7 +85,6 @@ public class ServerNetworkReceiver implements ModInitializer {
                 // Inform invitee of invitation
                 ServerNetworkSender.sendInvitationRequest(invitee, party);
                 sendMessageToPlayer(invitee, Text.translatable("onmymark.action.onInviteToParty.gotInvited", context.player().getName()));
-
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.invalidParty"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
