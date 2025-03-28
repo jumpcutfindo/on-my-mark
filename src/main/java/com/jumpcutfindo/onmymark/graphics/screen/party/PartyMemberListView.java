@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics.screen.party;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListView;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -88,5 +89,10 @@ public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
         }
 
         return items;
+    }
+
+    @Override
+    public boolean canSelect() {
+        return OnMyMarkClientMod.INSTANCE.clientPartyManager().partyMember().isPartyLeader();
     }
 }

@@ -57,4 +57,9 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
     public void renderSelectedBackground(DrawContext context, int x, int y, int mouseX, int mouseY) {
         context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 196, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
+
+    @Override
+    public boolean canSelect() {
+        return !this.item.isPartyLeader();
+    }
 }

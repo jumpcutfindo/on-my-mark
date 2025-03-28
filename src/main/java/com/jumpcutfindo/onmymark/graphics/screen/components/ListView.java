@@ -132,8 +132,9 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
             return true;
         }
 
+        // Block action if player cannot select due to some specified condition
         // If nothing can be selected, don't even check any items
-        if (this.selectType == SelectType.NONE) {
+        if (!this.canSelect() || this.selectType == SelectType.NONE) {
             return false;
         }
 
@@ -262,6 +263,10 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
 
     public void setScrollPosition(float scrollPosition) {
         this.scrollPosition = scrollPosition;
+    }
+
+    public boolean canSelect() {
+        return true;
     }
 
     /**
