@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.network;
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
 import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.PartyInvitationDecisionPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -30,5 +31,9 @@ public class ClientNetworkSender implements ClientModInitializer {
         buf.writeString(playerName);
 
         ClientPlayNetworking.send(new InviteToPartyPacket(buf));
+    }
+
+    public static void sendInvitationResponse(boolean isAccept) {
+        ClientPlayNetworking.send(PartyInvitationDecisionPacket.create(isAccept));
     }
 }

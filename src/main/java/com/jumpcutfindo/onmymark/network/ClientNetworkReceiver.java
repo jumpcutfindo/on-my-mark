@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
+import com.jumpcutfindo.onmymark.graphics.screen.party.PartyInviteWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.toast.OnMyMarkToast;
 import com.jumpcutfindo.onmymark.network.packets.InviteToPartyResponsePacket;
@@ -62,6 +63,11 @@ public class ClientNetworkReceiver implements ClientModInitializer {
             partyManager.setPartyInvite(partyInvite);
 
             OnMyMarkToast.addPartyInvitationToast(context.client(), partyInvite);
+
+            // Update screen if the player is looking
+            if (context.client().currentScreen instanceof PartyScreen partyScreen) {
+                partyScreen.setActiveWindow(new PartyInviteWindow(partyScreen, partyInvite));
+            }
         });
     }
 }

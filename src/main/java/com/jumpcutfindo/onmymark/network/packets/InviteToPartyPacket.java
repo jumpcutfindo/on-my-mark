@@ -8,7 +8,6 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
 public class InviteToPartyPacket implements CustomPayload {
-
     public static final Id<InviteToPartyPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_to_party"));
     public static final PacketCodec<RegistryByteBuf, InviteToPartyPacket> PACKET_CODEC = PacketCodec.of(InviteToPartyPacket::write, InviteToPartyPacket::new);
 

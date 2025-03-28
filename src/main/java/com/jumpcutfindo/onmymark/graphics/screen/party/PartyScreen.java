@@ -1,10 +1,12 @@
 package com.jumpcutfindo.onmymark.graphics.screen.party;
 
+import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.IconButton;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
@@ -33,6 +35,12 @@ public class PartyScreen extends OnMyMarkScreen {
         this.createPartyButton = new IconButton(this, x + 192, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
         this.leavePartyButton = new IconButton(this, x + 192, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
         this.invitePlayerButton = new IconButton(this, x + 174, y + 6, 32, 16, this::onInvitePlayer, Text.translatable("onmymark.menu.invitePlayer.tooltip"));
+
+        // If there is a pending invite, we show immediately
+        PartyInvite existingPartyInvite = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyInvite();
+        if (existingPartyInvite != null) {
+            this.setActiveWindow(new PartyInviteWindow(this, existingPartyInvite));
+        }
     }
 
     @Override

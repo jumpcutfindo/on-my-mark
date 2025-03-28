@@ -4,12 +4,10 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
 import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
 import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.PartyInvitationDecisionPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.AlreadyInPartyException;
-import com.jumpcutfindo.onmymark.party.exceptions.ExistingInviteException;
-import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsException;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
+import com.jumpcutfindo.onmymark.party.exceptions.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -27,6 +25,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.onCreateParty();
         this.onLeaveParty();
         this.onInviteToParty();
+        this.onPartyInvitationDecision();
     }
 
     private void onCreateParty() {
@@ -43,11 +42,11 @@ public class ServerNetworkReceiver implements ModInitializer {
             Party party = OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
 
             sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.self"));
-            sendMessageToParty(party, Text.translatable("onmymark.action.onOtherPlayerLeaveParty.other", context.player().getName()));
             removePartyInfo(context.player());
             if (party == null) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.disbanded"));
             } else {
+                sendMessageToParty(party, Text.translatable("onmymark.action.onLeaveParty.other", context.player().getName()));
                 syncPartyInfo(party);
             }
         });
@@ -69,7 +68,7 @@ public class ServerNetworkReceiver implements ModInitializer {
             }
 
             if (invitee == null) {
-                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.playerNotFound"));
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
                 return;
             }
@@ -86,17 +85,48 @@ public class ServerNetworkReceiver implements ModInitializer {
                 ServerNetworkSender.sendInvitationRequest(invitee, party);
                 sendMessageToPlayer(invitee, Text.translatable("onmymark.action.onInviteToParty.gotInvited", context.player().getName()));
             } catch (PartyNotFoundException e) {
-                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.invalidParty"));
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             } catch (InvalidPartyPermissionsException e) {
-                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.invalidPermissions"));
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidPermissions"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             } catch (ExistingInviteException e) {
-                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.existingInvite"));
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.existingInvite"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
             } catch (AlreadyInPartyException e) {
-                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.alreadyInParty"));
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.alreadyInParty"));
                 ServerNetworkSender.sendInviteToPartyResponse(context.player(), false);
+            }
+        });
+    }
+
+    private void onPartyInvitationDecision() {
+        this.registerAndHandle(PartyInvitationDecisionPacket.PACKET_ID, PartyInvitationDecisionPacket.PACKET_CODEC, (payload, context) -> {
+            ServerPlayerEntity invitedPlayer = context.player();
+
+            try {
+                if (payload.isAccept()) {
+                    Party party = OnMyMarkMod.PARTY_MANAGER.acceptInvite(invitedPlayer);
+
+                    // Broadcast to entire party that player has joined
+                    sendMessageToParty(party, Text.translatable("onmymark.action.onInviteToParty.accepted", invitedPlayer.getName()));
+
+                    // Send update to all members
+                    syncPartyInfo(party);
+                } else {
+                    Party party = OnMyMarkMod.PARTY_MANAGER.rejectInvite(context.player());
+
+                    // Inform leader that player has not joined
+                    sendMessageToPlayer((ServerPlayerEntity) party.partyLeader().player(), Text.translatable("onmymark.action.onInviteToParty.rejected", invitedPlayer.getName()));
+                }
+            } catch (PartyInviteNotFoundException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidInvite"));
+            } catch (PartyNotFoundException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.partyNotFound"));
+            } catch (PlayerAlreadyInPartyException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.alreadyInParty"));
+            } catch (InvalidPartyPermissionsException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidPermissions"));
             }
         });
     }

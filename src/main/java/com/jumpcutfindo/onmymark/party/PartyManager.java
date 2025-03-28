@@ -110,7 +110,7 @@ public class PartyManager {
         this.partyInvites.add(new PartyInvite(party, partyLeader, invitee));
     }
 
-    public void acceptInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
+    public Party acceptInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
         PartyMember invitee = this.getOrCreate(player);
 
         Optional<PartyInvite> piOpt = this.partyInvites.stream()
@@ -125,9 +125,11 @@ public class PartyManager {
         this.partyInvites.remove(partyInvite);
 
         this.addPlayerToParty(partyInvite.party().partyId(), (ServerPlayerEntity) partyInvite.from().player(), (ServerPlayerEntity) partyInvite.to().player());
+
+        return partyInvite.party();
     }
 
-    public void rejectInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException {
+    public Party rejectInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException {
         PartyMember invitee = this.getOrCreate(player);
         PartyInvite existingInvite = this.getInviteOfInvitee(invitee);
 
@@ -136,6 +138,8 @@ public class PartyManager {
         }
 
         this.partyInvites.remove(existingInvite);
+
+        return existingInvite.party();
     }
 
     private PartyInvite getInviteOfInvitee(PartyMember invitee) {
