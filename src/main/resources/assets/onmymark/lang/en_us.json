@@ -1,6 +1,8 @@
 {
   "onmymark.modName": "On My Mark",
 
+  "onmymark.menu.party.partyLeader": "Party Leader",
+
   "onmymark.menu.createParty.tooltip": "Create a party",
   "onmymark.menu.leaveParty.tooltip": "Leave party",
   "onmymark.menu.invitePlayer.tooltip": "Invite a player",

@@ -34,6 +34,10 @@ public class PartyMember {
         this.state = State.AVAILABLE;
     }
 
+    public boolean isPartyLeader() {
+        return this.currentParty.isPartyLeader(this);
+    }
+
     public PlayerEntity player() {
         return player;
     }
