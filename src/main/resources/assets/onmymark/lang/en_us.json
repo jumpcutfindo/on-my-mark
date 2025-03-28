@@ -14,7 +14,7 @@
   "onmymark.menu.invitePlayer.textWidget": "Player name field",
   "onmymark.menu.invitePlayer.submitButton": "Invite",
 
-  "onmymark.action.onCreatedParty": "Created party \"%s\"",
+  "onmymark.action.onCreateParty": "Created party \"%s\"",
   "onmymark.action.onLeaveParty.self": "You have left the party",
   "onmymark.action.onLeaveParty.other": "%s has left the party",
   "onmymark.action.onLeaveParty.disbanded": "As the last player left the party, the party has been disbanded",
