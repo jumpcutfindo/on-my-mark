@@ -171,6 +171,12 @@ public class PartyManager {
     }
 
     public Party getPartyOfPlayer(ServerPlayerEntity player) throws PartyNotFoundException {
+        Party party = this.getOrCreate(player).currentParty();
+
+        if (party == null) {
+            throw new PartyNotFoundException();
+        }
+
         return this.getOrCreate(player).currentParty();
     }
 
