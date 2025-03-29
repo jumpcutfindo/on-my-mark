@@ -35,7 +35,7 @@ public class PartyMember {
     }
 
     public boolean isPartyLeader() {
-        return this.currentParty.isPartyLeader(this);
+        return this.currentParty != null && this.currentParty.isPartyLeader(this);
     }
 
     public PlayerEntity player() {
