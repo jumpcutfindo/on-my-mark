@@ -79,11 +79,11 @@ public class PartyManager {
 
         OnMyMarkMod.LOGGER.info("\"{}\" left party \"{}\"", partyMember.displayName(), party.partyName());
 
-        // Disband party if there are no members left
-        if (party.partyMembers().isEmpty()) {
+        // Disband party if:
+        // - Member who left is the party leader
+        // - There are no members left
+        if (partyMember.isPartyLeader() || party.partyMembers().isEmpty()) {
             this.disbandParty(party);
-            OnMyMarkMod.LOGGER.info("\"{}\" was disbanded as last player left", party.partyName());
-            return null;
         }
 
         return party;
@@ -159,6 +159,7 @@ public class PartyManager {
     }
 
     private void disbandParty(Party party) {
+        party.setState(Party.State.DISBANDED);
         this.parties.remove(party);
     }
 

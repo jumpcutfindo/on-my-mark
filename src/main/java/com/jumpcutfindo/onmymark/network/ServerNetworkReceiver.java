@@ -43,10 +43,16 @@ public class ServerNetworkReceiver implements ModInitializer {
 
             sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.self"));
             removePartyInfo(context.player());
-            if (party == null) {
-                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.disbanded"));
+
+            sendMessageToParty(party, Text.translatable("onmymark.action.onLeaveParty.other", context.player().getName()));
+
+            if (party.state() == Party.State.DISBANDED) {
+                sendMessageToParty(party, Text.translatable("onmymark.action.onLeaveParty.disbanded"));
+
+                for (PartyMember partyMember : party.partyMembers()) {
+                    removePartyInfo((ServerPlayerEntity) partyMember.player());
+                }
             } else {
-                sendMessageToParty(party, Text.translatable("onmymark.action.onLeaveParty.other", context.player().getName()));
                 syncPartyInfo(party);
             }
         });

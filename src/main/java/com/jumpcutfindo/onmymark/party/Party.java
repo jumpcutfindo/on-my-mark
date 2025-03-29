@@ -10,6 +10,8 @@ public class Party {
     private PartyMember partyLeader;
     private List<PartyMember> partyMembers;
 
+    private Party.State state;
+
     public Party(String partyName, PartyMember partyLeader) {
         this.partyId = UUID.randomUUID();
 
@@ -17,6 +19,8 @@ public class Party {
         this.partyLeader = partyLeader;
 
         this.partyMembers = new ArrayList<>();
+
+        this.state = State.ACTIVE;
     }
 
     public static Party withPartyId(UUID partyId, String partyName, PartyMember partyLeader) {
@@ -42,22 +46,27 @@ public class Party {
         return partyMembers;
     }
 
+    public State state() {
+        return state;
+    }
+
     public void addPartyMember(PartyMember partyMember) {
         this.partyMembers.add(partyMember);
     }
 
     public void removePartyMember(PartyMember partyMember) {
         this.partyMembers.remove(partyMember);
-
-        // Hand off party leadership to someone else
-        if (this.isPartyLeader(partyMember) && !this.partyMembers.isEmpty()) {
-            this.partyLeader = partyMembers.getFirst();
-
-            // TODO: Add handling of member states, e.g. player offline cannot get party leadership
-        }
     }
 
     public boolean isPartyLeader(PartyMember partyMember) {
         return this.partyLeader.equals(partyMember);
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public enum State {
+        ACTIVE, DISBANDED
     }
 }
