@@ -51,7 +51,7 @@ public class PartyManager {
         partyMember.setCurrentParty(party);
     }
 
-    public void removePlayerFromParty(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, RemovePartyLeaderException {
+    public void removePlayerFromParty(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, RemovePartyLeaderException, PlayerNotInPartyException {
         Party party = getPartyById(partyId);
 
         PartyMember partyLeader = this.getOrCreate(leader);
@@ -63,6 +63,10 @@ public class PartyManager {
 
         if (party.isPartyLeader(partyMember)) {
             throw new RemovePartyLeaderException(partyMember.displayName());
+        }
+
+        if (!party.hasMember(partyMember)) {
+            throw new PlayerNotInPartyException(partyMember.displayName());
         }
 
         party.removePartyMember(partyMember);

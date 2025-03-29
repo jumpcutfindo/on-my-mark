@@ -1,10 +1,7 @@
 package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
-import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.PartyInvitationDecisionPacket;
+import com.jumpcutfindo.onmymark.network.packets.*;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.*;
@@ -18,6 +15,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
+import java.util.UUID;
+
 public class ServerNetworkReceiver implements ModInitializer {
     @Override
     public void onInitialize() {
@@ -26,6 +25,8 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.onLeaveParty();
         this.onInviteToParty();
         this.onPartyInvitationDecision();
+
+        this.onKickPlayer();
     }
 
     private void onCreateParty() {
@@ -58,20 +59,40 @@ public class ServerNetworkReceiver implements ModInitializer {
         });
     }
 
+    private void onKickPlayer() {
+        this.registerAndHandle(KickFromPartyPacket.PACKET_ID, KickFromPartyPacket.PACKET_CODEC, (payload, context) -> {
+            ServerPlayerEntity player = context.player();
+            ServerPlayerEntity otherPlayer = this.getPlayerById(context, payload.playerId());
+
+            if (otherPlayer == null) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
+                return;
+            }
+
+            try {
+                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(player);
+                OnMyMarkMod.PARTY_MANAGER.removePlayerFromParty(party.partyId(), player, otherPlayer);
+
+                sendMessageToPlayer(otherPlayer, Text.translatable("onmymark.action.onKickFromParty.self"));
+                removePartyInfo(otherPlayer);
+
+                sendMessageToParty(party, Text.translatable("onmymark.action.onKickFromParty.other", otherPlayer.getName()));
+            } catch (PartyNotFoundException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            } catch (RemovePartyLeaderException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.removePartyLeader"));
+            } catch (PlayerNotInPartyException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
+            } catch (InvalidPartyPermissionsException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidPermissions"));
+            }
+        });
+    }
+
     private void onInviteToParty() {
         this.registerAndHandle(InviteToPartyPacket.PACKET_ID, InviteToPartyPacket.PACKET_CODEC, (payload, context) -> {
             // Find the player if they exist in any world
-            ServerPlayerEntity invitee = null;
-            for (ServerWorld world : context.server().getWorlds()) {
-                for (ServerPlayerEntity player : world.getPlayers()) {
-                    if (player.getName().getLiteralString().equals(payload.playerName())) {
-                        invitee = player;
-                        break;
-                    }
-                }
-
-                if (invitee != null) break;
-            }
+            ServerPlayerEntity invitee = getPlayerByName(context, payload.playerName());
 
             if (invitee == null) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
@@ -155,6 +176,31 @@ public class ServerNetworkReceiver implements ModInitializer {
         for (PartyMember partyMember : party.partyMembers()) {
             partyMember.player().sendMessage(message, false);
         }
+    }
+
+    private ServerPlayerEntity getPlayerById(ServerPlayNetworking.Context context, UUID playerId) {
+        for (ServerWorld world : context.server().getWorlds()) {
+            ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(playerId);
+
+            if (player != null) {
+                return player;
+            }
+        }
+
+        // Player not found
+        return null;
+    }
+
+    private ServerPlayerEntity getPlayerByName(ServerPlayNetworking.Context context, String playerName) {
+        for (ServerWorld world : context.server().getWorlds()) {
+            for (ServerPlayerEntity player : world.getPlayers()) {
+                if (player.getName().getLiteralString().equals(playerName)) {
+                    return player;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

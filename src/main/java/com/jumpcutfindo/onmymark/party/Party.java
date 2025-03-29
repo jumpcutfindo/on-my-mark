@@ -62,6 +62,10 @@ public class Party {
         return this.partyLeader.equals(partyMember);
     }
 
+    public boolean hasMember(PartyMember partyMember) {
+        return this.partyMembers.contains(partyMember);
+    }
+
     public void setState(State state) {
         this.state = state;
     }

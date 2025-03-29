@@ -28,6 +28,8 @@
   "onmymark.action.onLeaveParty.self": "You have left the party",
   "onmymark.action.onLeaveParty.other": "%s has left the party",
   "onmymark.action.onLeaveParty.disbanded": "The party has been disbanded",
+  "onmymark.action.onKickFromParty.self": "You have been kicked from the party",
+  "onmymark.action.onKickFromParty.other": "%s has been kicked from the party",
 
   "onmymark.action.exception.playerNotFound": "Unable to find the specified player",
   "onmymark.action.exception.partyNotFound": "Unable to find the specified party",
@@ -36,6 +38,7 @@
   "onmymark.action.exception.alreadyInParty": "The specified player is already in a party",
   "onmymark.action.exception.existingInvite": "The player already has a pending invite to another party",
   "onmymark.action.exception.invalidInvite": "Unable to perform that action as there was no party invite pending",
+  "onmymark.action.exception.removePartyLeader": "You cannot remove the party leader from the party",
 
   "onmymark.action.onInviteToParty.successful": "An invitation has been sent to %s",
   "onmymark.action.onInviteToParty.gotInvited": "%s has invited you to join their party",

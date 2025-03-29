@@ -1,13 +1,12 @@
 package com.jumpcutfindo.onmymark.network;
 
-import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.InviteToPartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
-import com.jumpcutfindo.onmymark.network.packets.PartyInvitationDecisionPacket;
+import com.jumpcutfindo.onmymark.network.packets.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.PacketByteBuf;
+
+import java.util.UUID;
 
 public class ClientNetworkSender implements ClientModInitializer {
     @Override
@@ -31,6 +30,13 @@ public class ClientNetworkSender implements ClientModInitializer {
         buf.writeString(playerName);
 
         ClientPlayNetworking.send(new InviteToPartyPacket(buf));
+    }
+
+    public static void kickFromParty(UUID playerId) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeUuid(playerId);
+
+        ClientPlayNetworking.send(new KickFromPartyPacket(buf));
     }
 
     public static void sendInvitationResponse(boolean isAccept) {
