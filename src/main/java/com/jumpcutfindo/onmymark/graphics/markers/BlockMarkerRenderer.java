@@ -25,4 +25,9 @@ public class BlockMarkerRenderer extends MarkerRenderer {
         Vec3d worldPos = blockMarker.getExactPosition();
         return worldPos.add(new Vec3d(0.0f, 1.0f, 0.0f));
     }
+
+    @Override
+    boolean isMoving() {
+        return false;
+    }
 }

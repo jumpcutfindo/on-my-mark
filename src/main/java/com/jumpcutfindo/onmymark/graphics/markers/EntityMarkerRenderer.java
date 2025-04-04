@@ -23,6 +23,13 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     @Override
     Vec3d getMarkerWorldPos() {
         Vec3d worldPos = entityMarker.getExactPosition();
+
         return worldPos.add(new Vec3d(0.0f, entityMarker.entity().getHeight(), 0.0f));
+    }
+
+    @Override
+    boolean isMoving() {
+        Vec3d velocity = entityMarker.entity().getVelocity();
+        return !velocity.equals(Vec3d.ZERO);
     }
 }
