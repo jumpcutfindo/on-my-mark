@@ -102,7 +102,10 @@ public abstract class MarkerRenderer {
 
     public void draw(DrawContext drawContext) {
         // TODO(preference): Implement toggling of pointer
-        this.drawPointer(drawContext);
+        if (this.isClamped) {
+            // Only draw pointer if the marker has been clamped
+            this.drawPointer(drawContext);
+        }
     }
 
     /**
