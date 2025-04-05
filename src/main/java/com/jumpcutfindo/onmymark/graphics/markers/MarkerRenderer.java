@@ -17,6 +17,7 @@ public abstract class MarkerRenderer {
 
     // TODO(preference): Implement switching of player selection between circle and oval
     private ClampType clampType;
+    private boolean isClamped;
     private float clampWidth, clampHeight;
 
     protected Vector4f screenPos, prevScreenPos;
@@ -71,7 +72,9 @@ public abstract class MarkerRenderer {
         this.clampWidth = diameter;
         this.clampHeight = diameter;
 
-        screenPos = RenderMath.clampScreenPosToEllipse(drawContext, screenPos, diameter, diameter);
+        RenderMath.ClampResult clampResult = RenderMath.clampScreenPosToEllipse(drawContext, screenPos, diameter, diameter);
+        this.screenPos = clampResult.screenPos();
+        this.isClamped = clampResult.isClamped();
     }
 
     private void clampScreenPosToOval(DrawContext drawContext) {
@@ -84,7 +87,9 @@ public abstract class MarkerRenderer {
         this.clampWidth = ellipseWidth;
         this.clampHeight = ellipseHeight;
 
-        screenPos = RenderMath.clampScreenPosToEllipse(drawContext, screenPos, ellipseWidth, ellipseHeight);
+        RenderMath.ClampResult clampResult = RenderMath.clampScreenPosToEllipse(drawContext, screenPos, ellipseWidth, ellipseHeight);
+        this.screenPos = clampResult.screenPos();
+        this.isClamped = clampResult.isClamped();
     }
 
     public boolean shouldDraw() {

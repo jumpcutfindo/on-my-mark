@@ -64,7 +64,7 @@ public class RenderMath {
         return new Vector4f(screenX, screenY, 0, vec.w);
     }
 
-    public static Vector4f clampScreenPosToEllipse(DrawContext drawContext, Vector4f screenPos, float ellipseWidth, float ellipseHeight) {
+    public static ClampResult clampScreenPosToEllipse(DrawContext drawContext, Vector4f screenPos, float ellipseWidth, float ellipseHeight) {
         int windowWidth = drawContext.getScaledWindowWidth();
         int windowHeight = drawContext.getScaledWindowHeight();
 
@@ -91,10 +91,13 @@ public class RenderMath {
             dY *= scale;
 
             // Update the screen position
-            return new Vector4f(centerX + dX, centerY + dY, screenPos.z(), screenPos.w());
+            return new ClampResult(
+                    new Vector4f(centerX + dX, centerY + dY, screenPos.z(), screenPos.w()),
+                    true
+            );
         }
 
-        return screenPos;
+        return new ClampResult(screenPos, false);
     }
 
     /**
@@ -113,4 +116,6 @@ public class RenderMath {
 
         return new Vector2f(normalX, normalY).normalize();
     }
+
+    public record ClampResult(Vector4f screenPos, boolean isClamped) {}
 }
