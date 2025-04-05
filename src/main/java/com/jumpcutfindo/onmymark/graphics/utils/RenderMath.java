@@ -82,7 +82,7 @@ public class RenderMath {
         // Calculate the distance from the center, normalized to the ellipse
         float distanceSquared = (dX * dX) / (semiMajorAxis * semiMajorAxis) + (dY * dY) / (semiMinorAxis * semiMinorAxis);
 
-        if (distanceSquared > 1.0f) {
+        if (distanceSquared > 1.0f || screenPos.w <= 0) {
             // Normalize the delta to the boundary of the oval
             float scale = MathHelper.sqrt(1.0f / distanceSquared); // Scale factor to keep the point on the ellipse
 
