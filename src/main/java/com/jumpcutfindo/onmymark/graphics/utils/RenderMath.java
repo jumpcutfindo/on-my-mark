@@ -3,10 +3,10 @@ package com.jumpcutfindo.onmymark.graphics.utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.util.math.Vector2f;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -97,10 +97,20 @@ public class RenderMath {
         return screenPos;
     }
 
-    public Vector2f getNormalToEllipse(float cx, float cy, float rx, float ry, float x, float y) {
+    /**
+     * Retrieves the normal to an ellipse
+     * @param cx x-coordinate of the ellipse center
+     * @param cy y-coordinate of the ellipse center
+     * @param rx Horizontal radius of the ellipse
+     * @param ry Vertical radius of the ellipse
+     * @param x x-coordinate of the point on the ellipse
+     * @param y y-coordinate of the point on the ellipse
+     * @return Normal to the ellipse at the specified point
+     */
+    public static Vector2f getNormalToEllipse(float cx, float cy, float rx, float ry, float x, float y) {
         float normalX = (2 * (x - cx)) / (rx * rx);
         float normalY = (2 * (y - cy)) / (ry * ry);
 
-        return new Vector2f(normalX, normalY);
+        return new Vector2f(normalX, normalY).normalize();
     }
 }

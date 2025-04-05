@@ -17,6 +17,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     public void draw(DrawContext drawContext) {
+        super.draw(drawContext);
         ObjectDrawer.drawTriangle(drawContext, this.screenPos.x(), this.screenPos.y(), 30, 0xFFFFFFFF);
     }
 
