@@ -67,7 +67,7 @@ public class OnMyMarkRenderer {
 
                 // Update the marker's position and stuff
                 boolean isFovChanging = lastFovMultiplier != fovMultiplier;
-                markerRenderer.renderTick(tickDelta, fov, isFovChanging);
+                markerRenderer.renderTick(drawContext, tickDelta, fov, isFovChanging);
 
                 if (markerRenderer.shouldDraw()) {
                     markerRenderer.draw(drawContext);

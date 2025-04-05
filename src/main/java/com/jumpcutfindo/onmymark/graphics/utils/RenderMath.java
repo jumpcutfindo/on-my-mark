@@ -2,12 +2,26 @@ package com.jumpcutfindo.onmymark.graphics.utils;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class RenderMath {
-    public static Vector4f worldToScreenPos(MinecraftClient client, Vec3d worldPos, float fovDegrees) {
+    public static boolean isBehindPlayer(MinecraftClient client, Vec3d worldPos, float fovDegrees) {
+        Camera camera = client.gameRenderer.getCamera();
+        Vec3d cameraPos = camera.getPos();
+        Vector3f cameraLookVec = camera.getHorizontalPlane();
+
+        Vec3d toTarget = worldPos.subtract(cameraPos).normalize();
+
+        // Dot product: if negative, it's behind
+        double dot = cameraLookVec.dot(toTarget.toVector3f());
+        return dot < 0;
+    }
+
+    public static Vector4f aheadWorldToScreenPos(MinecraftClient client, Vec3d worldPos, float fovDegrees) {
         Camera camera = client.gameRenderer.getCamera();
         Vec3d cameraPos = camera.getPos();
 
@@ -26,18 +40,25 @@ public class RenderMath {
         Matrix4f projectionMatrix = new Matrix4f(client.gameRenderer.getBasicProjectionMatrix(fovDegrees));
         vec.mul(projectionMatrix);
 
-        // Perspective divide
-        // If w is negative, is behind player
-        if (vec.w <= 0) return null;
-
         vec.x /= vec.w;
         vec.y /= vec.w;
         vec.z /= vec.w;
 
-        // Convert to screen coordinates
-        float screenX = (vec.x * 0.5f + 0.5f) * client.getWindow().getScaledWidth();
-        float screenY = (0.5f - vec.y * 0.5f) * client.getWindow().getScaledHeight();
+        int windowWidth = client.getWindow().getScaledWidth();
+        int windowHeight = client.getWindow().getScaledHeight();
 
-        return new Vector4f(screenX, screenY, 0, 1);
+        float screenX, screenY;
+
+        if (vec.w <= 0) {
+            // Invert across the center
+            vec.x = -vec.x;
+            vec.y = -vec.y;
+        }
+
+        // Convert to screen coordinates
+        screenX = (vec.x * 0.5f + 0.5f) * windowWidth;
+        screenY = (0.5f - vec.y * 0.5f) * windowHeight;
+
+        return new Vector4f(screenX, screenY, 0, vec.w);
     }
 }
