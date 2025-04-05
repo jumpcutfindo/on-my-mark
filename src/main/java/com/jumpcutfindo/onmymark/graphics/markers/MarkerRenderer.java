@@ -10,7 +10,8 @@ import org.joml.Vector4f;
 public abstract class MarkerRenderer {
     private MinecraftClient client;
 
-    private Vec3d worldPos, prevWorldPos;
+    // TODO(preference): Implement switching of player selection between circle and oval
+    private ClampType clampType;
 
     protected Vector4f screenPos, prevScreenPos;
 
@@ -19,6 +20,8 @@ public abstract class MarkerRenderer {
 
         this.screenPos = null;
         this.prevScreenPos = null;
+
+        this.clampType = ClampType.OVAL;
     }
 
     public void renderTick(DrawContext drawContext, float tickDelta, float fovDegrees, boolean isFovChanging) {
@@ -46,10 +49,14 @@ public abstract class MarkerRenderer {
             screenPos = newScreenPos;
         }
 
-        this.clampScreenPosToOval(drawContext);
+        switch (clampType) {
+            case OVAL -> this.clampScreenPosToOval(drawContext);
+            case CIRCLE -> this.clampScreenPosToCircle(drawContext);
+        }
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
+        // TODO(preference): Implement radius width selection
         int windowWidth = drawContext.getScaledWindowWidth();
         int windowHeight = drawContext.getScaledWindowHeight();
 
@@ -59,6 +66,7 @@ public abstract class MarkerRenderer {
     }
 
     private void clampScreenPosToOval(DrawContext drawContext) {
+        // TODO (preference): Implement padding value selection
         int padding = 50;
 
         int ellipseWidth = (drawContext.getScaledWindowWidth() - 2 * padding);
@@ -76,4 +84,8 @@ public abstract class MarkerRenderer {
     abstract boolean isMoving();
 
     public abstract void draw(DrawContext drawContext);
+
+    public enum ClampType {
+        CIRCLE, OVAL
+    }
 }

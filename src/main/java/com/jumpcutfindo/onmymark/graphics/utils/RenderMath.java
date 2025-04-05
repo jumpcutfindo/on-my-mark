@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.graphics.utils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.Vector2f;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
@@ -94,5 +95,12 @@ public class RenderMath {
         }
 
         return screenPos;
+    }
+
+    public Vector2f getNormalToEllipse(float cx, float cy, float rx, float ry, float x, float y) {
+        float normalX = (2 * (x - cx)) / (rx * rx);
+        float normalY = (2 * (y - cy)) / (ry * ry);
+
+        return new Vector2f(normalX, normalY);
     }
 }
