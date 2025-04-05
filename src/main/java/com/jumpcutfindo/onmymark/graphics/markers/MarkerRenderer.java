@@ -46,70 +46,25 @@ public abstract class MarkerRenderer {
             screenPos = newScreenPos;
         }
 
-        screenPos = clampScreenPosToRoundedRect(drawContext, screenPos);
+        this.clampScreenPosToOval(drawContext);
     }
 
-    private Vector4f clampScreenPosToCircle(DrawContext drawContext, Vector4f actualScreenPos) {
-        // Bind the screen pos to a circle
+    private void clampScreenPosToCircle(DrawContext drawContext) {
         int windowWidth = drawContext.getScaledWindowWidth();
         int windowHeight = drawContext.getScaledWindowHeight();
-        float radius = Math.min(windowWidth, windowHeight) / 3f;
 
-        float centerX = windowWidth / 2f;
-        float centerY = windowHeight / 2f;
+        float radius = Math.min(windowWidth, windowHeight) / 2f;
 
-        float dX = actualScreenPos.x() - centerX;
-        float dY = actualScreenPos.y() - centerY;
-        float distance = MathHelper.sqrt(dX * dX + dY * dY);
-
-        if (distance > radius || actualScreenPos.w() <= 0) {
-            // Out of bounds
-            float angle = (float) Math.atan2(dY, dX);
-            float clampedX, clampedY;
-
-            clampedX = centerX + MathHelper.cos(angle) * radius;
-            clampedY = centerY + MathHelper.sin(angle) * radius;
-
-            return new Vector4f(
-                    clampedX, clampedY, screenPos.z(), screenPos.w()
-            );
-        }
-
-        return actualScreenPos;
+        screenPos = RenderMath.clampScreenPosToEllipse(drawContext, screenPos, radius, radius);
     }
 
-    private Vector4f clampScreenPosToRoundedRect(DrawContext drawContext, Vector4f actualScreenPos) {
-        int windowWidth = drawContext.getScaledWindowWidth();
-        int windowHeight = drawContext.getScaledWindowHeight();
-        float padding = 50f;
+    private void clampScreenPosToOval(DrawContext drawContext) {
+        int padding = 50;
 
-        float centerX = windowWidth / 2f;
-        float centerY = windowHeight / 2f;
+        int ellipseWidth = (drawContext.getScaledWindowWidth() - 2 * padding);
+        int ellipseHeight = drawContext.getScaledWindowHeight() - 2 * padding;
 
-        // Oval semi-axes (half-width and half-height)
-        float semiMajorAxis = (windowWidth - 2 * padding) / 2f;
-        float semiMinorAxis = (windowHeight - 2 * padding) / 2f;
-
-        float dX = screenPos.x() - centerX;
-        float dY = screenPos.y() - centerY;
-
-        // Equation of ellipse: x^2/a^2 + y^2/b^2 = 1
-        // Calculate the distance from the center, normalized to the ellipse
-        float distanceSquared = (dX * dX) / (semiMajorAxis * semiMajorAxis) + (dY * dY) / (semiMinorAxis * semiMinorAxis);
-
-        if (distanceSquared > 1.0f) {
-            // Normalize the delta to the boundary of the oval
-            float scale = MathHelper.sqrt(1.0f / distanceSquared); // Scale factor to keep the point on the ellipse
-
-            // Clamp the point to the ellipse's boundary
-            dX *= scale;
-            dY *= scale;
-
-            // Update the screen position
-            return new Vector4f(centerX + dX, centerY + dY, screenPos.z(), screenPos.w());
-        }
-
-        return actualScreenPos;
+        screenPos = RenderMath.clampScreenPosToEllipse(drawContext, screenPos, ellipseWidth, ellipseHeight);
     }
 
     public boolean shouldDraw() {

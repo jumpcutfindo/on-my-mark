@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics.utils;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.Camera;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -60,5 +61,38 @@ public class RenderMath {
         screenY = (0.5f - vec.y * 0.5f) * windowHeight;
 
         return new Vector4f(screenX, screenY, 0, vec.w);
+    }
+
+    public static Vector4f clampScreenPosToEllipse(DrawContext drawContext, Vector4f screenPos, float ellipseWidth, float ellipseHeight) {
+        int windowWidth = drawContext.getScaledWindowWidth();
+        int windowHeight = drawContext.getScaledWindowHeight();
+
+        float centerX = windowWidth / 2f;
+        float centerY = windowHeight / 2f;
+
+        // Oval semi-axes (half-width and half-height)
+        float semiMajorAxis = ellipseWidth / 2f;
+        float semiMinorAxis = ellipseHeight / 2f;
+
+        float dX = screenPos.x() - centerX;
+        float dY = screenPos.y() - centerY;
+
+        // Equation of ellipse: x^2/a^2 + y^2/b^2 = 1
+        // Calculate the distance from the center, normalized to the ellipse
+        float distanceSquared = (dX * dX) / (semiMajorAxis * semiMajorAxis) + (dY * dY) / (semiMinorAxis * semiMinorAxis);
+
+        if (distanceSquared > 1.0f) {
+            // Normalize the delta to the boundary of the oval
+            float scale = MathHelper.sqrt(1.0f / distanceSquared); // Scale factor to keep the point on the ellipse
+
+            // Clamp the point to the ellipse's boundary
+            dX *= scale;
+            dY *= scale;
+
+            // Update the screen position
+            return new Vector4f(centerX + dX, centerY + dY, screenPos.z(), screenPos.w());
+        }
+
+        return screenPos;
     }
 }
