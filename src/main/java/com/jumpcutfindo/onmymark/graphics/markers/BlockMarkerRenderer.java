@@ -4,7 +4,13 @@ import com.jumpcutfindo.onmymark.graphics.utils.ObjectDrawer;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.EntityRenderers;
+import net.minecraft.client.render.entity.model.AllayEntityModel;
+import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector2f;
 
 public class BlockMarkerRenderer extends MarkerRenderer {
     private final BlockMarker blockMarker;
@@ -16,9 +22,9 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
-    public void draw(DrawContext drawContext) {
-        super.draw(drawContext);
-        ObjectDrawer.drawTriangle(drawContext, this.screenPos.x(), this.screenPos.y(), 20, 0xFF0000FF);
+    public void drawIcon(DrawContext drawContext, float screenX, float screenY) {
+        ItemStack blockItem = this.blockMarker.blockState().getBlock().asItem().getDefaultStack();
+        drawContext.drawItem(blockItem, (int) screenX, (int) screenY);
     }
 
     @Override

@@ -22,6 +22,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    public void drawIcon(DrawContext drawContext, float screenX, float screenY) {
+
+    }
+
+    @Override
     Vec3d getMarkerWorldPos() {
         Vec3d worldPos = entityMarker.getExactPosition();
 

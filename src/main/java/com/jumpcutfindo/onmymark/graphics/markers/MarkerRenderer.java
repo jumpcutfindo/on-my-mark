@@ -21,6 +21,7 @@ public abstract class MarkerRenderer {
     private float clampWidth, clampHeight;
 
     protected Vector4f screenPos, prevScreenPos;
+    protected Vector2f screenPosNormal;
 
     protected MarkerRenderer(MinecraftClient client) {
         this.client = client;
@@ -60,6 +61,13 @@ public abstract class MarkerRenderer {
             case OVAL -> this.clampScreenPosToOval(drawContext);
             case CIRCLE -> this.clampScreenPosToCircle(drawContext);
         }
+
+        // Calculate and store normal
+        int windowWidth = drawContext.getScaledWindowWidth();
+        int windowHeight = drawContext.getScaledWindowHeight();
+        float centerX = windowWidth / 2f;
+        float centerY = windowHeight / 2f;
+        screenPosNormal = RenderMath.getNormalToEllipse(centerX, centerY, clampWidth / 2f, clampHeight / 2f, screenPos.x(), screenPos.y());
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
@@ -105,6 +113,9 @@ public abstract class MarkerRenderer {
         if (this.isClamped) {
             // Only draw pointer if the marker has been clamped
             this.drawPointer(drawContext);
+
+            Vector2f iconPos = this.offsetIconFromScreenPos(drawContext, 12F, 16);
+            this.drawIcon(drawContext, iconPos.x(), iconPos.y());
         }
     }
 
@@ -157,6 +168,34 @@ public abstract class MarkerRenderer {
 
         BufferRenderer.drawWithGlobalProgram(buffer.end());
     }
+
+    private Vector2f offsetFromScreenPos(DrawContext drawContext, float offset) {
+        float offsetScreenPosX = screenPos.x() - screenPosNormal.x * offset;
+        float offsetScreenPosY = screenPos.y() - screenPosNormal.y * offset;
+
+        return new Vector2f(offsetScreenPosX, offsetScreenPosY);
+    }
+
+    protected Vector2f offsetIconFromScreenPos(DrawContext drawContext, float offset, float iconSize) {
+        Vector2f offsetPos = offsetFromScreenPos(drawContext, offset);
+        float offsetDistance = iconSize / 2;
+
+        // Flip the normal vector to go inward
+        Vector2f inwardNormal = new Vector2f(screenPosNormal);
+        inwardNormal.negate();
+
+        // Compute the center of the icon along the inward direction
+        float iconCenterX = offsetPos.x + inwardNormal.x * offsetDistance;
+        float iconCenterY = offsetPos.y + inwardNormal.y * offsetDistance;
+
+        // Compute the top-left corner to draw the icon centered at that point
+        int iconX = (int) (iconCenterX - iconSize / 2F);
+        int iconY = (int) (iconCenterY - iconSize / 2F);
+
+        return new Vector2f(iconX, iconY);
+    }
+
+    public abstract void drawIcon(DrawContext drawContext, float screenX, float screenY);
 
     public enum ClampType {
         CIRCLE, OVAL

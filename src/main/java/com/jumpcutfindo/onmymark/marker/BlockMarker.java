@@ -16,6 +16,10 @@ public class BlockMarker extends Marker {
         this.blockState = blockState;
     }
 
+    public BlockState blockState() {
+        return blockState;
+    }
+
     @Override
     public Vec3d getExactPosition() {
         return blockPos.toCenterPos();
