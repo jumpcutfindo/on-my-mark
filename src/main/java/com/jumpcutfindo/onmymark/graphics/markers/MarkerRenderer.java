@@ -106,6 +106,8 @@ public abstract class MarkerRenderer {
 
     abstract Vec3d getMarkerWorldPos();
 
+    abstract String getName();
+
     abstract boolean isMoving();
 
     public void draw(DrawContext drawContext) {
@@ -195,7 +197,10 @@ public abstract class MarkerRenderer {
         return new Vector2f(iconX, iconY);
     }
 
-    public abstract void drawIcon(DrawContext drawContext, float screenX, float screenY);
+    public void drawIcon(DrawContext drawContext, float screenX, float screenY) {
+        // Draw the name of the object by default
+        drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, 0xFFFFFFFF, true);
+    }
 
     public enum ClampType {
         CIRCLE, OVAL

@@ -34,6 +34,11 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    String getName() {
+        return this.blockMarker.blockState().getBlock().getName().getString();
+    }
+
+    @Override
     boolean isMoving() {
         return false;
     }
