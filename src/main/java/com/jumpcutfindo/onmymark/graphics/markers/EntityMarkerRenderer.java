@@ -5,6 +5,7 @@ import com.jumpcutfindo.onmymark.mixin.VehicleEntityInvoker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
 import net.minecraft.util.math.Vec3d;
 
@@ -23,7 +24,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     private void determineLabelType() {
         Entity entity = this.entityMarker.entity();
 
-        if (entity instanceof VehicleEntity) {
+        if (entity instanceof VehicleEntity || entity instanceof ItemEntity) {
             this.labelType = LabelType.ICON;
         } else {
             this.labelType = LabelType.TEXT;
@@ -51,7 +52,10 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
         Entity entity = this.entityMarker.entity();
 
-        if (entity instanceof VehicleEntity vehicle) {
+        if (entity instanceof ItemEntity item) {
+            drawContext.drawItem(item.getStack(), (int) screenX, (int) screenY);
+            drawContext.drawStackOverlay(MinecraftClient.getInstance().textRenderer, item.getStack(), (int) screenX, (int) screenY);
+        } else if (entity instanceof VehicleEntity vehicle) {
             drawContext.drawItem(((VehicleEntityInvoker) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY);
         }
     }
