@@ -18,9 +18,13 @@ public class ClientMarkerManager {
 
     public void addMarker(Marker marker) {
         this.markers.add(marker);
+
+        // TODO: Implement propagation of marker creation to other clients
     }
 
     public void removeMarker(Marker marker) {
         this.markers.remove(marker);
+
+        // TODO: Implement propagation of marker removal to other clients
     }
 }

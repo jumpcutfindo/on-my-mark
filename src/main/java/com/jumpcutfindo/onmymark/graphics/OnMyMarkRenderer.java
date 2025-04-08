@@ -20,6 +20,7 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class OnMyMarkRenderer {
     private MinecraftClient client;
@@ -74,6 +75,20 @@ public class OnMyMarkRenderer {
                 }
             }
         }
+
+        // Remove any markers that are no longer managed
+        Set<Marker> trackedMarkerSet = Set.copyOf(clientMarkerManager.markers());
+        Set<Marker> renderedMarkerSet = Set.copyOf(this.markerRendererMap.keySet());
+
+        for (Marker renderedMarker : renderedMarkerSet) {
+            if (!trackedMarkerSet.contains(renderedMarker)) {
+                markerRendererMap.remove(renderedMarker);
+            }
+        }
+    }
+
+    public Map<Marker, MarkerRenderer> markerRendererMap() {
+        return markerRendererMap;
     }
 
     private MarkerRenderer getOrCreateRenderer(Marker marker) {

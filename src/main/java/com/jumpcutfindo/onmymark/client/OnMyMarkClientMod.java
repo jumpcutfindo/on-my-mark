@@ -27,7 +27,7 @@ public class OnMyMarkClientMod implements ClientModInitializer {
 
 
         this.renderer = new OnMyMarkRenderer(MinecraftClient.getInstance(), clientMarkerManager);
-        this.inputListener = new InputListener(clientPartyManager, clientMarkerManager);
+        this.inputListener = new InputListener(clientPartyManager, clientMarkerManager, renderer);
 
         this.registerRenderer();
         this.registerInputListener();

@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.marker;
 
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.Objects;
@@ -15,6 +16,10 @@ public abstract class Marker {
     public Marker(PartyMember owner) {
         this.id = UUID.randomUUID();
         this.owner = owner;
+    }
+
+    public boolean isOwner(PlayerEntity player) {
+        return this.owner.player().getUuid().equals(player.getUuid());
     }
 
     public abstract Vec3d getExactPosition();

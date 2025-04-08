@@ -38,6 +38,10 @@ public abstract class MarkerRenderer {
         this.clampType = ClampType.OVAL;
     }
 
+    public Vector4f screenPos() {
+        return screenPos;
+    }
+
     public void renderTick(DrawContext drawContext, float tickDelta, float fovDegrees, boolean isFovChanging) {
         // Calculate screen position
         prevScreenPos = screenPos;

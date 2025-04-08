@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.client;
 
 
+import com.jumpcutfindo.onmymark.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.input.InputHandler;
 import com.jumpcutfindo.onmymark.input.OnPlayerMarkInputHandler;
@@ -41,10 +42,12 @@ public class InputListener {
 
     private final ClientPartyManager clientPartyManager;
     private final ClientMarkerManager clientMarkerManager;
+    private final OnMyMarkRenderer renderer;
 
-    public InputListener(ClientPartyManager clientPartyManager, ClientMarkerManager clientMarkerManager) {
+    public InputListener(ClientPartyManager clientPartyManager, ClientMarkerManager clientMarkerManager, OnMyMarkRenderer renderer) {
         this.clientPartyManager = clientPartyManager;
         this.clientMarkerManager = clientMarkerManager;
+        this.renderer = renderer;
     }
 
     public void onInput(MinecraftClient client) {
@@ -56,7 +59,7 @@ public class InputListener {
 
             while (MARK_BINDING.wasPressed()) {
                 // TODO: Add cooldown to marking
-                InputHandler inputHandler = new OnPlayerMarkInputHandler(clientMarkerManager);
+                InputHandler inputHandler = new OnPlayerMarkInputHandler(clientMarkerManager, renderer);
                 inputHandler.execute(client);
             }
 

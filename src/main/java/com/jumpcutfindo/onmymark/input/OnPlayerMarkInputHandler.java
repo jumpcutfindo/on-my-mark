@@ -1,8 +1,11 @@
 package com.jumpcutfindo.onmymark.input;
 
 import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
+import com.jumpcutfindo.onmymark.graphics.OnMyMarkRenderer;
+import com.jumpcutfindo.onmymark.graphics.markers.MarkerRenderer;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
+import com.jumpcutfindo.onmymark.marker.Marker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,16 +21,40 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector4f;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class OnPlayerMarkInputHandler implements InputHandler {
     private final ClientMarkerManager clientMarkerManager;
+    private final OnMyMarkRenderer renderer;
 
-    public OnPlayerMarkInputHandler(ClientMarkerManager clientMarkerManager) {
+    public OnPlayerMarkInputHandler(ClientMarkerManager clientMarkerManager, OnMyMarkRenderer renderer) {
         this.clientMarkerManager = clientMarkerManager;
+        this.renderer = renderer;
     }
     
     @Override
     public void execute(MinecraftClient client) {
+        if (client == null || client.player == null) {
+            return;
+        }
+
+        // Attempt to remove existing markers first, if any
+        List<Marker> markers = findMarkersAroundCrosshair(client)
+                .stream()
+                .filter(marker -> marker.isOwner(client.player))
+                .toList();
+
+        if (!markers.isEmpty()) {
+            // Since there are some markers around, we remove them and stop further processing
+            markers.forEach(clientMarkerManager::removeMarker);
+            return;
+        }
+
+        // Attempt to create a marker at the crosshair's target
         AbstractClientPlayerEntity clientPlayer = client.player;
         HitResult hitResult = findCrosshairTarget(client, client.getCameraEntity(), 1.0f);
 
@@ -54,6 +81,34 @@ public class OnPlayerMarkInputHandler implements InputHandler {
         } else if (hitResult.getType() == HitResult.Type.MISS) {
             System.out.println("lol you missed");
         }
+    }
+
+    /**
+     * Retrieves the list of markers that are present around a small radius of the crosshair.
+     */
+    private List<Marker> findMarkersAroundCrosshair(MinecraftClient client) {
+        int radius = 8;
+        int centerX = client.getWindow().getScaledWidth() / 2;
+        int centerY = client.getWindow().getScaledHeight() / 2;
+
+        Map<Marker, MarkerRenderer> markerRendererMap = renderer.markerRendererMap();
+        List<Marker> result = new ArrayList<>();
+
+        for (Marker marker : markerRendererMap.keySet()) {
+            MarkerRenderer mr = markerRendererMap.get(marker);
+            Vector4f mrScreenPos = mr.screenPos();
+
+            // Compute squared distance to avoid sqrt
+            float dx = mrScreenPos.x - centerX;
+            float dy = mrScreenPos.y - centerY;
+            float distanceSq = dx * dx + dy * dy;
+
+            if (distanceSq <= radius * radius) {
+                result.add(marker);
+            }
+        }
+
+        return result;
     }
 
     /**
