@@ -22,9 +22,19 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
-    public void drawIcon(DrawContext drawContext, float screenX, float screenY) {
+    public void drawLabel(DrawContext drawContext, float screenX, float screenY) {
         ItemStack blockItem = this.blockMarker.blockState().getBlock().asItem().getDefaultStack();
         drawContext.drawItem(blockItem, (int) screenX, (int) screenY);
+    }
+
+    @Override
+    public int getLabelWidth() {
+        return (int) MarkerRenderer.ICON_SIZE;
+    }
+
+    @Override
+    public int getLabelHeight() {
+        return (int) MarkerRenderer.ICON_SIZE;
     }
 
     @Override
