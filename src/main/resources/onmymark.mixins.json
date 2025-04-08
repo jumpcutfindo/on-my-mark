@@ -3,7 +3,8 @@
 	"package": "com.jumpcutfindo.onmymark.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"OnMyMarkMixin"
+		"OnMyMarkMixin",
+		"VehicleEntityInvoker"
 	],
 	"injectors": {
 		"defaultRequire": 1
