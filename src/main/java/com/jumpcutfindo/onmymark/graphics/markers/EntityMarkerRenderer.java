@@ -1,9 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
-import com.jumpcutfindo.onmymark.graphics.utils.ObjectDrawer;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityMarkerRenderer extends MarkerRenderer {
@@ -31,5 +29,10 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     boolean isMoving() {
         Vec3d velocity = entityMarker.entity().getVelocity();
         return !velocity.equals(Vec3d.ZERO);
+    }
+
+    @Override
+    public boolean shouldDraw() {
+        return super.shouldDraw() && !this.entityMarker.entity().isRemoved();
     }
 }

@@ -78,7 +78,7 @@ public class OnPlayerMarkInputHandler implements InputHandler {
         Vec3d vec3d3 = vec3d.add(vec3d2.x * d, vec3d2.y * d, vec3d2.z * d);
         float g = 1.0F;
         Box box = cameraEntity.getBoundingBox().stretch(vec3d2.multiply(d)).expand(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(cameraEntity, vec3d, vec3d3, box, EntityPredicates.CAN_HIT, e);
+        EntityHitResult entityHitResult = ProjectileUtil.raycast(cameraEntity, vec3d, vec3d3, box, EntityPredicates.EXCEPT_SPECTATOR, e);
         return entityHitResult != null ? entityHitResult : hitResult;
     }
 }
