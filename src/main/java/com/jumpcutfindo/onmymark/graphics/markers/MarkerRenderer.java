@@ -28,6 +28,7 @@ public abstract class MarkerRenderer {
 
     protected Vector4f screenPos, prevScreenPos;
     protected Vector2f screenPosNormal;
+    protected double distanceFromPlayer;
 
     protected MarkerRenderer(MinecraftClient client) {
         this.client = client;
@@ -78,6 +79,9 @@ public abstract class MarkerRenderer {
         float centerX = windowWidth / 2f;
         float centerY = windowHeight / 2f;
         screenPosNormal = RenderMath.getNormalToEllipse(centerX, centerY, clampWidth / 2f, clampHeight / 2f, screenPos.x(), screenPos.y());
+
+        // Calculate and store distance from player
+        this.distanceFromPlayer = this.client.player.getPos().distanceTo(this.getWorldPos());
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
@@ -114,6 +118,8 @@ public abstract class MarkerRenderer {
         return screenPos != null && screenPosNormal != null;
     }
 
+    abstract Vec3d getWorldPos();
+
     abstract Vec3d getMarkerWorldPos();
 
     abstract String getName();
@@ -121,16 +127,31 @@ public abstract class MarkerRenderer {
     abstract boolean isMoving();
 
     public void draw(DrawContext drawContext) {
+        // Calculate distance label variables
+        float distanceLabelScale = 0.65F; // TODO(preference): Implement adjusting of distance label size
+        String distanceLabelString = this.getDistanceLabelString();
+
+        int distanceLabelWidth = (int) ((float) client.textRenderer.getWidth(distanceLabelString) * distanceLabelScale);
+        int distanceLabelHeight = (int) ((float) client.textRenderer.fontHeight * distanceLabelScale);
+
         // TODO(preference): Implement toggling of pointer
         if (this.isClamped) {
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext);
-            Vector2f iconPos = this.getClampedLabelPos(drawContext, this.getLabelWidth(), this.getLabelHeight(), 12F);
+            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 8F);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y());
+
+            Vector2f distanceLabelPos = this.getClampedLabelPos(distanceLabelWidth, distanceLabelHeight, 36F);
+            this.drawDistanceLabel(drawContext, distanceLabelPos.x(), distanceLabelPos.y(), distanceLabelScale);
         } else {
             // Draw pointer that points directly toward object
             this.drawPointer(drawContext);
-            this.drawLabel(drawContext, screenPos.x() - this.getLabelWidth() / 2F, screenPos.y() - POINTER_HEIGHT - getLabelHeight() - 4F);
+
+            float screenX = screenPos.x() - this.getLabelWidth() / 2F;
+            float screenY = screenPos.y() - POINTER_HEIGHT - getLabelHeight() - 4F;
+
+            this.drawLabel(drawContext, screenX, screenY);
+            this.drawDistanceLabel(drawContext, screenPos.x() - distanceLabelWidth / 2F, screenPos.y()  - POINTER_HEIGHT - distanceLabelHeight - 24F, distanceLabelScale);
         }
 
     }
@@ -150,6 +171,17 @@ public abstract class MarkerRenderer {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
         BufferRenderer.drawWithGlobalProgram(buffer.end());
+    }
+
+    private String getDistanceLabelString() {
+        return String.format("%dm", (int) distanceFromPlayer);
+    }
+
+    private void drawDistanceLabel(DrawContext drawContext, float screenX, float screenY, float scale) {
+        drawContext.getMatrices().push();
+        drawContext.getMatrices().scale(scale, scale, scale);
+        drawContext.drawText(this.client.textRenderer, getDistanceLabelString(), (int) (screenX / scale), (int) (screenY / scale), 0xFFFFFFFF, true);
+        drawContext.getMatrices().pop();
     }
 
     /**
@@ -200,27 +232,27 @@ public abstract class MarkerRenderer {
         BufferRenderer.drawWithGlobalProgram(buffer.end());
     }
 
-    private Vector2f offsetFromScreenPos(DrawContext drawContext, float offset) {
+    private Vector2f offsetFromScreenPos(float offset) {
         float offsetScreenPosX = screenPos.x() - screenPosNormal.x * offset;
         float offsetScreenPosY = screenPos.y() - screenPosNormal.y * offset;
 
         return new Vector2f(offsetScreenPosX, offsetScreenPosY);
     }
 
-    protected Vector2f getClampedLabelPos(DrawContext drawContext, float labelWidth, float labelHeight, float offset) {
-        Vector2f offsetPos = offsetFromScreenPos(drawContext, offset);
+    protected Vector2f getClampedLabelPos(float labelWidth, float labelHeight, float offset) {
+        Vector2f offsetPos = offsetFromScreenPos(offset);
 
         // Flip the normal vector to go inward
         Vector2f inwardNormal = new Vector2f(screenPosNormal);
         inwardNormal.negate();
 
         // Compute the center of the icon along the inward direction
-        float iconCenterX = offsetPos.x + inwardNormal.x * labelWidth;
-        float iconCenterY = offsetPos.y + inwardNormal.y * labelHeight;
+        float labelCenterX = offsetPos.x + inwardNormal.x * labelWidth;
+        float labelCenterY = offsetPos.y + inwardNormal.y * labelHeight;
 
         // Compute the top-left corner to draw the icon centered at that point
-        int iconX = (int) (iconCenterX - labelWidth / 2F);
-        int iconY = (int) (iconCenterY - labelHeight / 2F);
+        int iconX = (int) (labelCenterX - labelWidth / 2F);
+        int iconY = (int) (labelCenterY - labelHeight / 2F);
 
         return new Vector2f(iconX, iconY);
     }

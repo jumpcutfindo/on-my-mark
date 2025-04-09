@@ -37,6 +37,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    Vec3d getWorldPos() {
+        return entityMarker.getExactPosition();
+    }
+
+    @Override
     Vec3d getMarkerWorldPos() {
         Vec3d worldPos = entityMarker.getExactPosition();
 
