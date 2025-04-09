@@ -24,6 +24,8 @@
   "onmymark.toast.partyInvite.title": "New party invitation",
   "onmymark.toast.partyInvite.description": "%s wants you to join their party",
 
+  "onmymark.action.placeMarker.notInParty": "You need to be in a party before you can place a marker",
+
   "onmymark.action.onCreateParty": "Created party \"%s\"",
   "onmymark.action.onLeaveParty.self": "You have left the party",
   "onmymark.action.onLeaveParty.other": "%s has left the party",

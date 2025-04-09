@@ -13,6 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -39,7 +40,12 @@ public class OnPlayerMarkInputHandler implements InputHandler {
     
     @Override
     public void execute(MinecraftClient client) {
-        if (client == null || client.player == null || !this.clientPartyManager.isInParty()) {
+        if (client == null || client.player == null) {
+            return;
+        }
+
+        if (!this.clientPartyManager.isInParty()) {
+            client.player.sendMessage(Text.translatable("onmymark.action.placeMarker.notInParty"), false);
             return;
         }
 
