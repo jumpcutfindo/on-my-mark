@@ -7,7 +7,7 @@ import com.jumpcutfindo.onmymark.graphics.markers.MarkerRenderer;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
-import net.minecraft.block.Block;
+import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -78,10 +78,9 @@ public class OnPlayerMarkInputHandler implements InputHandler {
             if (client.world == null) return;
 
             BlockState blockState = client.world.getBlockState(blockPos);
-            Block block = blockState.getBlock();
 
             clientMarkerManager.setMarker(this.clientPartyManager.self(), new BlockMarker(this.clientPartyManager.self(), blockPos, blockState));
-            // TODO: Implement propagation of marker creation to other clients
+            ClientNetworkSender.markBlock(client.player, blockPos);
         }
     }
 

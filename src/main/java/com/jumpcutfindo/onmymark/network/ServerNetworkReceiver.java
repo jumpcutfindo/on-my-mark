@@ -27,6 +27,8 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.onPartyInvitationDecision();
 
         this.onKickPlayer();
+
+        this.onMarkBlock();
     }
 
     private void onCreateParty() {
@@ -155,6 +157,20 @@ public class ServerNetworkReceiver implements ModInitializer {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.alreadyInParty"));
             } catch (InvalidPartyPermissionsException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidPermissions"));
+            }
+        });
+    }
+
+    private void onMarkBlock() {
+        this.registerAndHandle(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC, (payload, context) -> {
+            try {
+                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+
+                for (PartyMember partyMember : party.partyMembers()) {
+                    ServerNetworkSender.sendBlockMarker((ServerPlayerEntity) partyMember.player(), context.player(), payload.blockPos());
+                }
+            } catch (PartyNotFoundException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
             }
         });
     }

@@ -4,7 +4,9 @@ import com.jumpcutfindo.onmymark.network.packets.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.UUID;
 
@@ -41,5 +43,9 @@ public class ClientNetworkSender implements ClientModInitializer {
 
     public static void sendInvitationResponse(boolean isAccept) {
         ClientPlayNetworking.send(PartyInvitationDecisionPacket.create(isAccept));
+    }
+
+    public static void markBlock(PlayerEntity player, BlockPos blockPos) {
+        ClientPlayNetworking.send(MarkBlockPacket.create(player, blockPos));
     }
 }

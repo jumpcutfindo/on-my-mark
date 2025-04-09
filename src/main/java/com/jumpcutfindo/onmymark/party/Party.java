@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.party;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Party {
@@ -64,6 +65,16 @@ public class Party {
 
     public boolean hasMember(PartyMember partyMember) {
         return this.partyMembers.contains(partyMember);
+    }
+
+    public boolean hasMemberWithId(UUID playerId) {
+        return this.partyMembers.stream().anyMatch((pm) -> pm.player().getUuid().equals(playerId));
+    }
+
+    public PartyMember getMemberWithId(UUID playerId) {
+        Optional<PartyMember> pmOpt = this.partyMembers.stream().filter((pm) -> pm.player().getUuid().equals(playerId)).findFirst();
+
+        return pmOpt.orElse(null);
     }
 
     public void setState(State state) {
