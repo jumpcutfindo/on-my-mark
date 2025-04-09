@@ -29,6 +29,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
 
         onMarkBlock();
         onMarkEntity();
+        onRemoveMarker();
     }
 
     public static void onPartyInfo() {
@@ -106,6 +107,20 @@ public class ClientNetworkReceiver implements ClientModInitializer {
                 PartyMember partyMember = party.getMemberWithId(packet.playerId());
 
                 markerManager.setMarker(partyMember, new EntityMarker(partyMember, entity));
+            }
+        });
+    }
+
+    public static void onRemoveMarker() {
+        ClientPlayNetworking.registerGlobalReceiver(RemoveMarkerPacket.PACKET_ID, (packet, context) -> {
+            ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
+            Party party = partyManager.party();
+
+            if (party.hasMemberWithId(packet.markerPlayerId())) {
+                ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();
+                PartyMember partyMember = party.getMemberWithId(packet.markerPlayerId());
+
+                markerManager.removeMarkerOf(partyMember);
             }
         });
     }

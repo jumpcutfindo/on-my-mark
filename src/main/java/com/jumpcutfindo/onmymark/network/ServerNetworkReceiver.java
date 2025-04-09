@@ -10,6 +10,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
@@ -32,6 +33,7 @@ public class ServerNetworkReceiver implements ModInitializer {
 
         this.onMarkBlock();
         this.onMarkEntity();
+        this.onRemoveMarker();
     }
 
     private void onCreateParty() {
@@ -193,7 +195,23 @@ public class ServerNetworkReceiver implements ModInitializer {
                 for (PartyMember partyMember : party.partyMembers()) {
                     ServerNetworkSender.sendEntityMarker((ServerPlayerEntity) partyMember.player(), context.player(), entity);
                 }
+            } catch (PartyNotFoundException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            }
+        }));
+    }
 
+    private void onRemoveMarker() {
+        this.registerAndHandle(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC, ((payload , context) -> {
+            try {
+                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+
+                ServerWorld world = context.player().getServerWorld();
+                PlayerEntity markerPlayer = world.getPlayerByUuid(payload.markerPlayerId());
+
+                for (PartyMember partyMember : party.partyMembers()) {
+                    ServerNetworkSender.removeMarker((ServerPlayerEntity) partyMember.player(), (ServerPlayerEntity) markerPlayer);
+                }
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
             }

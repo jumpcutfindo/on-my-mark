@@ -24,6 +24,7 @@ public class ServerNetworkSender implements ModInitializer {
 
         PayloadTypeRegistry.playS2C().register(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC);
     }
 
     public static void sendPartyInfo(ServerPlayerEntity player, Party party) {
@@ -50,5 +51,9 @@ public class ServerNetworkSender implements ModInitializer {
 
     public static void sendEntityMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, Entity entity) {
         ServerPlayNetworking.send(player, MarkEntityPacket.create(markerPlayer, entity));
+    }
+
+    public static void removeMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer) {
+        ServerPlayNetworking.send(player, RemoveMarkerPacket.create(markerPlayer));
     }
 }

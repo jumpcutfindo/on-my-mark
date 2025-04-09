@@ -53,4 +53,8 @@ public class ClientNetworkSender implements ClientModInitializer {
     public static void markEntity(PlayerEntity player, Entity entity) {
         ClientPlayNetworking.send(MarkEntityPacket.create(player, entity));
     }
+
+    public static void removeMarker(PlayerEntity player) {
+        ClientPlayNetworking.send(RemoveMarkerPacket.create(player));
+    }
 }

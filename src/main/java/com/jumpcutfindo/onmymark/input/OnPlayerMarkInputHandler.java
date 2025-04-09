@@ -58,7 +58,7 @@ public class OnPlayerMarkInputHandler implements InputHandler {
         if (!markers.isEmpty()) {
             // Since there are some markers around, we remove them and stop further processing
             clientMarkerManager.removeMarkerOf(this.clientPartyManager.self());
-            // TODO: Implement propagation of marker removal to other clients
+            ClientNetworkSender.removeMarker(client.player);
             return;
         }
 
