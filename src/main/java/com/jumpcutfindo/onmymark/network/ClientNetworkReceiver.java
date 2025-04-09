@@ -35,6 +35,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
     public static void onPartyInfo() {
         ClientPlayNetworking.registerGlobalReceiver(PartyInfoPacket.PACKET_ID, ((partyInfoPacket, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
+
             Party party = partyInfoPacket.toParty(context.player().getWorld());
             partyManager.setParty(party);
 

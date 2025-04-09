@@ -29,19 +29,22 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
         this.item = partyMember;
         this.index = index;
 
-        this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(partyMember.player().getGameProfile());
+        if (partyMember.player() != null) {
+            this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(partyMember.player().getGameProfile());
+        }
     }
 
     @Override
     public void renderContent(DrawContext context, int x, int y, int mouseX, int mouseY) {
-
         // Draw marker color
         int markerColor = ScreenUtils.getColorOfIndex(this.index);
         context.fill(x + 3, y + 3, x + 8, y + 15, markerColor << 7);
         context.fill(x + 4, y + 4, x + 7, y + 14, markerColor);
 
         // Draw player icon
-        PlayerSkinDrawer.draw(context, this.playerSkinTextures, x + 11, y + 3, 12);
+        if (this.playerSkinTextures != null) {
+            PlayerSkinDrawer.draw(context, this.playerSkinTextures, x + 11, y + 3, 12);
+        }
 
         // Draw name
         Text displayName = Text.literal(StringUtils.truncatedName(this.item.displayName(), 14));

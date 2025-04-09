@@ -146,6 +146,17 @@ public class PartyManager {
         return existingInvite.party();
     }
 
+    public void removeInvite(ServerPlayerEntity player) {
+        PartyMember invitee = this.getOrCreate(player);
+        PartyInvite existingInvite = this.getInviteOfInvitee(invitee);
+
+        if (existingInvite == null) {
+            return;
+        }
+
+        this.partyInvites.remove(existingInvite);
+    }
+
     private PartyInvite getInviteOfInvitee(PartyMember invitee) {
         Optional<PartyInvite> piOpt = this.partyInvites.stream()
                 .filter(partyInvite -> partyInvite.to().equals(invitee))

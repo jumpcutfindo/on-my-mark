@@ -14,7 +14,7 @@ public class ScreenUtils {
         }
 
         // Convert index into a hue value between 0.0 and 1.0
-        float hue = (index % 360) / 360.0f;
+        float hue = (index % 360) / 180.0f;
 
         // Saturation and brightness are full (1.0f)
         Color color = Color.getHSBColor(hue, 1.0f, 1.0f);

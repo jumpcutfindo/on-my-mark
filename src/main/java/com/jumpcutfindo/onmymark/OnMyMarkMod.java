@@ -7,8 +7,11 @@ import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
@@ -22,31 +25,38 @@ public class OnMyMarkMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ServerLifecycleEvents
-				.SERVER_STARTED
-				.register(this::onServerStarted);
+		ServerLifecycleEvents.SERVER_STARTED.register(this::onServerStarted);
 
-		ServerEntityEvents.ENTITY_LOAD.register(this::onEntityLoaded);
-
+		ServerPlayConnectionEvents.JOIN.register(this::onEntityLoaded);
+		ServerPlayConnectionEvents.DISCONNECT.register(this::onPlayerDisconnect);
 	}
 
 	public void onServerStarted(MinecraftServer server) {
 		// Initialize the party system
 		PARTY_MANAGER = new PartyManager();
+
 		LOGGER.info("Party manager initialized!");
 	}
 
-	public void onEntityLoaded(Entity entity, ServerWorld serverWorld) {
-		if (entity instanceof ServerPlayerEntity serverPlayer) {
-			// Send party info the to the client
-			try {
-				Party party = PARTY_MANAGER.getPartyOfPlayer(serverPlayer);
-				ServerNetworkSender.sendPartyInfo(serverPlayer, party);
-			} catch (PartyNotFoundException e) {
-				// Player has no party info, remove it from the client
-				ServerNetworkSender.removePartyInfo(serverPlayer);
-			}
+	public void onEntityLoaded(ServerPlayNetworkHandler networkHandler, PacketSender packetSender, MinecraftServer minecraftServer) {
+		ServerPlayerEntity serverPlayer = networkHandler.getPlayer();
 
+		try {
+			// Send party info the to the client
+			Party party = PARTY_MANAGER.getPartyOfPlayer(serverPlayer);
+			ServerNetworkSender.sendPartyInfo(serverPlayer, party);
+		} catch (PartyNotFoundException e) {
+			// Player has no party info, remove it from the client
+			ServerNetworkSender.removePartyInfo(serverPlayer);
 		}
+	}
+
+	public void onPlayerDisconnect(ServerPlayNetworkHandler networkHandler, MinecraftServer minecraftServer) {
+		ServerPlayerEntity serverPlayer = networkHandler.getPlayer();
+
+		// TODO: Persist user in server as long as server is running
+		// For now, we remove the player when they leave the server
+		PARTY_MANAGER.removeInvite(serverPlayer);
+		PARTY_MANAGER.leaveParty(serverPlayer);
 	}
 }
