@@ -12,6 +12,10 @@ public class ClientMarkerManager {
         this.markerMap = new HashMap<>();
     }
 
+    public void reset() {
+        this.markerMap = new HashMap<>();
+    }
+
     public Collection<Marker> markers() {
         return markerMap.values();
     }

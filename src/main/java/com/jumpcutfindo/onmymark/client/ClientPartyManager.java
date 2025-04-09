@@ -14,6 +14,12 @@ public class ClientPartyManager {
 
     }
 
+    public void reset() {
+        this.party = null;
+        this.self = null;
+        this.partyInvite = null;
+    }
+
     public void setParty(Party party) {
         this.party = party;
 
