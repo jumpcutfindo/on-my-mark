@@ -200,7 +200,7 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     private void onKickPlayer(PartyMember partyMember) {
-        // TODO: Implement kicking of player
+        ClientNetworkSender.kickFromParty(partyMember.player().getUuid());
     }
 
     private enum State {
