@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
+import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -51,6 +52,11 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     @Override
     boolean isMoving() {
         return false;
+    }
+
+    @Override
+    int getPointerColor() {
+        return ScreenUtils.getColorOfIndex(this.blockMarker.owner().getPartyIndex());
     }
 
     @Override

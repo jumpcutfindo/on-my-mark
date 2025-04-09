@@ -22,6 +22,10 @@ public class PartyMember {
         return currentParty;
     }
 
+    public int getPartyIndex() {
+        return currentParty != null ? currentParty.partyMembers().indexOf(this) : -1;
+    }
+
     public void setCurrentParty(Party party) {
         assert (party != null): "Use `PartyMember#removeCurrentParty` if you wish to remove the player's current party";
 

@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
+import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.mixin.VehicleEntityInvoker;
 import net.minecraft.client.MinecraftClient;
@@ -69,6 +70,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     boolean isMoving() {
         Vec3d velocity = entityMarker.entity().getVelocity();
         return !velocity.equals(Vec3d.ZERO);
+    }
+
+    @Override
+    int getPointerColor() {
+        return ScreenUtils.getColorOfIndex(this.entityMarker.owner().getPartyIndex());
     }
 
     @Override

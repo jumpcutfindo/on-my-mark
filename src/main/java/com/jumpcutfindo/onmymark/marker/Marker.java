@@ -18,6 +18,10 @@ public abstract class Marker {
         this.owner = owner;
     }
 
+    public PartyMember owner() {
+        return this.owner;
+    }
+
     public boolean isOwner(PlayerEntity player) {
         return this.owner.player().getUuid().equals(player.getUuid());
     }

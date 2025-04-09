@@ -34,14 +34,23 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
 
     @Override
     public void renderContent(DrawContext context, int x, int y, int mouseX, int mouseY) {
-        PlayerSkinDrawer.draw(context, this.playerSkinTextures, x + 3, y + 3, 12);
 
+        // Draw marker color
+        int markerColor = ScreenUtils.getColorOfIndex(this.index);
+        context.fill(x + 3, y + 3, x + 8, y + 15, markerColor << 7);
+        context.fill(x + 4, y + 4, x + 7, y + 14, markerColor);
+
+        // Draw player icon
+        PlayerSkinDrawer.draw(context, this.playerSkinTextures, x + 11, y + 3, 12);
+
+        // Draw name
         Text displayName = Text.literal(StringUtils.truncatedName(this.item.displayName(), 14));
-        context.drawText(this.screen.getTextRenderer(), displayName, (x + 18), (y + 5), 0x282828, false);
+        context.drawText(this.screen.getTextRenderer(), displayName, (x + 27), (y + 5), 0x282828, false);
 
+        // Draw crown if party leader
         if (this.item.isPartyLeader()) {
             int displayNameWidth = this.screen.getTextRenderer().getWidth(displayName);
-            int partyLeaderCrownX = x + displayNameWidth + 19, partyLeaderCrownY = y;
+            int partyLeaderCrownX = x + displayNameWidth + 27, partyLeaderCrownY = y;
             context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, partyLeaderCrownX, partyLeaderCrownY, 180, 178, 16, 16, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
             if (

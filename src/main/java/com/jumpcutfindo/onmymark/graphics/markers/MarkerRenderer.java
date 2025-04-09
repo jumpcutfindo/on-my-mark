@@ -1,11 +1,8 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.util.math.MathHelper;
@@ -32,6 +29,8 @@ public abstract class MarkerRenderer {
     protected Vector2f screenPosNormal;
     protected double distanceFromPlayer;
 
+    private int pointerColor;
+
     protected MarkerRenderer(MinecraftClient client) {
         this.client = client;
 
@@ -39,6 +38,7 @@ public abstract class MarkerRenderer {
         this.prevScreenPos = null;
 
         this.clampType = ClampType.OVAL;
+        this.pointerColor = -1;
     }
 
     public Vector4f screenPos() {
@@ -84,6 +84,11 @@ public abstract class MarkerRenderer {
 
         // Calculate and store distance from player
         this.distanceFromPlayer = this.client.player.getPos().distanceTo(this.getWorldPos());
+
+        // Calculate color if not yet done
+        if (this.pointerColor <= -1) {
+            this.pointerColor = this.getPointerColor();
+        }
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
@@ -125,6 +130,8 @@ public abstract class MarkerRenderer {
     abstract Vec3d getMarkerWorldPos();
 
     abstract String getName();
+
+    abstract int getPointerColor();
 
     abstract boolean isMoving();
 
@@ -168,7 +175,7 @@ public abstract class MarkerRenderer {
         float x3 = this.screenPos.x + POINTER_WIDTH / 2F;
         float y3 = this.screenPos.y - POINTER_HEIGHT;
 
-        MarkerRenderer.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, 0xFFFFFFFF);
+        MarkerRenderer.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, this.pointerColor);
     }
 
     private String getDistanceLabelString() {
@@ -214,8 +221,18 @@ public abstract class MarkerRenderer {
         float baseRightX = baseCenterX + baseOffsetX;
         float baseRightY = baseCenterY + baseOffsetY;
 
-        // Draw triangle
-        MarkerRenderer.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, 0xFFFFFFFF);
+        float pointerBgScale = 2.0F;
+    //        MarkerRenderer.drawTriangle(
+    //                drawContext,
+    //                tipX,
+    //                tipY,
+    //                baseCenterX - baseOffsetX * pointerBgScale,
+    //                baseCenterY - baseOffsetY * pointerBgScale,
+    //                baseCenterX + baseOffsetX * pointerBgScale,
+    //                baseCenterY + baseOffsetY * pointerBgScale,
+    //                this.pointerColor
+    //        );
+        MarkerRenderer.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, this.pointerColor);
     }
 
     private static void drawTriangle(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, int argb) {
