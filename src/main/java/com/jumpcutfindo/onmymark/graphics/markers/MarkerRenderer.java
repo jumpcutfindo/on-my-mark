@@ -140,10 +140,10 @@ public abstract class MarkerRenderer {
         if (this.isClamped) {
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext);
-            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 8F);
+            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 24F);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y());
 
-            Vector2f distanceLabelPos = this.getClampedLabelPos(distanceLabelWidth, distanceLabelHeight, 36F);
+            Vector2f distanceLabelPos = this.getClampedLabelPos(distanceLabelWidth, distanceLabelHeight, 10F);
             this.drawDistanceLabel(drawContext, distanceLabelPos.x(), distanceLabelPos.y(), distanceLabelScale);
         } else {
             // Draw pointer that points directly toward object
