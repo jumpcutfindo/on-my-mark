@@ -3,7 +3,7 @@ package com.jumpcutfindo.onmymark.graphics.screen.components;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
-import com.jumpcutfindo.onmymark.graphics.screen.utils.SoundUtils;
+import com.jumpcutfindo.onmymark.utils.SoundUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

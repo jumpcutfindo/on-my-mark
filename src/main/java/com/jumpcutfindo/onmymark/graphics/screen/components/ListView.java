@@ -2,7 +2,7 @@ package com.jumpcutfindo.onmymark.graphics.screen.components;
 
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
-import com.jumpcutfindo.onmymark.graphics.screen.utils.SoundUtils;
+import com.jumpcutfindo.onmymark.utils.SoundUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;

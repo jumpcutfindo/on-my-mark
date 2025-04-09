@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.graphics.screen.utils;
+package com.jumpcutfindo.onmymark.utils;
 
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;

@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.graphics.screen.utils;
+package com.jumpcutfindo.onmymark.utils;
 
 public class StringUtils {
     public static String truncatedName(String name, int maxLength) {

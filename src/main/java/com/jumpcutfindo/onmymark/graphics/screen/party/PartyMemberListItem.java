@@ -4,7 +4,7 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
-import com.jumpcutfindo.onmymark.graphics.screen.utils.StringUtils;
+import com.jumpcutfindo.onmymark.utils.StringUtils;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
