@@ -1,9 +1,11 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgramKeys;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.util.math.MathHelper;
@@ -157,20 +159,16 @@ public abstract class MarkerRenderer {
     }
 
     private void drawPointer(DrawContext drawContext) {
-        Matrix4f transformationMatrix = drawContext.getMatrices().peek().getPositionMatrix();
-        Tessellator tessellator = Tessellator.getInstance();
+        float x1 = this.screenPos.x();
+        float y1 = this.screenPos.y();
 
-        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
+        float x2 = this.screenPos.x - POINTER_WIDTH / 2F;
+        float y2 = this.screenPos.y - POINTER_HEIGHT;
 
-        buffer.vertex(transformationMatrix, this.screenPos.x, this.screenPos.y, 5).color(0xFFFFFFFF);
-        buffer.vertex(transformationMatrix, this.screenPos.x - POINTER_WIDTH / 2F, this.screenPos.y - POINTER_HEIGHT, 5).color(0xFFFFFFFF);
-        buffer.vertex(transformationMatrix, this.screenPos.x + POINTER_WIDTH / 2F, this.screenPos.y - POINTER_HEIGHT, 5).color(0xFFFFFFFF);
-        buffer.vertex(transformationMatrix, this.screenPos.x, this.screenPos.y, 5).color(0xFFFFFFFF);
+        float x3 = this.screenPos.x + POINTER_WIDTH / 2F;
+        float y3 = this.screenPos.y - POINTER_HEIGHT;
 
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        BufferRenderer.drawWithGlobalProgram(buffer.end());
+        MarkerRenderer.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, 0xFFFFFFFF);
     }
 
     private String getDistanceLabelString() {
@@ -217,19 +215,22 @@ public abstract class MarkerRenderer {
         float baseRightY = baseCenterY + baseOffsetY;
 
         // Draw triangle
+        MarkerRenderer.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, 0xFFFFFFFF);
+    }
+
+    private static void drawTriangle(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, int argb) {
         Matrix4f transformationMatrix = drawContext.getMatrices().peek().getPositionMatrix();
         Tessellator tessellator = Tessellator.getInstance();
 
         BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
 
-        buffer.vertex(transformationMatrix, tipX, tipY, 5).color(0xFFFFFFFF);
-        buffer.vertex(transformationMatrix, baseLeftX, baseLeftY, 5).color(0xFFFFFFF);
-        buffer.vertex(transformationMatrix, baseRightX, baseRightY, 5).color(0xFFFFFFF);
+        buffer.vertex(transformationMatrix, x1, y1, 5).color(argb);
+        buffer.vertex(transformationMatrix, x2, y2, 5).color(argb);
+        buffer.vertex(transformationMatrix, x3, y3, 5).color(argb);
 
-        RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        BufferRenderer.drawWithGlobalProgram(buffer.end());
+        try (BuiltBuffer builtBuffer = buffer.end()) {
+            RenderLayer.getDebugTriangleFan().draw(builtBuffer);
+        }
     }
 
     private Vector2f offsetFromScreenPos(float offset) {
