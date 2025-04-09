@@ -7,7 +7,7 @@ import net.minecraft.client.MinecraftClient;
 
 public class ClientPartyManager {
     private Party party;
-    private PartyMember partyMember;
+    private PartyMember self;
     private PartyInvite partyInvite;
 
     public ClientPartyManager() {
@@ -18,11 +18,11 @@ public class ClientPartyManager {
         this.party = party;
 
         if (party == null) {
-            this.partyMember = null;
+            this.self = null;
             return;
         }
 
-        this.partyMember = party.partyMembers()
+        this.self = party.partyMembers()
                 .stream()
                 .filter((mem) -> mem.player().getUuid() == MinecraftClient.getInstance().player.getUuid())
                 .toList()
@@ -33,8 +33,16 @@ public class ClientPartyManager {
         return party;
     }
 
-    public PartyMember partyMember() {
-        return partyMember;
+    public PartyMember self() {
+        return self;
+    }
+
+    public boolean isPartyLeader() {
+        return self != null && self.isPartyLeader();
+    }
+
+    public boolean isInParty() {
+        return self != null;
     }
 
     public void setPartyInvite(PartyInvite invite) {

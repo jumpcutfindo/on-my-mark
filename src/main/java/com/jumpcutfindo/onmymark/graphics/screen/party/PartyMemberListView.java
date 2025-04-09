@@ -94,7 +94,7 @@ public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
 
     @Override
     public boolean canSelect() {
-        PartyMember partyMember = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyMember();
+        PartyMember partyMember = OnMyMarkClientMod.INSTANCE.clientPartyManager().self();
 
         if (partyMember == null) {
             return true;

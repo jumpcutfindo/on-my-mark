@@ -63,7 +63,7 @@ public class PartyScreen extends OnMyMarkScreen {
         // Calculate the state
         if (this.party == null) {
             state = State.NO_PARTY;
-        } else if (OnMyMarkClientMod.INSTANCE.clientPartyManager().partyMember().isPartyLeader()) {
+        } else if (OnMyMarkClientMod.INSTANCE.clientPartyManager().isPartyLeader()) {
             if (this.partyMemberListView.isAnySelected()) {
                 state = State.IN_PARTY_AS_LEADER_MEMBER_SELECTED;
             } else {

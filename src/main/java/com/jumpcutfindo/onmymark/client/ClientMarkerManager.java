@@ -1,30 +1,26 @@
 package com.jumpcutfindo.onmymark.client;
 
 import com.jumpcutfindo.onmymark.marker.Marker;
+import com.jumpcutfindo.onmymark.party.PartyMember;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ClientMarkerManager {
-    private List<Marker> markers;
+    private Map<PartyMember, Marker> markerMap;
 
     public ClientMarkerManager() {
-        this.markers = new ArrayList<>();
+        this.markerMap = new HashMap<>();
     }
 
-    public List<Marker> markers() {
-        return markers;
+    public Collection<Marker> markers() {
+        return markerMap.values();
     }
 
-    public void addMarker(Marker marker) {
-        this.markers.add(marker);
-
-        // TODO: Implement propagation of marker creation to other clients
+    public void setMarker(PartyMember partyMember, Marker marker) {
+        this.markerMap.put(partyMember, marker);
     }
 
-    public void removeMarker(Marker marker) {
-        this.markers.remove(marker);
-
-        // TODO: Implement propagation of marker removal to other clients
+    public void removeMarkerOf(PartyMember partyMember) {
+        this.markerMap.remove(partyMember);
     }
 }

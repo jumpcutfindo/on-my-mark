@@ -59,7 +59,7 @@ public class InputListener {
 
             while (MARK_BINDING.wasPressed()) {
                 // TODO: Add cooldown to marking
-                InputHandler inputHandler = new OnPlayerMarkInputHandler(clientMarkerManager, renderer);
+                InputHandler inputHandler = new OnPlayerMarkInputHandler(clientPartyManager, clientMarkerManager, renderer);
                 inputHandler.execute(client);
             }
 

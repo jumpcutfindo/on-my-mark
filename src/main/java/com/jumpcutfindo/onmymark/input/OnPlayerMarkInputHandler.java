@@ -1,16 +1,15 @@
 package com.jumpcutfindo.onmymark.input;
 
 import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
+import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.graphics.markers.MarkerRenderer;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
-import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -28,17 +27,19 @@ import java.util.List;
 import java.util.Map;
 
 public class OnPlayerMarkInputHandler implements InputHandler {
+    private final ClientPartyManager clientPartyManager;
     private final ClientMarkerManager clientMarkerManager;
     private final OnMyMarkRenderer renderer;
 
-    public OnPlayerMarkInputHandler(ClientMarkerManager clientMarkerManager, OnMyMarkRenderer renderer) {
+    public OnPlayerMarkInputHandler(ClientPartyManager clientPartyManager, ClientMarkerManager clientMarkerManager, OnMyMarkRenderer renderer) {
+        this.clientPartyManager = clientPartyManager;
         this.clientMarkerManager = clientMarkerManager;
         this.renderer = renderer;
     }
     
     @Override
     public void execute(MinecraftClient client) {
-        if (client == null || client.player == null) {
+        if (client == null || client.player == null || !this.clientPartyManager.isInParty()) {
             return;
         }
 
@@ -50,22 +51,20 @@ public class OnPlayerMarkInputHandler implements InputHandler {
 
         if (!markers.isEmpty()) {
             // Since there are some markers around, we remove them and stop further processing
-            markers.forEach(clientMarkerManager::removeMarker);
+            clientMarkerManager.removeMarkerOf(this.clientPartyManager.self());
+            // TODO: Implement propagation of marker removal to other clients
             return;
         }
 
         // Attempt to create a marker at the crosshair's target
-        AbstractClientPlayerEntity clientPlayer = client.player;
         HitResult hitResult = findCrosshairTarget(client, client.getCameraEntity(), 1.0f);
 
         if (hitResult.getType() == HitResult.Type.ENTITY) {
             EntityHitResult entityHitResult = (EntityHitResult) hitResult;
             Entity entity = entityHitResult.getEntity();
 
-            System.out.println(entity.getDisplayName());
-
-            // TODO: Change this so that the party member is some instance
-            clientMarkerManager.addMarker(new EntityMarker(new PartyMember(clientPlayer), entity));
+            clientMarkerManager.setMarker(this.clientPartyManager.self(), new EntityMarker(this.clientPartyManager.self(), entity));
+            // TODO: Implement propagation of marker creation to other clients
         } else if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
             BlockPos blockPos = blockHitResult.getBlockPos();
@@ -74,12 +73,9 @@ public class OnPlayerMarkInputHandler implements InputHandler {
 
             BlockState blockState = client.world.getBlockState(blockPos);
             Block block = blockState.getBlock();
-            System.out.println(block.getName());
 
-            // TODO: Change this so that the party member is some instance
-            clientMarkerManager.addMarker(new BlockMarker(new PartyMember(clientPlayer), blockPos, blockState));
-        } else if (hitResult.getType() == HitResult.Type.MISS) {
-            System.out.println("lol you missed");
+            clientMarkerManager.setMarker(this.clientPartyManager.self(), new BlockMarker(this.clientPartyManager.self(), blockPos, blockState));
+            // TODO: Implement propagation of marker creation to other clients
         }
     }
 
