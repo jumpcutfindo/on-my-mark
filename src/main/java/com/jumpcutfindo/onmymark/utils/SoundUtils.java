@@ -8,4 +8,8 @@ public class SoundUtils {
     public static void playClickSound(SoundManager soundManager) {
         soundManager.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
+
+    public static void playPlaceMarkerSound(SoundManager soundManager) {
+        soundManager.play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_HARP, 1.0F));
+    }
 }
