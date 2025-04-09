@@ -6,6 +6,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -20,7 +21,9 @@ public class ServerNetworkSender implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(RemovePartyInfoPacket.PACKET_ID, RemovePartyInfoPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(InviteToPartyResponsePacket.PACKET_ID, InviteToPartyResponsePacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(PartyInvitationRequestPacket.PACKET_ID, PartyInvitationRequestPacket.PACKET_CODEC);
+
         PayloadTypeRegistry.playS2C().register(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC);
     }
 
     public static void sendPartyInfo(ServerPlayerEntity player, Party party) {
@@ -43,5 +46,9 @@ public class ServerNetworkSender implements ModInitializer {
 
     public static void sendBlockMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, BlockPos blockPos) {
         ServerPlayNetworking.send(player, MarkBlockPacket.create(markerPlayer, blockPos));
+    }
+
+    public static void sendEntityMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, Entity entity) {
+        ServerPlayNetworking.send(player, MarkEntityPacket.create(markerPlayer, entity));
     }
 }

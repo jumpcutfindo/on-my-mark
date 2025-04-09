@@ -7,12 +7,16 @@ import com.jumpcutfindo.onmymark.graphics.screen.party.PartyInviteWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.toast.OnMyMarkToast;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
+import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.network.packets.*;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 
 public class ClientNetworkReceiver implements ClientModInitializer {
     @Override
@@ -24,6 +28,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
         onPartyInvitation();
 
         onMarkBlock();
+        onMarkEntity();
     }
 
     public static void onPartyInfo() {
@@ -83,6 +88,24 @@ public class ClientNetworkReceiver implements ClientModInitializer {
                 PartyMember partyMember = party.getMemberWithId(packet.playerId());
 
                 markerManager.setMarker(partyMember, new BlockMarker(partyMember, packet.blockPos(), context.client().world.getBlockState(packet.blockPos())));
+            }
+        });
+    }
+
+    public static void onMarkEntity() {
+        ClientPlayNetworking.registerGlobalReceiver(MarkEntityPacket.PACKET_ID, (packet, context) -> {
+            ClientWorld world = context.client().world;
+
+            Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), packet.entityId());
+
+            ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
+            Party party = partyManager.party();
+
+            if (party.hasMemberWithId(packet.playerId())){
+                ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();
+                PartyMember partyMember = party.getMemberWithId(packet.playerId());
+
+                markerManager.setMarker(partyMember, new EntityMarker(partyMember, entity));
             }
         });
     }

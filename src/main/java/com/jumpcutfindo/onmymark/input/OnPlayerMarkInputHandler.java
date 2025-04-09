@@ -70,7 +70,7 @@ public class OnPlayerMarkInputHandler implements InputHandler {
             Entity entity = entityHitResult.getEntity();
 
             clientMarkerManager.setMarker(this.clientPartyManager.self(), new EntityMarker(this.clientPartyManager.self(), entity));
-            // TODO: Implement propagation of marker creation to other clients
+            ClientNetworkSender.markEntity(client.player, entity);
         } else if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
             BlockPos blockPos = blockHitResult.getBlockPos();

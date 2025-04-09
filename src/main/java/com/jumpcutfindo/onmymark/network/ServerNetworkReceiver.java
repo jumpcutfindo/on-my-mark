@@ -5,9 +5,11 @@ import com.jumpcutfindo.onmymark.network.packets.*;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.*;
+import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
@@ -29,6 +31,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.onKickPlayer();
 
         this.onMarkBlock();
+        this.onMarkEntity();
     }
 
     private void onCreateParty() {
@@ -173,6 +176,28 @@ public class ServerNetworkReceiver implements ModInitializer {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
             }
         });
+    }
+
+    private void onMarkEntity() {
+        this.registerAndHandle(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC, ((payload, context) -> {
+            try {
+                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                ServerWorld world = context.player().getServerWorld();
+
+                Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
+
+                if (entity == null) {
+                    return;
+                }
+
+                for (PartyMember partyMember : party.partyMembers()) {
+                    ServerNetworkSender.sendEntityMarker((ServerPlayerEntity) partyMember.player(), context.player(), entity);
+                }
+
+            } catch (PartyNotFoundException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            }
+        }));
     }
 
     private void syncPartyInfo(Party party) {
