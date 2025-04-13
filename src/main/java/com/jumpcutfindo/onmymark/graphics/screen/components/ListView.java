@@ -251,7 +251,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
         return selectedIndices.stream().toList();
     }
 
-    protected void resetSelection() {
+    public void resetSelection() {
         for (T item : listItems) item.setSelected(false);
         this.selectedItems = new HashSet<>();
         this.selectedIndices = new HashSet<>();

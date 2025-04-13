@@ -87,6 +87,7 @@ public class ServerNetworkReceiver implements ModInitializer {
                 removePartyInfo(otherPlayer);
 
                 sendMessageToParty(party, Text.translatable("onmymark.action.onKickFromParty.other", otherPlayer.getName()));
+                syncPartyInfo(party);
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
             } catch (RemovePartyLeaderException e) {

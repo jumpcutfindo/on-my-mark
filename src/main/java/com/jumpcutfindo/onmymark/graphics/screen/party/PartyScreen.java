@@ -184,7 +184,9 @@ public class PartyScreen extends OnMyMarkScreen {
 
     public void setParty(Party party) {
         this.party = party;
+
         this.partyMemberListView.setParty(party);
+        this.partyMemberListView.resetSelection();
     }
 
     private boolean isMouseInList(double mouseX, double mouseY) {
