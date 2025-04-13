@@ -55,7 +55,7 @@ public class PartyManager {
         Party party = getPartyById(partyId);
 
         PartyMember partyLeader = this.getOrCreate(leader);
-        PartyMember partyMember = this.getOrCreate(leader);
+        PartyMember partyMember = this.getOrCreate(player);
 
         if (!party.isPartyLeader(partyLeader)) {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
