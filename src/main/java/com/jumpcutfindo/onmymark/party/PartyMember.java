@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.party;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.Objects;
@@ -26,6 +27,10 @@ public class PartyMember {
         this.displayName = displayName;
 
         this.state = State.IN_OTHER_WORLD;
+    }
+
+    public GameProfile gameProfile() {
+        return new GameProfile(this.partyMemberId, this.displayName);
     }
 
     public String displayName() {

@@ -6,6 +6,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.utils.StringUtils;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderLayer;
@@ -29,9 +30,11 @@ public class PartyMemberListItem extends ListItem<PartyMember> {
         this.item = partyMember;
         this.index = index;
 
-        if (partyMember.player() != null) {
-            this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(partyMember.player().getGameProfile());
-        }
+        this.playerSkinTextures = MinecraftClient.getInstance()
+                .getSkinProvider()
+                .getSkinTextures(
+                        partyMember.gameProfile()
+                );
     }
 
     @Override
