@@ -53,6 +53,10 @@ public abstract class PartyMember {
         this.state = State.AVAILABLE;
     }
 
+    public boolean isOffline() {
+        return this.state == PartyMember.State.OFFLINE;
+    }
+
     public abstract boolean isPartyLeader();
 
     @Override

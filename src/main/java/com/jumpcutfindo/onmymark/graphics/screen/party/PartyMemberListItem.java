@@ -6,6 +6,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.utils.StringUtils;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
@@ -37,7 +38,20 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     }
 
     @Override
+    public void render(DrawContext context, int x, int y, int mouseX, int mouseY) {
+        this.renderBackground(context, x, y, mouseX, mouseY);
+        if (this.item.isOffline()) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
+            this.renderContent(context, x, y, mouseX, mouseY);
+        } else {
+            this.renderContent(context, x, y, mouseX, mouseY);
+        }
+    }
+
+    @Override
     public void renderContent(DrawContext context, int x, int y, int mouseX, int mouseY) {
+        Text displayName = Text.literal(StringUtils.truncatedName(this.item.displayName(), 14));
+
         // Draw marker color
         int markerColor = ScreenUtils.getColorOfIndex(this.index);
         context.fill(x + 3, y + 3, x + 8, y + 15, markerColor << 7);
@@ -47,10 +61,6 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         if (this.playerSkinTextures != null) {
             PlayerSkinDrawer.draw(context, this.playerSkinTextures, x + 11, y + 3, 12);
         }
-
-        // Draw name
-        Text displayName = Text.literal(StringUtils.truncatedName(this.item.displayName(), 14));
-        context.drawText(this.screen.getTextRenderer(), displayName, (x + 27), (y + 5), 0x282828, false);
 
         // Draw crown if party leader
         if (this.item.isPartyLeader()) {
@@ -62,9 +72,14 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
                     !this.screen.isWindowOpen()
                             && ScreenUtils.isWithin(mouseX, mouseY, partyLeaderCrownX, partyLeaderCrownY, 16, 16)
             ) {
+                context.draw();
+                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 context.drawTooltip(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.party.partyLeader"), mouseX, mouseY);
             }
         }
+
+        // Draw name
+        context.drawText(this.screen.getTextRenderer(), displayName, (x + 27), (y + 5), 0x282828, false);
     }
 
     @Override
