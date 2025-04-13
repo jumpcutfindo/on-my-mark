@@ -176,6 +176,31 @@ public class PartyManager {
         return piOpt.isPresent();
     }
 
+    public Party handlePlayerConnected(ServerPlayerEntity player) throws PlayerNotInPartyException {
+        ServerPartyMember partyMember = this.getOrCreate(player);
+
+        if (partyMember.isInParty()) {
+            partyMember.setState(PartyMember.State.IN_PARTY);
+            return partyMember.currentParty();
+        }
+
+        throw new PlayerNotInPartyException(player.getDisplayName().getString());
+    }
+
+    public Party handlePlayerDisconnected(ServerPlayerEntity player) throws PlayerNotInPartyException {
+        ServerPartyMember partyMember = this.getOrCreate(player);
+
+        if (partyMember.isInParty()) {
+            partyMember.setState(PartyMember.State.OFFLINE);
+            return partyMember.currentParty();
+        }
+
+        // Remove any existing invites as well for the player
+        this.removeInvite(player);
+
+        throw new PlayerNotInPartyException(player.getDisplayName().getString());
+    }
+
     private void disbandParty(Party party) {
         party.setState(Party.State.DISBANDED);
         this.parties.remove(party);

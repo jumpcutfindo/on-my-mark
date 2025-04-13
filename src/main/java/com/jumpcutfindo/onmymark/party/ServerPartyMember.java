@@ -15,6 +15,10 @@ public class ServerPartyMember extends PartyMember {
         return player;
     }
 
+    public void setState(PartyMember.State state) {
+        this.state = state;
+    }
+
     @Override
     public boolean isPartyLeader() {
         return this.currentParty.isPartyLeader(this);

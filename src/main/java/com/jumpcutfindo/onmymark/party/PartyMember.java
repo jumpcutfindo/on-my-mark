@@ -33,6 +33,10 @@ public abstract class PartyMember {
         return currentParty;
     }
 
+    public boolean isInParty() {
+        return currentParty != null && currentParty.state() == Party.State.ACTIVE;
+    }
+
     public int getPartyIndex() {
         return currentParty != null ? currentParty.partyMembers().indexOf(this) : -1;
     }
@@ -63,7 +67,6 @@ public abstract class PartyMember {
     }
 
     public enum State {
-        // TODO: Add handling for "OFFLINE" state
-        AVAILABLE, IN_PARTY, IN_OTHER_WORLD
+        AVAILABLE, IN_PARTY, OFFLINE
     }
 }

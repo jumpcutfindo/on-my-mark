@@ -61,7 +61,7 @@ public class PartyInvitationRequestPacket implements CustomPayload {
     public PartyInvite toPartyInvite(World world, PlayerEntity player) {
         Party party = Party.withPartyId(partyId, partyName, partyLeader);
 
-        PartyMember invitee = new ClientPartyMember(player.getUuid(), player.getDisplayName().getString(), false);
+        PartyMember invitee = new ClientPartyMember(player.getUuid(), player.getDisplayName().getString(), false, PartyMember.State.AVAILABLE);
 
         return new PartyInvite(party, partyLeader, invitee);
     }

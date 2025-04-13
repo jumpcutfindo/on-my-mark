@@ -16,8 +16,9 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
         UUID playerId = buf.readUuid();
         String playerName = buf.readString();
         boolean isPartyLeader = buf.readBoolean();
+        PartyMember.State state = buf.readEnumConstant(PartyMember.State.class);
 
-        return new ClientPartyMember(playerId, playerName, isPartyLeader);
+        return new ClientPartyMember(playerId, playerName, isPartyLeader, state);
     }
 
     @Override
@@ -25,5 +26,6 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
         buf.writeUuid(partyMember.id());
         buf.writeString(partyMember.displayName());
         buf.writeBoolean(partyMember.isPartyLeader());
+        buf.writeEnumConstant(partyMember.state());
     }
 }
