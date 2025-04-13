@@ -54,12 +54,17 @@ public class PartyScreen extends OnMyMarkScreen {
         if (existingPartyInvite != null) {
             this.setActiveWindow(new PartyInviteWindow(this, existingPartyInvite));
         }
+
+        this.calculateState();
     }
 
     @Override
     public void tick() {
         super.tick();
+        this.calculateState();
+    }
 
+    private void calculateState() {
         // Calculate the state
         if (this.party == null) {
             state = State.NO_PARTY;
