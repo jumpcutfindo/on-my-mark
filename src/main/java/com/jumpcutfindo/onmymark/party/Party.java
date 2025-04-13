@@ -68,11 +68,11 @@ public class Party {
     }
 
     public boolean hasMemberWithId(UUID playerId) {
-        return this.partyMembers.stream().anyMatch((pm) -> pm.player().getUuid().equals(playerId));
+        return this.partyMembers.stream().anyMatch((pm) -> pm.id().equals(playerId));
     }
 
     public PartyMember getMemberWithId(UUID playerId) {
-        Optional<PartyMember> pmOpt = this.partyMembers.stream().filter((pm) -> pm.player().getUuid().equals(playerId)).findFirst();
+        Optional<PartyMember> pmOpt = this.partyMembers.stream().filter((pm) -> pm.id().equals(playerId)).findFirst();
 
         return pmOpt.orElse(null);
     }

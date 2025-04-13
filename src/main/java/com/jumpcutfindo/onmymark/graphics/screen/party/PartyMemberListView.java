@@ -4,6 +4,7 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListView;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.gui.DrawContext;
@@ -86,7 +87,7 @@ public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
         }
 
         for (int i = 0; i < party.partyMembers().size(); i++) {
-            items.add(new PartyMemberListItem(screen, party.partyMembers().get(i), i));
+            items.add(new PartyMemberListItem(screen, (ClientPartyMember) party.partyMembers().get(i), i));
         }
 
         return items;

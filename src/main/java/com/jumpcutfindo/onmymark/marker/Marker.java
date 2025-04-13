@@ -23,7 +23,7 @@ public abstract class Marker {
     }
 
     public boolean isOwner(PlayerEntity player) {
-        return this.owner.player().getUuid().equals(player.getUuid());
+        return this.owner.id().equals(player.getUuid());
     }
 
     public abstract Vec3d getExactPosition();

@@ -2,8 +2,6 @@ package com.jumpcutfindo.onmymark.graphics.screen.toast;
 
 import com.google.common.collect.ImmutableList;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -155,7 +153,6 @@ public class OnMyMarkToast implements Toast {
         );
     }
 
-    @Environment(EnvType.CLIENT)
     public static class Type {
         public static final OnMyMarkToast.Type PARTY_INVITATION = new OnMyMarkToast.Type();
 

@@ -1,44 +1,32 @@
 package com.jumpcutfindo.onmymark.party;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.player.PlayerEntity;
-
 import java.util.Objects;
 import java.util.UUID;
 
-public class PartyMember {
-    private UUID partyMemberId;
-    private Party currentParty;
-    private String displayName;
-    private PlayerEntity player;
-    private PartyMember.State state;
+public abstract class PartyMember {
+    UUID id;
+    String displayName;
 
-    public PartyMember(PlayerEntity player) {
-        this.player = player;
+    Party currentParty;
+    PartyMember.State state;
 
-        this.partyMemberId = player.getUuid();
-        this.displayName = player.getDisplayName().getString();
-
-        this.state = State.AVAILABLE;
-    }
-
-    public PartyMember(UUID playerId, String displayName) {
-        this.partyMemberId = playerId;
+    public PartyMember(UUID playerId, String displayName, PartyMember.State initialState) {
+        this.id = playerId;
         this.displayName = displayName;
 
-        this.state = State.IN_OTHER_WORLD;
-    }
-
-    public GameProfile gameProfile() {
-        return new GameProfile(this.partyMemberId, this.displayName);
+        this.state = initialState;
     }
 
     public UUID id() {
-        return this.partyMemberId;
+        return this.id;
     }
 
     public String displayName() {
         return this.displayName;
+    }
+
+    public PartyMember.State state() {
+        return state;
     }
 
     public Party currentParty() {
@@ -61,27 +49,17 @@ public class PartyMember {
         this.state = State.AVAILABLE;
     }
 
-    public boolean isPartyLeader() {
-        return this.currentParty != null && this.currentParty.isPartyLeader(this);
-    }
-
-    public PlayerEntity player() {
-        return player;
-    }
-
-    public PartyMember.State state() {
-        return state;
-    }
+    public abstract boolean isPartyLeader();
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof PartyMember that)) return false;
-        return Objects.equals(partyMemberId, that.partyMemberId);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(partyMemberId);
+        return Objects.hashCode(id);
     }
 
     public enum State {

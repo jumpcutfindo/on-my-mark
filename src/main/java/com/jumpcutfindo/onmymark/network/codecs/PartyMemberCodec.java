@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.network.codecs;
 
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -14,13 +15,15 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
     public PartyMember decode(PacketByteBuf buf) {
         UUID playerId = buf.readUuid();
         String playerName = buf.readString();
+        boolean isPartyLeader = buf.readBoolean();
 
-        return new PartyMember(playerId, playerName);
+        return new ClientPartyMember(playerId, playerName, isPartyLeader);
     }
 
     @Override
     public void encode(PacketByteBuf buf, PartyMember partyMember) {
-        buf.writeUuid(partyMember.player().getUuid());
+        buf.writeUuid(partyMember.id());
         buf.writeString(partyMember.displayName());
+        buf.writeBoolean(partyMember.isPartyLeader());
     }
 }

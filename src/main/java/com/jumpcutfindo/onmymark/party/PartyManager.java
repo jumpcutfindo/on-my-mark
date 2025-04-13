@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class PartyManager {
-    private final List<PartyMember> partyMembers;
+    private final List<ServerPartyMember> partyMembers;
     private final List<Party> parties;
     private final List<PartyInvite> partyInvites;
 
@@ -75,6 +75,7 @@ public class PartyManager {
 
     public Party leaveParty(ServerPlayerEntity player) {
         PartyMember partyMember = this.getOrCreate(player);
+        boolean isPartyLeader = partyMember.isPartyLeader();
 
         Party party = partyMember.currentParty();
 
@@ -86,7 +87,7 @@ public class PartyManager {
         // Disband party if:
         // - Member who left is the party leader
         // - There are no members left
-        if (partyMember.isPartyLeader() || party.partyMembers().isEmpty()) {
+        if (isPartyLeader || party.partyMembers().isEmpty()) {
             this.disbandParty(party);
         }
 
@@ -115,7 +116,7 @@ public class PartyManager {
     }
 
     public Party acceptInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
-        PartyMember invitee = this.getOrCreate(player);
+        ServerPartyMember invitee = this.getOrCreate(player);
 
         Optional<PartyInvite> piOpt = this.partyInvites.stream()
                 .filter(partyInvite -> partyInvite.to().equals(invitee))
@@ -126,9 +127,11 @@ public class PartyManager {
         }
 
         PartyInvite partyInvite = piOpt.get();
+        ServerPartyMember partyLeader = (ServerPartyMember) partyInvite.from();
+
         this.partyInvites.remove(partyInvite);
 
-        this.addPlayerToParty(partyInvite.party().partyId(), (ServerPlayerEntity) partyInvite.from().player(), (ServerPlayerEntity) partyInvite.to().player());
+        this.addPlayerToParty(partyInvite.party().partyId(), partyLeader.player(), invitee.player());
 
         return partyInvite.party();
     }
@@ -200,13 +203,13 @@ public class PartyManager {
         return this.getOrCreate(player).currentParty();
     }
 
-    private PartyMember getOrCreate(ServerPlayerEntity player) {
-        Optional<PartyMember> partyMemberOpt = this.partyMembers.stream()
+    private ServerPartyMember getOrCreate(ServerPlayerEntity player) {
+        Optional<ServerPartyMember> partyMemberOpt = this.partyMembers.stream()
                 .filter(pm -> pm.player().equals(player))
                 .findFirst();
 
         if (partyMemberOpt.isEmpty()) {
-            PartyMember partyMember = new PartyMember(player);
+            ServerPartyMember partyMember = new ServerPartyMember(player);
             this.partyMembers.add(partyMember);
             return partyMember;
         } else {

@@ -19,42 +19,37 @@ public class PartyInfoPacket implements CustomPayload {
 
     private final UUID partyId;
     private final String partyName;
-    private final UUID partyLeader;
     private final List<PartyMember> partyMembers;
 
     public PartyInfoPacket(PacketByteBuf buf) {
         this.partyId = buf.readUuid();
         this.partyName = buf.readString();
-        this.partyLeader = buf.readUuid();
         this.partyMembers = buf.readList(OnMyMarkCodecs.PARTY_MEMBER);
     }
 
-    private PartyInfoPacket(UUID partyId, String partyName, UUID partyLeader, List<PartyMember> partyMembers) {
+    private PartyInfoPacket(UUID partyId, String partyName, List<PartyMember> partyMembers) {
         this.partyId = partyId;
         this.partyName = partyName;
-        this.partyLeader = partyLeader;
         this.partyMembers = partyMembers;
     }
 
     public void write(PacketByteBuf buf) {
         buf.writeUuid(partyId);
         buf.writeString(partyName);
-        buf.writeUuid(partyLeader);
         buf.writeCollection(partyMembers, OnMyMarkCodecs.PARTY_MEMBER);
     }
 
     public static PartyInfoPacket fromParty(Party party) {
         UUID partyId = party.partyId();
         String partyName = party.partyName();
-        UUID partyLeader = party.partyLeader().player().getUuid();
         List<PartyMember> partyMembers = party.partyMembers();
 
-        return new PartyInfoPacket(partyId, partyName, partyLeader, partyMembers);
+        return new PartyInfoPacket(partyId, partyName, partyMembers);
     }
 
     public Party toParty() {
         PartyMember partyLeader = this.partyMembers.stream()
-                .filter(pm -> pm.id().equals(this.partyLeader))
+                .filter(PartyMember::isPartyLeader)
                 .findAny()
                 .get();
 

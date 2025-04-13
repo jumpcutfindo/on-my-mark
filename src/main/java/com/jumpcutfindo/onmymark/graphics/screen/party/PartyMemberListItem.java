@@ -4,25 +4,24 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.utils.StringUtils;
-import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class PartyMemberListItem extends ListItem<PartyMember> {
+public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     private static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/party_screen.png");
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
 
     private SkinTextures playerSkinTextures;
 
-    public PartyMemberListItem(OnMyMarkScreen screen, PartyMember partyMember, int index) {
+    public PartyMemberListItem(OnMyMarkScreen screen, ClientPartyMember partyMember, int index) {
         super(screen, partyMember, index);
 
         this.setBackground(TEXTURE, 0, 178, 180, 18, TEXTURE_WIDTH, TEXTURE_HEIGHT);
