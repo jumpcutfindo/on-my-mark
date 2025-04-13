@@ -30,7 +30,7 @@ public class ClientPartyManager {
 
         this.self = party.partyMembers()
                 .stream()
-                .filter((mem) -> mem.player().getUuid() == MinecraftClient.getInstance().player.getUuid())
+                .filter((mem) -> mem.id().equals(MinecraftClient.getInstance().player.getUuid()))
                 .toList()
                 .getFirst();
     }

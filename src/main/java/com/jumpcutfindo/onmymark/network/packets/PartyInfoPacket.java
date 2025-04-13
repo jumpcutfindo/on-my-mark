@@ -1,21 +1,17 @@
 package com.jumpcutfindo.onmymark.network.packets;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.network.codecs.OnMyMarkCodecs;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Uuids;
-import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class PartyInfoPacket implements CustomPayload {
     public static final Id<PartyInfoPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "create_party"));
@@ -24,69 +20,47 @@ public class PartyInfoPacket implements CustomPayload {
     private final UUID partyId;
     private final String partyName;
     private final UUID partyLeader;
-    private final List<UUID> partyMembers;
-    private final List<String> partyMemberNames;
+    private final List<PartyMember> partyMembers;
 
     public PartyInfoPacket(PacketByteBuf buf) {
         this.partyId = buf.readUuid();
         this.partyName = buf.readString();
         this.partyLeader = buf.readUuid();
-        this.partyMembers = buf.readList(Uuids.PACKET_CODEC);
-        this.partyMemberNames = buf.readList(PacketCodecs.STRING);
+        this.partyMembers = buf.readList(OnMyMarkCodecs.PARTY_MEMBER);
     }
 
-    private PartyInfoPacket(UUID partyId, String partyName, UUID partyLeader, List<UUID> partyMembers, List<String> partyMemberNames) {
+    private PartyInfoPacket(UUID partyId, String partyName, UUID partyLeader, List<PartyMember> partyMembers) {
         this.partyId = partyId;
         this.partyName = partyName;
         this.partyLeader = partyLeader;
         this.partyMembers = partyMembers;
-        this.partyMemberNames = partyMemberNames;
     }
 
     public void write(PacketByteBuf buf) {
         buf.writeUuid(partyId);
         buf.writeString(partyName);
         buf.writeUuid(partyLeader);
-        buf.writeCollection(partyMembers, Uuids.PACKET_CODEC);
-        buf.writeCollection(partyMemberNames, PacketCodecs.STRING);
+        buf.writeCollection(partyMembers, OnMyMarkCodecs.PARTY_MEMBER);
     }
 
     public static PartyInfoPacket fromParty(Party party) {
         UUID partyId = party.partyId();
         String partyName = party.partyName();
         UUID partyLeader = party.partyLeader().player().getUuid();
-        List<UUID> partyMembers = party.partyMembers().stream().map((member) -> member.player().getUuid()).toList();
-        List<String> partyMemberNames = party.partyMembers().stream().map(PartyMember::displayName).toList();
+        List<PartyMember> partyMembers = party.partyMembers();
 
-        return new PartyInfoPacket(partyId, partyName, partyLeader, partyMembers, partyMemberNames);
+        return new PartyInfoPacket(partyId, partyName, partyLeader, partyMembers);
     }
 
-    public Party toParty(World world) {
-        PlayerEntity partyLeaderPlayer = world.getPlayerByUuid(this.partyLeader);
+    public Party toParty() {
+        PartyMember partyLeader = this.partyMembers.stream()
+                .filter(pm -> pm.id().equals(this.partyLeader))
+                .findAny()
+                .get();
 
-        PartyMember partyLeader;
-        if (partyLeaderPlayer != null) {
-            partyLeader = new PartyMember(partyLeaderPlayer);
-        } else {
-            int memberIndex = partyMembers.indexOf(this.partyLeader);
-            partyLeader = new PartyMember(partyMembers.get(memberIndex), partyMemberNames.get(memberIndex));
-        }
-        
         Party party = Party.withPartyId(partyId, partyName, partyLeader);
 
-        for (int i = 0; i < partyMembers.size(); i++) {
-            UUID memberId = partyMembers.get(i);
-            String memberName = partyMemberNames.get(i);
-
-            PlayerEntity player = world.getPlayerByUuid(memberId);
-
-            PartyMember member;
-            if (player != null) {
-                member = new PartyMember(player);
-            } else {
-                member = new PartyMember(memberId, memberName);
-            }
-
+        for (PartyMember member : partyMembers) {
             member.setCurrentParty(party);
             party.addPartyMember(member);
         }

@@ -36,7 +36,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(PartyInfoPacket.PACKET_ID, ((partyInfoPacket, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
 
-            Party party = partyInfoPacket.toParty(context.player().getWorld());
+            Party party = partyInfoPacket.toParty();
             partyManager.setParty(party);
 
             // Update screen if the player is looking

@@ -33,6 +33,10 @@ public class PartyMember {
         return new GameProfile(this.partyMemberId, this.displayName);
     }
 
+    public UUID id() {
+        return this.partyMemberId;
+    }
+
     public String displayName() {
         return this.displayName;
     }
