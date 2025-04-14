@@ -2,6 +2,8 @@ package com.jumpcutfindo.onmymark.network;
 
 import com.jumpcutfindo.onmymark.network.packets.*;
 import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -25,6 +27,17 @@ public class ServerNetworkSender implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC);
+    }
+
+    public static void sendPartyInfoToParty(Party party) {
+        for (PartyMember partyMember : party.partyMembers()) {
+            if (partyMember.isOffline()) {
+                continue;
+            }
+
+            ServerPlayerEntity player = ((ServerPartyMember) partyMember).player();
+            ServerNetworkSender.sendPartyInfo(player, party);
+        }
     }
 
     public static void sendPartyInfo(ServerPlayerEntity player, Party party) {

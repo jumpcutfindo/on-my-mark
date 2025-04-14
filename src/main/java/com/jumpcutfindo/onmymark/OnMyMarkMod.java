@@ -40,10 +40,8 @@ public class OnMyMarkMod implements ModInitializer {
 
 		try {
 			Party party = PARTY_MANAGER.handlePlayerConnected(serverPlayer);
-			ServerNetworkSender.sendPartyInfo(serverPlayer, party);
-		} catch (PlayerNotInPartyException e) {
-			// Player has no party info, remove it from the client
-			ServerNetworkSender.removePartyInfo(serverPlayer);
+			ServerNetworkSender.sendPartyInfoToParty(party);
+		} catch (PlayerNotInPartyException ignored) {
 		}
 	}
 
@@ -52,10 +50,8 @@ public class OnMyMarkMod implements ModInitializer {
 
 		try {
 			Party party = PARTY_MANAGER.handlePlayerDisconnected(serverPlayer);
-			ServerNetworkSender.sendPartyInfo(serverPlayer, party);
-		} catch (PlayerNotInPartyException e) {
-			// Player has no party info, remove it from the client
-			ServerNetworkSender.removePartyInfo(serverPlayer);
+			ServerNetworkSender.sendPartyInfoToParty(party);
+		} catch (PlayerNotInPartyException ignored) {
 		}
 	}
 }

@@ -39,10 +39,14 @@ public class ServerNetworkReceiver implements ModInitializer {
 
     private void onCreateParty() {
         this.registerAndHandle(CreatePartyPacket.PACKET_ID, CreatePartyPacket.PACKET_CODEC, (payload, context) -> {
-            Party party = OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
-
-            sendMessageToParty(party, Text.translatable("onmymark.action.onCreateParty", party.partyName()));
-            syncPartyInfo(party);
+            Party party = null;
+            try {
+                party = OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
+                sendMessageToParty(party, Text.translatable("onmymark.action.onCreateParty", party.partyName()));
+                syncPartyInfo(party);
+            } catch (AlreadyInPartyException e) {
+                sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.alreadyInParty"));
+            }
         });
     }
 

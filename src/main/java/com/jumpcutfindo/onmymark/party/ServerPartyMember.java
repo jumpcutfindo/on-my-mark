@@ -11,6 +11,10 @@ public class ServerPartyMember extends PartyMember {
         this.player = player;
     }
 
+    public void setPlayer(ServerPlayerEntity serverPlayer) {
+        this.player = serverPlayer;
+    }
+
     public ServerPlayerEntity player() {
         return player;
     }
