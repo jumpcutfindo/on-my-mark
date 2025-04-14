@@ -41,7 +41,7 @@ public class ServerNetworkReceiver implements ModInitializer {
             try {
                 party = OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
                 sendMessageToParty(party, Text.translatable("onmymark.action.onCreateParty", party.partyName()));
-                syncPartyInfo(party);
+                ServerNetworkSender.sendPartyInfoToParty(party);
             } catch (AlreadyInPartyException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.alreadyInParty"));
             }
@@ -66,7 +66,7 @@ public class ServerNetworkReceiver implements ModInitializer {
                     removePartyInfo(serverPartyMember.player());
                 }
             } else {
-                syncPartyInfo(party);
+                ServerNetworkSender.sendPartyInfoToParty(party);
             }
         });
     }
@@ -89,7 +89,7 @@ public class ServerNetworkReceiver implements ModInitializer {
                 removePartyInfo(otherPlayer);
 
                 sendMessageToParty(party, Text.translatable("onmymark.action.onKickFromParty.other", otherPlayer.getName()));
-                syncPartyInfo(party);
+                ServerNetworkSender.sendPartyInfoToParty(party);
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
             } catch (RemovePartyLeaderException e) {
@@ -152,7 +152,7 @@ public class ServerNetworkReceiver implements ModInitializer {
                     sendMessageToParty(party, Text.translatable("onmymark.action.onInviteToParty.accepted", invitedPlayer.getName()));
 
                     // Send update to all members
-                    syncPartyInfo(party);
+                    ServerNetworkSender.sendPartyInfoToParty(party);
                 } else {
                     Party party = OnMyMarkMod.PARTY_MANAGER.rejectInvite(context.player());
 
@@ -225,13 +225,6 @@ public class ServerNetworkReceiver implements ModInitializer {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
             }
         }));
-    }
-
-    private void syncPartyInfo(Party party) {
-        for (PartyMember partyMember : party.partyMembers()) {
-            ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
-            ServerNetworkSender.sendPartyInfo(serverPartyMember.player(), party);
-        }
     }
 
     private void removePartyInfo(ServerPlayerEntity player) {
