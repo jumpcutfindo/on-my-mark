@@ -21,7 +21,7 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> createParty(ServerPlayerEntity creator, String name) throws AlreadyInPartyException {
-        ServerPartyMember partyLeader = this.getOrCreate(creator);
+        ServerPartyMember partyLeader = this.getOrCreatePlayer(creator);
 
         if (partyLeader.isInParty()) {
             throw new AlreadyInPartyException(partyLeader.displayName());
@@ -42,12 +42,12 @@ public class PartyManager {
     public void addPlayerToParty(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, PlayerAlreadyInPartyException {
         Party<ServerPartyMember> party = getPartyById(partyId);
 
-        ServerPartyMember partyLeader = this.getOrCreate(leader);
+        ServerPartyMember partyLeader = this.getOrCreatePlayer(leader);
         if (!party.isPartyLeader(partyLeader)) {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
         }
 
-        ServerPartyMember partyMember = this.getOrCreate(player);
+        ServerPartyMember partyMember = this.getOrCreatePlayer(player);
         if (partyMember.state() == PartyMember.State.IN_PARTY) {
             throw new PlayerAlreadyInPartyException(partyMember.displayName());
         }
@@ -60,8 +60,8 @@ public class PartyManager {
     public void removePlayerFromParty(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, RemovePartyLeaderException, PlayerNotInPartyException {
         Party<ServerPartyMember> party = getPartyById(partyId);
 
-        ServerPartyMember partyLeader = this.getOrCreate(leader);
-        ServerPartyMember partyMember = this.getOrCreate(player);
+        ServerPartyMember partyLeader = this.getOrCreatePlayer(leader);
+        ServerPartyMember partyMember = this.getOrCreatePlayer(player);
 
         if (!party.isPartyLeader(partyLeader)) {
             throw new InvalidPartyPermissionsException(partyLeader.displayName());
@@ -80,7 +80,7 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> leaveParty(ServerPlayerEntity player) {
-        ServerPartyMember partyMember = this.getOrCreate(player);
+        ServerPartyMember partyMember = this.getOrCreatePlayer(player);
         boolean isPartyLeader = partyMember.isPartyLeader();
 
         Party<ServerPartyMember> party = partyMember.currentParty();
@@ -101,8 +101,8 @@ public class PartyManager {
     }
 
     public void createInvite(UUID partyId, ServerPlayerEntity leader, ServerPlayerEntity player) throws PartyNotFoundException, InvalidPartyPermissionsException, ExistingInviteException, AlreadyInPartyException {
-        ServerPartyMember partyLeader = this.getOrCreate(leader);
-        ServerPartyMember invitee = this.getOrCreate(player);
+        ServerPartyMember partyLeader = this.getOrCreatePlayer(leader);
+        ServerPartyMember invitee = this.getOrCreatePlayer(player);
 
         Party<ServerPartyMember> party = this.getPartyById(partyId);
 
@@ -122,7 +122,7 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> acceptInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException, PartyNotFoundException, PlayerAlreadyInPartyException, InvalidPartyPermissionsException {
-        ServerPartyMember invitee = this.getOrCreate(player);
+        ServerPartyMember invitee = this.getOrCreatePlayer(player);
 
         Optional<PartyInvite<ServerPartyMember>> piOpt = this.partyInvites.stream()
                 .filter(partyInvite -> partyInvite.to().equals(invitee))
@@ -143,7 +143,7 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> rejectInvite(ServerPlayerEntity player) throws PartyInviteNotFoundException {
-        PartyMember invitee = this.getOrCreate(player);
+        PartyMember invitee = this.getOrCreatePlayer(player);
         PartyInvite<ServerPartyMember> existingInvite = this.getInviteOfInvitee(invitee);
 
         if (existingInvite == null) {
@@ -156,7 +156,7 @@ public class PartyManager {
     }
 
     public void removeInvite(ServerPlayerEntity player) {
-        PartyMember invitee = this.getOrCreate(player);
+        PartyMember invitee = this.getOrCreatePlayer(player);
         PartyInvite<ServerPartyMember> existingInvite = this.getInviteOfInvitee(invitee);
 
         if (existingInvite == null) {
@@ -183,7 +183,7 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> handlePlayerConnected(ServerPlayerEntity player) throws PlayerNotInPartyException {
-        ServerPartyMember partyMember = this.getOrCreate(player);
+        ServerPartyMember partyMember = this.getOrCreatePlayer(player);
 
         // Update player as the old reference points to a different object
         partyMember.setPlayer(player);
@@ -197,7 +197,7 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> handlePlayerDisconnected(ServerPlayerEntity player) throws PlayerNotInPartyException {
-        ServerPartyMember partyMember = this.getOrCreate(player);
+        ServerPartyMember partyMember = this.getOrCreatePlayer(player);
 
         if (!partyMember.isInParty()) {
             throw new PlayerNotInPartyException(player.getDisplayName().getString());
@@ -229,16 +229,16 @@ public class PartyManager {
     }
 
     public Party<ServerPartyMember> getPartyOfPlayer(ServerPlayerEntity player) throws PartyNotFoundException {
-        Party<ServerPartyMember> party = this.getOrCreate(player).currentParty();
+        Party<ServerPartyMember> party = this.getOrCreatePlayer(player).currentParty();
 
         if (party == null) {
             throw new PartyNotFoundException();
         }
 
-        return this.getOrCreate(player).currentParty();
+        return this.getOrCreatePlayer(player).currentParty();
     }
 
-    private ServerPartyMember getOrCreate(ServerPlayerEntity player) {
+    public ServerPartyMember getOrCreatePlayer(ServerPlayerEntity player) {
         Optional<ServerPartyMember> partyMemberOpt = this.partyMembers.stream()
                 .filter(pm -> pm.id().equals(player.getUuid()))
                 .findFirst();

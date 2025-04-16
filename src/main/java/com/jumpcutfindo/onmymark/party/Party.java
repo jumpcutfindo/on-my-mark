@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class Party<T extends PartyMember> {
     private UUID partyId;
@@ -45,6 +46,10 @@ public class Party<T extends PartyMember> {
 
     public List<T> partyMembers() {
         return partyMembers;
+    }
+
+    public List<T> partyMembers(Predicate<T> filter) {
+        return partyMembers.stream().filter(filter).toList();
     }
 
     public State state() {

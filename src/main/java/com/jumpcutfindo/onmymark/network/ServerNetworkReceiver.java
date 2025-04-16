@@ -3,7 +3,7 @@ package com.jumpcutfindo.onmymark.network;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.packets.*;
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.party.PartyMemberFilters;
 import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.*;
 import com.jumpcutfindo.onmymark.utils.EntityUtils;
@@ -175,8 +175,11 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.registerAndHandle(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC, (payload, context) -> {
             try {
                 Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                ServerPartyMember playerPartyMember = OnMyMarkMod.PARTY_MANAGER.getOrCreatePlayer(context.player());
 
-                for (ServerPartyMember partyMember : party.partyMembers()) {
+                // Send markers only to players in the same dimension
+                PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(playerPartyMember);
+                for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
                     ServerNetworkSender.sendBlockMarker(partyMember.player(), context.player(), payload.blockPos());
                 }
             } catch (PartyNotFoundException e) {
@@ -189,6 +192,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.registerAndHandle(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC, ((payload, context) -> {
             try {
                 Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                ServerPartyMember playerPartyMember = OnMyMarkMod.PARTY_MANAGER.getOrCreatePlayer(context.player());
                 ServerWorld world = context.player().getServerWorld();
 
                 Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
@@ -197,7 +201,9 @@ public class ServerNetworkReceiver implements ModInitializer {
                     return;
                 }
 
-                for (ServerPartyMember partyMember : party.partyMembers()) {
+                // Send markers only to players in the same dimension
+                PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(playerPartyMember);
+                for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
                     ServerNetworkSender.sendEntityMarker(partyMember.player(), context.player(), entity);
                 }
             } catch (PartyNotFoundException e) {
@@ -210,13 +216,14 @@ public class ServerNetworkReceiver implements ModInitializer {
         this.registerAndHandle(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC, ((payload , context) -> {
             try {
                 Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                ServerPartyMember playerPartyMember = OnMyMarkMod.PARTY_MANAGER.getOrCreatePlayer(context.player());
 
                 ServerWorld world = context.player().getServerWorld();
                 PlayerEntity markerPlayer = world.getPlayerByUuid(payload.markerPlayerId());
 
-                for (PartyMember partyMember : party.partyMembers()) {
-                    ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
-                    ServerNetworkSender.removeMarker(serverPartyMember.player(), (ServerPlayerEntity) markerPlayer);
+                PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(playerPartyMember);
+                for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
+                    ServerNetworkSender.removeMarker(partyMember.player(), (ServerPlayerEntity) markerPlayer);
                 }
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
@@ -233,9 +240,8 @@ public class ServerNetworkReceiver implements ModInitializer {
     }
 
     private void sendMessageToParty(Party<ServerPartyMember> party, Text message) {
-        for (PartyMember partyMember : party.partyMembers()) {
-            ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
-            serverPartyMember.player().sendMessage(message, false);
+        for (ServerPartyMember partyMember : party.partyMembers()) {
+            partyMember.player().sendMessage(message, false);
         }
     }
 
