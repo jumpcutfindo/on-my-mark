@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 
 public class ClientPartyMember extends PartyMember {
+    private Party<ClientPartyMember> currentParty;
     private final boolean isPartyLeader;
 
     public ClientPartyMember(UUID playerId, String displayName, boolean isPartyLeader, PartyMember.State state) {
@@ -16,6 +17,19 @@ public class ClientPartyMember extends PartyMember {
     @Override
     public boolean isPartyLeader() {
         return isPartyLeader;
+    }
+
+    public void setCurrentParty(Party<ClientPartyMember> currentParty) {
+        this.currentParty = currentParty;
+    }
+
+    public int getPartyIndex() {
+        return this.currentParty.partyMembers().indexOf(this);
+    }
+
+    @Override
+    public Party<? extends PartyMember> currentParty() {
+        return currentParty;
     }
 
     public GameProfile gameProfile() {

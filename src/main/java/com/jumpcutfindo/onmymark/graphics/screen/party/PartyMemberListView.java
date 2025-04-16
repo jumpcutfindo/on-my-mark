@@ -22,12 +22,12 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
 
     private static final int MAX_ITEMS = 8;
 
-    private Party party;
+    private Party<ClientPartyMember> party;
 
     private int titleX, titleY;
     private Text title;
 
-public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
+public PartyMemberListView(OnMyMarkScreen screen, Party<ClientPartyMember> party, int x, int y) {
         super(screen);
 
         this.party = party;
@@ -71,7 +71,7 @@ public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
         return false;
     }
 
-    public void setParty(Party party) {
+    public void setParty(Party<ClientPartyMember> party) {
         this.party = party;
 
         // Update list of items
@@ -79,7 +79,7 @@ public PartyMemberListView(OnMyMarkScreen screen, Party party, int x, int y) {
         this.setList(createItems(this.screen, party), MAX_ITEMS);
     }
 
-    private static List<PartyMemberListItem> createItems(OnMyMarkScreen screen, Party party) {
+    private static List<PartyMemberListItem> createItems(OnMyMarkScreen screen, Party<ClientPartyMember> party) {
         List<PartyMemberListItem> items = new ArrayList<>();
 
         if (party == null) {

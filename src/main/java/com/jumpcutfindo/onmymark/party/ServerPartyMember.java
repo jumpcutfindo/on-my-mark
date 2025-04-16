@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ServerPartyMember extends PartyMember {
     private ServerPlayerEntity player;
+    private Party<ServerPartyMember> currentParty;
 
     public ServerPartyMember(ServerPlayerEntity player) {
         super(player.getUuid(), player.getDisplayName().getString(), State.AVAILABLE);
@@ -21,6 +22,20 @@ public class ServerPartyMember extends PartyMember {
 
     public void setState(PartyMember.State state) {
         this.state = state;
+    }
+
+    @Override
+    public Party<ServerPartyMember> currentParty() {
+        return currentParty;
+    }
+
+    public void setCurrentParty(Party<ServerPartyMember> currentParty) {
+        this.currentParty = currentParty;
+    }
+
+    public void removeCurrentParty() {
+        this.currentParty = null;
+        this.setState(State.AVAILABLE);
     }
 
     @Override

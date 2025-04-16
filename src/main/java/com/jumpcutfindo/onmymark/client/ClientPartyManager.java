@@ -1,14 +1,15 @@
 package com.jumpcutfindo.onmymark.client;
 
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.MinecraftClient;
 
 public class ClientPartyManager {
-    private Party party;
-    private PartyMember self;
-    private PartyInvite partyInvite;
+    private Party<ClientPartyMember> party;
+    private ClientPartyMember self;
+    private PartyInvite<ClientPartyMember> partyInvite;
 
     public ClientPartyManager() {
 
@@ -20,7 +21,7 @@ public class ClientPartyManager {
         this.partyInvite = null;
     }
 
-    public void setParty(Party party) {
+    public void setParty(Party<ClientPartyMember> party) {
         this.party = party;
 
         if (party == null) {
@@ -35,7 +36,7 @@ public class ClientPartyManager {
                 .getFirst();
     }
 
-    public Party party() {
+    public Party<ClientPartyMember> party() {
         return party;
     }
 
@@ -51,11 +52,11 @@ public class ClientPartyManager {
         return self != null;
     }
 
-    public void setPartyInvite(PartyInvite invite) {
+    public void setPartyInvite(PartyInvite<ClientPartyMember> invite) {
         this.partyInvite = invite;
     }
 
-    public PartyInvite partyInvite() {
+    public PartyInvite<ClientPartyMember> partyInvite() {
         return partyInvite;
     }
 }

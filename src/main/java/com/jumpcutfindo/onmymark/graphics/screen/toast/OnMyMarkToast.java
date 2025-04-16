@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics.screen.toast;
 
 import com.google.common.collect.ImmutableList;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -144,7 +145,7 @@ public class OnMyMarkToast implements Toast {
         }
     }
 
-    public static void addPartyInvitationToast(MinecraftClient client, PartyInvite partyInvite) {
+    public static void addPartyInvitationToast(MinecraftClient client, PartyInvite<ClientPartyMember> partyInvite) {
         add(
                 client.getToastManager(),
                 Type.PARTY_INVITATION,

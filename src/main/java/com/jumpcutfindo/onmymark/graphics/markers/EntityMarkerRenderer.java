@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.graphics.markers;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.mixin.VehicleEntityInvoker;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.Entity;
@@ -74,7 +75,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     int getPointerColor() {
-        return ScreenUtils.getColorOfIndex(this.entityMarker.owner().getPartyIndex());
+        return ScreenUtils.getColorOfIndex(((ClientPartyMember) this.entityMarker.owner()).getPartyIndex());
     }
 
     @Override

@@ -37,7 +37,7 @@ public class ServerNetworkReceiver implements ModInitializer {
 
     private void onCreateParty() {
         this.registerAndHandle(CreatePartyPacket.PACKET_ID, CreatePartyPacket.PACKET_CODEC, (payload, context) -> {
-            Party party = null;
+            Party<ServerPartyMember> party = null;
             try {
                 party = OnMyMarkMod.PARTY_MANAGER.createParty(context.player(), payload.partyName());
                 sendMessageToParty(party, Text.translatable("onmymark.action.onCreateParty", party.partyName()));
@@ -50,7 +50,7 @@ public class ServerNetworkReceiver implements ModInitializer {
 
     private void onLeaveParty() {
         this.registerAndHandle(LeavePartyPacket.PACKET_ID, LeavePartyPacket.PACKET_CODEC, (payload, context) -> {
-            Party party = OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
+            Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.leaveParty(context.player());
 
             sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.self"));
             removePartyInfo(context.player());
@@ -61,9 +61,8 @@ public class ServerNetworkReceiver implements ModInitializer {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.disbanded"));
                 sendMessageToParty(party, Text.translatable("onmymark.action.onLeaveParty.disbanded"));
 
-                for (PartyMember partyMember : party.partyMembers()) {
-                    ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
-                    removePartyInfo(serverPartyMember.player());
+                for (ServerPartyMember partyMember : party.partyMembers()) {
+                    removePartyInfo(partyMember.player());
                 }
             } else {
                 ServerNetworkSender.sendPartyInfoToParty(party);
@@ -82,7 +81,7 @@ public class ServerNetworkReceiver implements ModInitializer {
             }
 
             try {
-                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(player);
+                Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(player);
                 OnMyMarkMod.PARTY_MANAGER.removePlayerFromParty(party.partyId(), player, otherPlayer);
 
                 sendMessageToPlayer(otherPlayer, Text.translatable("onmymark.action.onKickFromParty.self"));
@@ -114,7 +113,7 @@ public class ServerNetworkReceiver implements ModInitializer {
             }
 
             try {
-                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
                 OnMyMarkMod.PARTY_MANAGER.createInvite(party.partyId(), context.player(), invitee);
 
                 // Inform the requester of the result
@@ -146,7 +145,7 @@ public class ServerNetworkReceiver implements ModInitializer {
 
             try {
                 if (payload.isAccept()) {
-                    Party party = OnMyMarkMod.PARTY_MANAGER.acceptInvite(invitedPlayer);
+                    Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.acceptInvite(invitedPlayer);
 
                     // Broadcast to entire party that player has joined
                     sendMessageToParty(party, Text.translatable("onmymark.action.onInviteToParty.accepted", invitedPlayer.getName()));
@@ -154,7 +153,7 @@ public class ServerNetworkReceiver implements ModInitializer {
                     // Send update to all members
                     ServerNetworkSender.sendPartyInfoToParty(party);
                 } else {
-                    Party party = OnMyMarkMod.PARTY_MANAGER.rejectInvite(context.player());
+                    Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.rejectInvite(context.player());
 
                     // Inform leader that player has not joined
                     ServerPartyMember partyLeader = (ServerPartyMember) party.partyLeader();
@@ -175,11 +174,10 @@ public class ServerNetworkReceiver implements ModInitializer {
     private void onMarkBlock() {
         this.registerAndHandle(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC, (payload, context) -> {
             try {
-                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
 
-                for (PartyMember partyMember : party.partyMembers()) {
-                    ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
-                    ServerNetworkSender.sendBlockMarker((ServerPlayerEntity) serverPartyMember.player(), context.player(), payload.blockPos());
+                for (ServerPartyMember partyMember : party.partyMembers()) {
+                    ServerNetworkSender.sendBlockMarker(partyMember.player(), context.player(), payload.blockPos());
                 }
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
@@ -190,7 +188,7 @@ public class ServerNetworkReceiver implements ModInitializer {
     private void onMarkEntity() {
         this.registerAndHandle(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC, ((payload, context) -> {
             try {
-                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
                 ServerWorld world = context.player().getServerWorld();
 
                 Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
@@ -199,9 +197,8 @@ public class ServerNetworkReceiver implements ModInitializer {
                     return;
                 }
 
-                for (PartyMember partyMember : party.partyMembers()) {
-                    ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
-                    ServerNetworkSender.sendEntityMarker(serverPartyMember.player(), context.player(), entity);
+                for (ServerPartyMember partyMember : party.partyMembers()) {
+                    ServerNetworkSender.sendEntityMarker(partyMember.player(), context.player(), entity);
                 }
             } catch (PartyNotFoundException e) {
                 sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
@@ -212,7 +209,7 @@ public class ServerNetworkReceiver implements ModInitializer {
     private void onRemoveMarker() {
         this.registerAndHandle(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC, ((payload , context) -> {
             try {
-                Party party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
+                Party<ServerPartyMember> party = OnMyMarkMod.PARTY_MANAGER.getPartyOfPlayer(context.player());
 
                 ServerWorld world = context.player().getServerWorld();
                 PlayerEntity markerPlayer = world.getPlayerByUuid(payload.markerPlayerId());
@@ -235,7 +232,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         player.sendMessage(message);
     }
 
-    private void sendMessageToParty(Party party, Text message) {
+    private void sendMessageToParty(Party<ServerPartyMember> party, Text message) {
         for (PartyMember partyMember : party.partyMembers()) {
             ServerPartyMember serverPartyMember = (ServerPartyMember) partyMember;
             serverPartyMember.player().sendMessage(message, false);

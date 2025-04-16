@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.graphics.markers;
 
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.world.ClientWorld;
@@ -56,7 +57,7 @@ public class BlockMarkerRenderer extends MarkerRenderer {
 
     @Override
     int getPointerColor() {
-        return ScreenUtils.getColorOfIndex(this.blockMarker.owner().getPartyIndex());
+        return ScreenUtils.getColorOfIndex(((ClientPartyMember) this.blockMarker.owner()).getPartyIndex());
     }
 
     @Override

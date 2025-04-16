@@ -7,7 +7,6 @@ public abstract class PartyMember {
     UUID id;
     String displayName;
 
-    Party currentParty;
     PartyMember.State state;
 
     public PartyMember(UUID playerId, String displayName, PartyMember.State initialState) {
@@ -29,27 +28,8 @@ public abstract class PartyMember {
         return state;
     }
 
-    public Party currentParty() {
-        return currentParty;
-    }
-
     public boolean isInParty() {
-        return currentParty != null && currentParty.state() == Party.State.ACTIVE;
-    }
-
-    public int getPartyIndex() {
-        return currentParty != null ? currentParty.partyMembers().indexOf(this) : -1;
-    }
-
-    public void setCurrentParty(Party party) {
-        assert (party != null): "Use `PartyMember#removeCurrentParty` if you wish to remove the player's current party";
-
-        this.currentParty = party;
-    }
-
-    public void removeCurrentParty() {
-        this.currentParty = null;
-        this.state = State.AVAILABLE;
+        return this.state == PartyMember.State.IN_PARTY;
     }
 
     public boolean isOffline() {
@@ -57,6 +37,8 @@ public abstract class PartyMember {
     }
 
     public abstract boolean isPartyLeader();
+
+    public abstract Party<? extends PartyMember> currentParty();
 
     @Override
     public boolean equals(Object o) {

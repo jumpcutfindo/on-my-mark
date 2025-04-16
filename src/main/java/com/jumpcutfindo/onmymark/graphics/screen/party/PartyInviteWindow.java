@@ -6,6 +6,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.components.OnMyMarkButton;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
@@ -24,9 +25,9 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     public static final int WINDOW_WIDTH = 160, WINDOW_HEIGHT = 92;
     private final OnMyMarkButton acceptButton, rejectButton;
 
-    private final PartyInvite partyInvite;
+    private final PartyInvite<ClientPartyMember> partyInvite;
 
-    public PartyInviteWindow(OnMyMarkScreen screen, PartyInvite partyInvite) {
+    public PartyInviteWindow(OnMyMarkScreen screen, PartyInvite<ClientPartyMember> partyInvite) {
         super(screen, Text.translatable("onmymark.menu.partyInvite.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         this.partyInvite = partyInvite;

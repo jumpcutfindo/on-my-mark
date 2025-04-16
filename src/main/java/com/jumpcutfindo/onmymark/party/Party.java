@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class Party {
+public class Party<T extends PartyMember> {
     private UUID partyId;
     private String partyName;
-    private PartyMember partyLeader;
-    private List<PartyMember> partyMembers;
+    private T partyLeader;
+    private List<T> partyMembers;
 
     private Party.State state;
 
-    public Party(String partyName, PartyMember partyLeader) {
+    public Party(String partyName, T partyLeader) {
         this.partyId = UUID.randomUUID();
 
         this.partyName = partyName;
@@ -24,8 +24,8 @@ public class Party {
         this.state = State.ACTIVE;
     }
 
-    public static Party withPartyId(UUID partyId, String partyName, PartyMember partyLeader) {
-        Party party = new Party(partyName, partyLeader);
+    public static <T extends PartyMember> Party<T> withPartyId(UUID partyId, String partyName, T partyLeader) {
+        Party<T> party = new Party<>(partyName, partyLeader);
         party.partyId = partyId;
 
         return party;
@@ -39,11 +39,11 @@ public class Party {
         return partyName;
     }
 
-    public PartyMember partyLeader() {
+    public T partyLeader() {
         return partyLeader;
     }
 
-    public List<PartyMember> partyMembers() {
+    public List<T> partyMembers() {
         return partyMembers;
     }
 
@@ -51,19 +51,19 @@ public class Party {
         return state;
     }
 
-    public void addPartyMember(PartyMember partyMember) {
+    public void addPartyMember(T partyMember) {
         this.partyMembers.add(partyMember);
     }
 
-    public void removePartyMember(PartyMember partyMember) {
+    public void removePartyMember(T partyMember) {
         this.partyMembers.remove(partyMember);
     }
 
-    public boolean isPartyLeader(PartyMember partyMember) {
+    public boolean isPartyLeader(T partyMember) {
         return this.partyLeader.equals(partyMember);
     }
 
-    public boolean hasMember(PartyMember partyMember) {
+    public boolean hasMember(T partyMember) {
         return this.partyMembers.contains(partyMember);
     }
 
@@ -71,8 +71,8 @@ public class Party {
         return this.partyMembers.stream().anyMatch((pm) -> pm.id().equals(playerId));
     }
 
-    public PartyMember getMemberWithId(UUID playerId) {
-        Optional<PartyMember> pmOpt = this.partyMembers.stream().filter((pm) -> pm.id().equals(playerId)).findFirst();
+    public T getMemberWithId(UUID playerId) {
+        Optional<T> pmOpt = this.partyMembers.stream().filter((pm) -> pm.id().equals(playerId)).findFirst();
 
         return pmOpt.orElse(null);
     }

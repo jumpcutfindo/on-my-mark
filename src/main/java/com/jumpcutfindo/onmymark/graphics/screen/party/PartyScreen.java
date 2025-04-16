@@ -5,6 +5,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.IconButton;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
@@ -19,11 +20,11 @@ public class PartyScreen extends OnMyMarkScreen {
     private PartyMemberListView partyMemberListView;
     private IconButton createPartyButton, leavePartyButton, invitePlayerButton, kickPlayerButton;
 
-    private Party party;
+    private Party<ClientPartyMember> party;
 
     private PartyScreen.State state;
 
-    public PartyScreen(Party party) {
+    public PartyScreen(Party<ClientPartyMember> party) {
         super(party != null ? Text.literal(party.partyName()) : Text.translatable("onmymark.modName"));
 
         this.party = party;
@@ -50,7 +51,7 @@ public class PartyScreen extends OnMyMarkScreen {
         }, Text.translatable("onmymark.menu.kickPlayer.tooltip"));
 
         // If there is a pending invite, we show immediately
-        PartyInvite existingPartyInvite = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyInvite();
+        PartyInvite<ClientPartyMember> existingPartyInvite = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyInvite();
         if (existingPartyInvite != null) {
             this.setActiveWindow(new PartyInviteWindow(this, existingPartyInvite));
         }
@@ -182,7 +183,7 @@ public class PartyScreen extends OnMyMarkScreen {
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
-    public void setParty(Party party) {
+    public void setParty(Party<ClientPartyMember> party) {
         this.party = party;
 
         this.partyMemberListView.setParty(party);

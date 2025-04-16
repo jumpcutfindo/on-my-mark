@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.network.packets;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.codecs.OnMyMarkCodecs;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.network.PacketByteBuf;
@@ -39,25 +40,26 @@ public class PartyInfoPacket implements CustomPayload {
         buf.writeCollection(partyMembers, OnMyMarkCodecs.PARTY_MEMBER);
     }
 
-    public static PartyInfoPacket fromParty(Party party) {
+    @SuppressWarnings("unchecked")
+    public static <T extends PartyMember> PartyInfoPacket fromParty(Party<T> party) {
         UUID partyId = party.partyId();
         String partyName = party.partyName();
-        List<PartyMember> partyMembers = party.partyMembers();
+        List<T> partyMembers = party.partyMembers();
 
-        return new PartyInfoPacket(partyId, partyName, partyMembers);
+        return new PartyInfoPacket(partyId, partyName, (List<PartyMember>) partyMembers);
     }
 
-    public Party toParty() {
-        PartyMember partyLeader = this.partyMembers.stream()
+    public Party<ClientPartyMember> toParty() {
+        ClientPartyMember partyLeader = (ClientPartyMember) this.partyMembers.stream()
                 .filter(PartyMember::isPartyLeader)
                 .findAny()
                 .get();
 
-        Party party = Party.withPartyId(partyId, partyName, partyLeader);
+        Party<ClientPartyMember> party = Party.withPartyId(partyId, partyName, partyLeader);
 
         for (PartyMember member : partyMembers) {
-            member.setCurrentParty(party);
-            party.addPartyMember(member);
+            ((ClientPartyMember) member).setCurrentParty(party);
+            party.addPartyMember((ClientPartyMember) member);
         }
 
         return party;

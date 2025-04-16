@@ -9,6 +9,7 @@ import com.jumpcutfindo.onmymark.graphics.screen.toast.OnMyMarkToast;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.network.packets.*;
+import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
@@ -32,11 +33,12 @@ public class ClientNetworkReceiver implements ClientModInitializer {
         onRemoveMarker();
     }
 
+    @SuppressWarnings("unchecked")
     public static void onPartyInfo() {
         ClientPlayNetworking.registerGlobalReceiver(PartyInfoPacket.PACKET_ID, ((partyInfoPacket, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
 
-            Party party = partyInfoPacket.toParty();
+            Party<ClientPartyMember> party = partyInfoPacket.toParty();
             partyManager.setParty(party);
 
             // Update screen if the player is looking
@@ -67,7 +69,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
     public static void onPartyInvitation() {
         ClientPlayNetworking.registerGlobalReceiver(PartyInvitationRequestPacket.PACKET_ID, (packet, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
-            PartyInvite partyInvite = packet.toPartyInvite(context.player().getWorld(), context.player());
+            PartyInvite<ClientPartyMember> partyInvite = packet.toPartyInvite(context.player().getWorld(), context.player());
 
             partyManager.setPartyInvite(partyInvite);
 
@@ -83,7 +85,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
     public static void onMarkBlock() {
         ClientPlayNetworking.registerGlobalReceiver(MarkBlockPacket.PACKET_ID, (packet, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
-            Party party = partyManager.party();
+            Party<ClientPartyMember>party = partyManager.party();
 
             if (party.hasMemberWithId(packet.playerId())){
                 ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();
@@ -101,7 +103,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
             Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), packet.entityId());
 
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
-            Party party = partyManager.party();
+            Party<ClientPartyMember>party = partyManager.party();
 
             if (party.hasMemberWithId(packet.playerId())){
                 ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();
@@ -115,7 +117,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
     public static void onRemoveMarker() {
         ClientPlayNetworking.registerGlobalReceiver(RemoveMarkerPacket.PACKET_ID, (packet, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
-            Party party = partyManager.party();
+            Party<ClientPartyMember>party = partyManager.party();
 
             if (party.hasMemberWithId(packet.markerPlayerId())) {
                 ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();

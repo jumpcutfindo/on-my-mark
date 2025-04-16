@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark;
 import com.jumpcutfindo.onmymark.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyManager;
+import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.PlayerNotInPartyException;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -39,7 +40,7 @@ public class OnMyMarkMod implements ModInitializer {
 		ServerPlayerEntity serverPlayer = networkHandler.getPlayer();
 
 		try {
-			Party party = PARTY_MANAGER.handlePlayerConnected(serverPlayer);
+			Party<ServerPartyMember> party = PARTY_MANAGER.handlePlayerConnected(serverPlayer);
 			ServerNetworkSender.sendPartyInfoToParty(party);
 		} catch (PlayerNotInPartyException ignored) {
 		}
@@ -49,7 +50,7 @@ public class OnMyMarkMod implements ModInitializer {
 		ServerPlayerEntity serverPlayer = networkHandler.getPlayer();
 
 		try {
-			Party party = PARTY_MANAGER.handlePlayerDisconnected(serverPlayer);
+			Party<ServerPartyMember> party = PARTY_MANAGER.handlePlayerDisconnected(serverPlayer);
 			ServerNetworkSender.sendPartyInfoToParty(party);
 		} catch (PlayerNotInPartyException ignored) {
 		}

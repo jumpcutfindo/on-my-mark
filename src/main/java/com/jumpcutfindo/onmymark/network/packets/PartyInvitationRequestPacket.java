@@ -49,7 +49,7 @@ public class PartyInvitationRequestPacket implements CustomPayload {
         return partyName;
     }
 
-    public static PartyInvitationRequestPacket create(Party party) {
+    public static <T extends PartyMember> PartyInvitationRequestPacket create(Party<T> party) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(party.partyId());
         buf.writeString(party.partyName());
@@ -58,12 +58,12 @@ public class PartyInvitationRequestPacket implements CustomPayload {
         return new PartyInvitationRequestPacket(buf);
     }
 
-    public PartyInvite toPartyInvite(World world, PlayerEntity player) {
-        Party party = Party.withPartyId(partyId, partyName, partyLeader);
+    public PartyInvite<ClientPartyMember> toPartyInvite(World world, PlayerEntity player) {
+        Party<ClientPartyMember> party = Party.withPartyId(partyId, partyName, (ClientPartyMember) partyLeader);
 
-        PartyMember invitee = new ClientPartyMember(player.getUuid(), player.getDisplayName().getString(), false, PartyMember.State.AVAILABLE);
+        ClientPartyMember invitee = new ClientPartyMember(player.getUuid(), player.getDisplayName().getString(), false, PartyMember.State.AVAILABLE);
 
-        return new PartyInvite(party, partyLeader, invitee);
+        return new PartyInvite<>(party, (ClientPartyMember) partyLeader, invitee);
     }
 
     @Override
