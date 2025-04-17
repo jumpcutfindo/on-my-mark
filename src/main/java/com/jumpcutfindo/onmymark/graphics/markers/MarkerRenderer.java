@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
+import com.jumpcutfindo.onmymark.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.graphics.utils.RenderMath;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
@@ -31,6 +32,8 @@ public abstract class MarkerRenderer {
 
     private int pointerColor;
 
+    private float existTime;
+
     protected MarkerRenderer(MinecraftClient client) {
         this.client = client;
 
@@ -46,6 +49,8 @@ public abstract class MarkerRenderer {
     }
 
     public void renderTick(DrawContext drawContext, float tickDelta, float fovDegrees, boolean isFovChanging) {
+        existTime++;
+
         // Calculate screen position
         prevScreenPos = screenPos;
 
@@ -143,10 +148,16 @@ public abstract class MarkerRenderer {
         int distanceLabelWidth = (int) ((float) client.textRenderer.getWidth(distanceLabelString) * distanceLabelScale);
         int distanceLabelHeight = (int) ((float) client.textRenderer.fontHeight * distanceLabelScale);
 
+        // Calculate pointer values
+        float pointerSizeModifier = existTime >= 80F ? 1.0F : (float) (Math.abs(Math.sin(existTime / 20F))) * 1.4F;
+        float pointerWidth = POINTER_WIDTH * pointerSizeModifier;
+        float pointerHeight = POINTER_HEIGHT * pointerSizeModifier;
+        int pointerColor = ColorUtils.setOpacity(this.pointerColor, Math.min(existTime / 20, 1.0F));
+
         // TODO(preference): Implement toggling of pointer
         if (this.isClamped) {
             // Draw edge pointer if the marker has been clamped
-            this.drawEdgePointer(drawContext);
+            this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
             Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 24F);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y());
 
@@ -154,7 +165,8 @@ public abstract class MarkerRenderer {
             this.drawDistanceLabel(drawContext, distanceLabelPos.x(), distanceLabelPos.y(), distanceLabelScale);
         } else {
             // Draw pointer that points directly toward object
-            this.drawPointer(drawContext);
+
+            this.drawPointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
             float screenX = screenPos.x() - this.getLabelWidth() / 2F;
             float screenY = screenPos.y() - POINTER_HEIGHT - getLabelHeight() - 4F;
@@ -165,17 +177,17 @@ public abstract class MarkerRenderer {
 
     }
 
-    private void drawPointer(DrawContext drawContext) {
+    private void drawPointer(DrawContext drawContext, float width, float height, int color) {
         float x1 = this.screenPos.x();
         float y1 = this.screenPos.y();
 
-        float x2 = this.screenPos.x - POINTER_WIDTH / 2F;
-        float y2 = this.screenPos.y - POINTER_HEIGHT;
+        float x2 = this.screenPos.x - width / 2F;
+        float y2 = this.screenPos.y - height;
 
-        float x3 = this.screenPos.x + POINTER_WIDTH / 2F;
-        float y3 = this.screenPos.y - POINTER_HEIGHT;
+        float x3 = this.screenPos.x + width / 2F;
+        float y3 = this.screenPos.y - height;
 
-        MarkerRenderer.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, this.pointerColor);
+        MarkerRenderer.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, color);
     }
 
     private String getDistanceLabelString() {
@@ -192,7 +204,7 @@ public abstract class MarkerRenderer {
     /**
      * Draws a pointer where the pointer's tip is on the edge of the clamped shape.
      */
-    private void drawEdgePointer(DrawContext drawContext) {
+    private void drawEdgePointer(DrawContext drawContext, float width, float height, int color) {
         int windowWidth = drawContext.getScaledWindowWidth();
         int windowHeight = drawContext.getScaledWindowHeight();
 
@@ -208,12 +220,12 @@ public abstract class MarkerRenderer {
         float tipY = screenPos.y();
 
         // Base center point (back from tip along the normal)
-        float baseCenterX = tipX - normal.x * POINTER_HEIGHT;
-        float baseCenterY = tipY - normal.y * POINTER_WIDTH;
+        float baseCenterX = tipX - normal.x * height;
+        float baseCenterY = tipY - normal.y * width;
 
         // Base corners (perpendicular from base center)
-        float baseOffsetX = perpendicular.x * (POINTER_WIDTH / 2f);
-        float baseOffsetY = perpendicular.y * (POINTER_WIDTH / 2f);
+        float baseOffsetX = perpendicular.x * (width / 2f);
+        float baseOffsetY = perpendicular.y * (width / 2f);
 
         float baseLeftX = baseCenterX - baseOffsetX;
         float baseLeftY = baseCenterY - baseOffsetY;
@@ -221,18 +233,7 @@ public abstract class MarkerRenderer {
         float baseRightX = baseCenterX + baseOffsetX;
         float baseRightY = baseCenterY + baseOffsetY;
 
-        float pointerBgScale = 2.0F;
-    //        MarkerRenderer.drawTriangle(
-    //                drawContext,
-    //                tipX,
-    //                tipY,
-    //                baseCenterX - baseOffsetX * pointerBgScale,
-    //                baseCenterY - baseOffsetY * pointerBgScale,
-    //                baseCenterX + baseOffsetX * pointerBgScale,
-    //                baseCenterY + baseOffsetY * pointerBgScale,
-    //                this.pointerColor
-    //        );
-        MarkerRenderer.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, this.pointerColor);
+        MarkerRenderer.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, color);
     }
 
     private static void drawTriangle(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, int argb) {
