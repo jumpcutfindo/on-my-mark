@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.graphics.screen.party;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.components.ListItem;
+import com.jumpcutfindo.onmymark.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.utils.StringUtils;
@@ -53,7 +54,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         Text displayName = Text.literal(StringUtils.truncatedName(this.item.displayName(), 14));
 
         // Draw marker color
-        int markerColor = ScreenUtils.getColorOfIndex(this.index);
+        int markerColor = ColorUtils.getColorOfIndex(this.index);
         context.fill(x + 3, y + 3, x + 8, y + 15, markerColor << 7);
         context.fill(x + 4, y + 4, x + 7, y + 14, markerColor);
 

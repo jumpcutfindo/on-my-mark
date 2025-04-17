@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
-import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
+import com.jumpcutfindo.onmymark.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.mixin.VehicleEntityInvoker;
 import com.jumpcutfindo.onmymark.party.ClientPartyMember;
@@ -75,7 +75,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     int getPointerColor() {
-        return ScreenUtils.getColorOfIndex(((ClientPartyMember) this.entityMarker.owner()).getPartyIndex());
+        return ColorUtils.getColorOfIndex(((ClientPartyMember) this.entityMarker.owner()).getPartyIndex());
     }
 
     @Override
