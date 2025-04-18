@@ -6,8 +6,10 @@ in vec2 texCoord0;
 out vec4 fragColor;
 
 void main() {
-    float alpha = texture(Sampler0, texCoord0).a;
-    if (alpha < 0.1) discard;
+    vec4 color = texture(Sampler0, texCoord0) * ColorModulator;
+    if (color.a < 0.1) {
+        discard;
+    }
 
     fragColor = ColorModulator;
 }

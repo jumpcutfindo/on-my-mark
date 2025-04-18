@@ -48,18 +48,12 @@ public class DrawUtils {
                 // Replace existing RenderLayers with solid RenderLayers
                 ItemRenderState.LayerRenderState[] layers = ((ItemRenderStateMixin) itemRenderState).layers();
                 for (ItemRenderState.LayerRenderState layer : layers) {
-                    layer.setRenderLayer(CustomRenderLayers.SOLID_ENTITY_COLOR.apply(texture));
+                    layer.setRenderLayer(CustomRenderLayers.SOLID_ENTITY_COLOR.apply(texture, outlineColor));
                 }
 
                 matrices.scale(18.0F, -18.0F, 1.0F);
                 matrices.translate(0.0F, 0.0F, -32.0F);
 
-                float a = ((outlineColor >> 24) & 0xFF) / 255f;
-                float r = ((outlineColor >> 16) & 0xFF) / 255f;
-                float g = ((outlineColor >> 8) & 0xFF) / 255f;
-                float b = (outlineColor & 0xFF) / 255f;
-
-                RenderSystem.setShaderColor(r, g, b, a);
                 itemRenderState.render(matrices, vertexConsumers, 15728880, OverlayTexture.DEFAULT_UV);
 
                 vertexConsumers.draw();
