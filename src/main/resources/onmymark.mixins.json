@@ -4,7 +4,9 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"OnMyMarkMixin",
-		"VehicleEntityInvoker"
+		"VehicleEntityMixin",
+		"DrawContextMixin",
+		"ItemRenderStateMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

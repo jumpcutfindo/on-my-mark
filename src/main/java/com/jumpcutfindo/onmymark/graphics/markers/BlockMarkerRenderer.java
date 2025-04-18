@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ColorUtils;
+import com.jumpcutfindo.onmymark.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import net.minecraft.client.MinecraftClient;
@@ -19,9 +20,9 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
-    public void drawLabel(DrawContext drawContext, float screenX, float screenY) {
+    public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
         ItemStack blockItem = this.blockMarker.blockState().getBlock().asItem().getDefaultStack();
-        drawContext.drawItem(blockItem, (int) screenX, (int) screenY);
+        DrawUtils.drawItemOutlined(drawContext, blockItem, (int) screenX, (int) screenY, this.getPointerColor());
     }
 
     @Override

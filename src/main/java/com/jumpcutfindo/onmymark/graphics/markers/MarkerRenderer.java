@@ -159,7 +159,7 @@ public abstract class MarkerRenderer {
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
             Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 24F);
-            this.drawLabel(drawContext, iconPos.x(), iconPos.y());
+            this.drawLabel(drawContext, iconPos.x(), iconPos.y(), true);
 
             Vector2f distanceLabelPos = this.getClampedLabelPos(distanceLabelWidth, distanceLabelHeight, 10F);
             this.drawDistanceLabel(drawContext, distanceLabelPos.x(), distanceLabelPos.y(), distanceLabelScale);
@@ -171,7 +171,8 @@ public abstract class MarkerRenderer {
             float screenX = screenPos.x() - this.getLabelWidth() / 2F;
             float screenY = screenPos.y() - POINTER_HEIGHT - getLabelHeight() - 4F;
 
-            this.drawLabel(drawContext, screenX, screenY);
+            this.drawLabel(drawContext, screenX, screenY, true);
+
             this.drawDistanceLabel(drawContext, screenPos.x() - distanceLabelWidth / 2F, screenPos.y()  - POINTER_HEIGHT - distanceLabelHeight - 24F, distanceLabelScale);
         }
 
@@ -276,7 +277,7 @@ public abstract class MarkerRenderer {
         return new Vector2f(iconX, iconY);
     }
 
-    public void drawLabel(DrawContext drawContext, float screenX, float screenY) {
+    public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
         // Draw the name of the object by default
         drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, 0xFFFFFFFF, true);
     }

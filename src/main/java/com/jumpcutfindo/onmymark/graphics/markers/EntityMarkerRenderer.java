@@ -1,8 +1,9 @@
 package com.jumpcutfindo.onmymark.graphics.markers;
 
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ColorUtils;
+import com.jumpcutfindo.onmymark.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
-import com.jumpcutfindo.onmymark.mixin.VehicleEntityInvoker;
+import com.jumpcutfindo.onmymark.mixin.VehicleEntityMixin;
 import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -47,23 +48,27 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     Vec3d getMarkerWorldPos() {
         Vec3d worldPos = entityMarker.getExactPosition();
 
+        if (this.entityMarker.entity() instanceof ItemEntity) {
+            return worldPos.add(new Vec3d(0.0F, 1.0F, 0.0F));
+        }
+
         return worldPos.add(new Vec3d(0.0f, entityMarker.entity().getHeight(), 0.0f));
     }
 
     @Override
-    public void drawLabel(DrawContext drawContext, float screenX, float screenY) {
+    public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
         if (this.labelType == LabelType.TEXT) {
-            super.drawLabel(drawContext, screenX, screenY);
+            super.drawLabel(drawContext, screenX, screenY, isOutlined);
             return;
         }
 
         Entity entity = this.entityMarker.entity();
 
         if (entity instanceof ItemEntity item) {
-            drawContext.drawItem(item.getStack(), (int) screenX, (int) screenY);
+            DrawUtils.drawItemOutlined(drawContext, item.getStack(), (int) screenX, (int) screenY, this.getPointerColor());
             drawContext.drawStackOverlay(MinecraftClient.getInstance().textRenderer, item.getStack(), (int) screenX, (int) screenY);
         } else if (entity instanceof VehicleEntity vehicle) {
-            drawContext.drawItem(((VehicleEntityInvoker) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY);
+            drawContext.drawItem(((VehicleEntityMixin) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY);
         }
     }
 

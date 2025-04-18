@@ -1,0 +1,17 @@
+{
+  "vertex": "minecraft:core/entity",
+  "fragment": "onmymark:solid_color",
+  "defines": {
+    "values": {
+      "ALPHA_CUTOUT": "0.1"
+    }
+  },
+  "samplers": [
+    { "name": "Sampler0" }
+  ],
+  "uniforms": [
+    { "name": "ModelViewMat", "type": "matrix4x4", "count": 16 },
+    { "name": "ProjMat", "type": "matrix4x4", "count": 16 },
+    { "name": "ColorModulator", "type": "float", "count": 4 }
+  ]
+}
