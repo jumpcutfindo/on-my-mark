@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.graphics.render;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.PolygonMode;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.gl.UniformType;
@@ -20,6 +21,10 @@ public class CustomRenderPipelines {
             .withVertexShader(Identifier.of(OnMyMarkMod.MOD_ID, "core/solid_color"))
             .withFragmentShader(Identifier.of(OnMyMarkMod.MOD_ID, "core/solid_color"))
             .withSampler("Sampler0")
+            .withColorWrite(true)
+            .withDepthWrite(true)
+            .withPolygonMode(PolygonMode.FILL)
+            .withCull(true)
             .withVertexFormat(
                     VertexFormat.builder()
                             .add("Position", VertexFormatElement.POSITION)
@@ -28,6 +33,5 @@ public class CustomRenderPipelines {
                             .build(),
                     VertexFormat.DrawMode.QUADS
             )
-            .withShaderDefine("ALPHA_CUTOUT", 0.1F)
             .build();
 }

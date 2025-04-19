@@ -48,7 +48,7 @@ public class DrawUtils {
                 // Replace existing RenderLayers with solid RenderLayers
                 ItemRenderState.LayerRenderState[] layers = ((ItemRenderStateMixin) itemRenderState).layers();
                 for (ItemRenderState.LayerRenderState layer : layers) {
-                    layer.setRenderLayer(CustomRenderLayers.SOLID_ENTITY_COLOR.apply(texture, outlineColor));
+                    layer.setRenderLayer(CustomRenderLayers.SOLID_ENTITY_COLOR.apply(outlineColor));
                 }
 
                 matrices.scale(18.0F, -18.0F, 1.0F);
