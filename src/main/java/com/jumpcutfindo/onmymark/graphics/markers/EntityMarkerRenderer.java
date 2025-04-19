@@ -68,7 +68,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
             DrawUtils.drawItemOutlined(drawContext, item.getStack(), (int) screenX, (int) screenY, this.getPointerColor());
             drawContext.drawStackOverlay(MinecraftClient.getInstance().textRenderer, item.getStack(), (int) screenX, (int) screenY);
         } else if (entity instanceof VehicleEntity vehicle) {
-            drawContext.drawItem(((VehicleEntityMixin) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY);
+            DrawUtils.drawItemOutlined(drawContext, ((VehicleEntityMixin) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY, this.getPointerColor());
         }
     }
 
