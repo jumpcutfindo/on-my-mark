@@ -85,6 +85,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     public boolean shouldDraw() {
+        // Avoid drawing marker if the marker is placed on the player themselves
+        if (this.entityMarker.entity().equals(MinecraftClient.getInstance().player)) {
+            return false;
+        }
+
         return super.shouldDraw() && !this.entityMarker.entity().isRemoved();
     }
 
