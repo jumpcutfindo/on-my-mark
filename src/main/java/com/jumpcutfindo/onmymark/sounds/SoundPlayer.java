@@ -10,14 +10,14 @@ public class SoundPlayer {
     }
 
     public static void playPlaceMarkerSound(SoundManager soundManager) {
-        soundManager.play(PositionedSoundInstance.master(CustomSoundEvents.PLACE_MARKER, 1.0F, 1.1F));
+        soundManager.play(PositionedSoundInstance.master(CustomSoundEvents.PLACE_MARKER, 1.0F, 1.0F));
     }
 
     public static void playOtherMarkerSound(SoundManager soundManager) {
-        soundManager.play(PositionedSoundInstance.master(CustomSoundEvents.OTHER_MARKER, 1.1F));
+        soundManager.play(PositionedSoundInstance.master(CustomSoundEvents.OTHER_MARKER, 1.0F, 1.1F));
     }
 
     public static void playPlayerReportSound(SoundManager soundManager) {
-        soundManager.play(PositionedSoundInstance.master(CustomSoundEvents.PLAYER_REPORT, 1.1F));
+        soundManager.play(PositionedSoundInstance.master(CustomSoundEvents.PLAYER_REPORT, 1.0F, 1.1F));
     }
 }

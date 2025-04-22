@@ -3,7 +3,7 @@ package com.jumpcutfindo.onmymark.graphics.screen.components;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
-import com.jumpcutfindo.onmymark.utils.SoundUtils;
+import com.jumpcutfindo.onmymark.sounds.SoundPlayer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -107,7 +107,7 @@ public class IconButton implements Interactable {
 
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         if (!isDisabled() && isMouseWithin(mouseX, mouseY)) {
-            SoundUtils.playClickSound(MinecraftClient.getInstance().getSoundManager());
+            SoundPlayer.playClickSound(MinecraftClient.getInstance().getSoundManager());
             action.run();
             return true;
         }

@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.client;
 
-import com.jumpcutfindo.onmymark.utils.SoundUtils;
+import com.jumpcutfindo.onmymark.sounds.SoundPlayer;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.MinecraftClient;
@@ -23,7 +23,7 @@ public class ClientMarkerManager {
     }
 
     public void setMarker(PartyMember partyMember, Marker marker) {
-        SoundUtils.playPlaceMarkerSound(MinecraftClient.getInstance().getSoundManager());
+        SoundPlayer.playPlaceMarkerSound(MinecraftClient.getInstance().getSoundManager());
         this.markerMap.put(partyMember, marker);
     }
 

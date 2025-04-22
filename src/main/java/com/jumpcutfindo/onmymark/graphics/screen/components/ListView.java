@@ -2,7 +2,7 @@ package com.jumpcutfindo.onmymark.graphics.screen.components;
 
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.utils.ScreenUtils;
-import com.jumpcutfindo.onmymark.utils.SoundUtils;
+import com.jumpcutfindo.onmymark.sounds.SoundPlayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -145,7 +145,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
             T item = this.listItems.get(i);
 
             if (item.mouseClicked(x + listX, y + listY + offsetY, mouseX, mouseY)) {
-                SoundUtils.playClickSound(MinecraftClient.getInstance().getSoundManager());
+                SoundPlayer.playClickSound(MinecraftClient.getInstance().getSoundManager());
                 this.toggleSelected(i);
                 return true;
             }
