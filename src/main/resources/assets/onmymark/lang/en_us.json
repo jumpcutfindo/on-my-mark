@@ -45,5 +45,9 @@
   "onmymark.action.onInviteToParty.successful": "An invitation has been sent to %s",
   "onmymark.action.onInviteToParty.gotInvited": "%s has invited you to join their party",
   "onmymark.action.onInviteToParty.accepted": "%s has joined the party",
-  "onmymark.action.onInviteToParty.rejected": "%s has rejected your invitation"
+  "onmymark.action.onInviteToParty.rejected": "%s has rejected your invitation",
+
+  "onmymark.sound.placeMarker": "Marker places",
+  "onmymark.sound.otherMarker": "Member's marker places",
+  "onmymark.sound.playerReport": "Member reports in"
 }
