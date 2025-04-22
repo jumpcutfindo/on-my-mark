@@ -4,8 +4,6 @@ import com.jumpcutfindo.onmymark.client.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.graphics.markers.MarkerRenderer;
-import com.jumpcutfindo.onmymark.marker.BlockMarker;
-import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
 import net.minecraft.block.BlockState;
@@ -69,7 +67,6 @@ public class OnPlayerMarkInputHandler implements InputHandler {
             EntityHitResult entityHitResult = (EntityHitResult) hitResult;
             Entity entity = entityHitResult.getEntity();
 
-            clientMarkerManager.setMarker(this.clientPartyManager.self(), new EntityMarker(this.clientPartyManager.self(), entity));
             ClientNetworkSender.markEntity(client.player, entity);
         } else if (hitResult.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockHitResult = (BlockHitResult) hitResult;
@@ -79,7 +76,6 @@ public class OnPlayerMarkInputHandler implements InputHandler {
 
             BlockState blockState = client.world.getBlockState(blockPos);
 
-            clientMarkerManager.setMarker(this.clientPartyManager.self(), new BlockMarker(this.clientPartyManager.self(), blockPos, blockState));
             ClientNetworkSender.markBlock(client.player, blockPos);
         }
     }
