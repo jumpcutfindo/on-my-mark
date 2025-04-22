@@ -279,7 +279,7 @@ public abstract class MarkerRenderer {
 
     public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
         // Draw the name of the object by default
-        drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, this.getPointerColor(), true);
+        drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, 0xFFFFFF, true);
     }
 
     public int getLabelWidth() {
