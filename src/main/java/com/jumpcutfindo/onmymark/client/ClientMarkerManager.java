@@ -23,7 +23,14 @@ public class ClientMarkerManager {
     }
 
     public void setMarker(PartyMember partyMember, Marker marker) {
-        SoundPlayer.playPlaceMarkerSound(MinecraftClient.getInstance().getSoundManager());
+        if (partyMember.id().equals(MinecraftClient.getInstance().player.getUuid())) {
+            // Marker was placed by self
+            SoundPlayer.playPlaceMarkerSound(MinecraftClient.getInstance().getSoundManager());
+        } else {
+            // Marker was placed by other player
+            SoundPlayer.playOtherMarkerSound(MinecraftClient.getInstance().getSoundManager());
+        }
+
         this.markerMap.put(partyMember, marker);
     }
 
