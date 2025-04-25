@@ -4,11 +4,18 @@ import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.UUID;
+
 public class EntityMarker extends Marker {
+    private final UUID entityId;
+    private final String entityName;
+
     private final Entity entity;
 
-    public EntityMarker(PartyMember owner, Entity entity) {
+    public EntityMarker(PartyMember owner, UUID entityId, String entityName, Entity entity) {
         super(owner);
+        this.entityId = entityId;
+        this.entityName = entityName;
         this.entity = entity;
     }
 

@@ -1,19 +1,16 @@
 package com.jumpcutfindo.onmymark.server.network;
 
+import com.jumpcutfindo.onmymark.network.packets.clientbound.*;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerRequestC2SPacket;
-import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkBlockC2SPacket;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkEntityC2SPacket;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
-import com.jumpcutfindo.onmymark.network.packets.clientbound.InvitePlayerInvitationS2CPacket;
-import com.jumpcutfindo.onmymark.network.packets.clientbound.InvitePlayerResultS2CPacket;
-import com.jumpcutfindo.onmymark.network.packets.clientbound.PartyInfoS2CPacket;
-import com.jumpcutfindo.onmymark.network.packets.clientbound.RemovePartyInfoS2CPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -29,7 +26,7 @@ public class ServerNetworkSender implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(InvitePlayerResultS2CPacket.PACKET_ID, InvitePlayerResultS2CPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(InvitePlayerRequestC2SPacket.PACKET_ID, InvitePlayerRequestC2SPacket.PACKET_CODEC);
 
-        PayloadTypeRegistry.playS2C().register(MarkBlockC2SPacket.PACKET_ID, MarkBlockC2SPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(MarkBlockResultS2CPacket.PACKET_ID, MarkBlockResultS2CPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(MarkEntityC2SPacket.PACKET_ID, MarkEntityC2SPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(RemoveMarkerC2SPacket.PACKET_ID, RemoveMarkerC2SPacket.PACKET_CODEC);
     }
@@ -62,8 +59,8 @@ public class ServerNetworkSender implements ModInitializer {
         ServerPlayNetworking.send(player, InvitePlayerInvitationS2CPacket.create(party));
     }
 
-    public static void sendBlockMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, BlockPos blockPos) {
-        ServerPlayNetworking.send(player, MarkBlockC2SPacket.create(markerPlayer, blockPos));
+    public static void sendBlockMarker(ServerPlayerEntity player, ServerPartyMember markerMember, BlockPos blockPos, BlockState blockState) {
+        ServerPlayNetworking.send(player, MarkBlockResultS2CPacket.create(markerMember, blockPos, blockState));
     }
 
     public static void sendEntityMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, Entity entity) {

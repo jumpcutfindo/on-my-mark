@@ -1,15 +1,17 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkBlockC2SPacket;
+import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.PartyMemberFilters;
+import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
-import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyMemberFilters;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
+import net.minecraft.block.BlockState;
 import net.minecraft.text.Text;
+import net.minecraft.world.World;
 
 /**
  * Handler for when a party member is attempting to mark a block
@@ -21,12 +23,15 @@ public class MarkBlockC2SHandler implements ServerPacketHandler<MarkBlockC2SPack
 
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
-            ServerPartyMember playerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
+            ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
+
+            World markerWorld = context.player().getWorld();
+            BlockState blockState = markerWorld.getBlockState(payload.blockPos());
 
             // Send markers only to players in the same dimension
-            PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(playerPartyMember);
+            PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(markerPartyMember);
             for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
-                ServerNetworkSender.sendBlockMarker(partyMember.player(), context.player(), payload.blockPos());
+                ServerNetworkSender.sendBlockMarker(partyMember.player(), markerPartyMember, payload.blockPos(), blockState);
             }
         } catch (PartyNotFoundException e) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
