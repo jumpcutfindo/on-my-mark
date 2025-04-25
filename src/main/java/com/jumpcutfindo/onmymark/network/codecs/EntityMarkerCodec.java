@@ -4,6 +4,9 @@ import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.world.World;
 
 import java.util.UUID;
 
@@ -11,10 +14,11 @@ public class EntityMarkerCodec implements PacketCodec<PacketByteBuf, EntityMarke
     @Override
     public EntityMarker decode(PacketByteBuf buf) {
         PartyMember partyMember = buf.readNullable(OnMyMarkCodecs.PARTY_MEMBER);
+        RegistryKey<World> worldRegistryKey = buf.readRegistryKey(RegistryKeys.WORLD);
         UUID entityId = buf.readUuid();
         String entityName = buf.readString();
 
-        return new EntityMarker(partyMember, entityId, entityName);
+        return new EntityMarker(partyMember, worldRegistryKey, entityId, entityName);
     }
 
     @Override

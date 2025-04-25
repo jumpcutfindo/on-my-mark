@@ -8,7 +8,10 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
 import java.util.UUID;
 
@@ -17,17 +20,20 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
     public static final PacketCodec<RegistryByteBuf, MarkEntityResultS2CPacket> PACKET_CODEC = PacketCodec.of(MarkEntityResultS2CPacket::write, MarkEntityResultS2CPacket::new);
 
     private UUID playerId;
+    private RegistryKey<World> worldRegistryKey;
     private UUID entityId;
     private String entityName;
 
     public MarkEntityResultS2CPacket(PacketByteBuf buf) {
         this.playerId = buf.readUuid();
+        this.worldRegistryKey = buf.readRegistryKey(RegistryKeys.WORLD);
         this.entityId = buf.readUuid();
         this.entityName = buf.readString();
     }
 
     public void write(PacketByteBuf buf) {
         buf.writeUuid(this.playerId);
+        buf.writeRegistryKey(this.worldRegistryKey);
         buf.writeUuid(this.entityId);
         buf.writeString(this.entityName);
     }
@@ -35,6 +41,7 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
     public static MarkEntityResultS2CPacket create(PlayerEntity player, Entity entity) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(player.getUuid());
+        buf.writeRegistryKey(player.getWorld().getRegistryKey());
         buf.writeUuid(entity.getUuid());
         buf.writeString(entity.getDisplayName().getString());
 
@@ -43,6 +50,10 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
 
     public UUID playerId() {
         return playerId;
+    }
+
+    public RegistryKey<World> worldRegistryKey() {
+        return worldRegistryKey;
     }
 
     public UUID entityId() {

@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.marker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -13,8 +14,8 @@ public class BlockMarker extends Marker {
 
     private BlockState blockState;
 
-    public BlockMarker(PartyMember owner, BlockPos blockPos, Block block) {
-        super(owner);
+    public BlockMarker(PartyMember owner, RegistryKey<World> worldRegistryKey, BlockPos blockPos, Block block) {
+        super(owner, worldRegistryKey);
 
         this.blockPos = blockPos;
         this.block = block;

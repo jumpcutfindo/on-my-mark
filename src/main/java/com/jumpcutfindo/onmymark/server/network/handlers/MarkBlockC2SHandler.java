@@ -2,7 +2,6 @@ package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkBlockC2SPacket;
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyMemberFilters;
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
@@ -28,9 +27,7 @@ public class MarkBlockC2SHandler implements ServerPacketHandler<MarkBlockC2SPack
             World markerWorld = context.player().getWorld();
             BlockState blockState = markerWorld.getBlockState(payload.blockPos());
 
-            // Send markers only to players in the same dimension
-            PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(markerPartyMember);
-            for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
+            for (ServerPartyMember partyMember : party.partyMembers()) {
                 ServerNetworkSender.sendBlockMarker(partyMember.player(), markerPartyMember, payload.blockPos(), blockState);
             }
         } catch (PartyNotFoundException e) {

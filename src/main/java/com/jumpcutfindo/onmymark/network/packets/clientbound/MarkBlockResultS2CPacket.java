@@ -9,8 +9,11 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.UUID;
 
@@ -19,17 +22,20 @@ public class MarkBlockResultS2CPacket implements CustomPayload {
     public static final PacketCodec<RegistryByteBuf, MarkBlockResultS2CPacket> PACKET_CODEC = PacketCodec.of(MarkBlockResultS2CPacket::write, MarkBlockResultS2CPacket::new);
 
     private UUID playerId;
+    private RegistryKey<World> worldRegistryKey;
     private BlockPos blockPos;
     private Identifier blockIdentifier;
 
     public MarkBlockResultS2CPacket(PacketByteBuf buf) {
         this.playerId = buf.readUuid();
+        this.worldRegistryKey = buf.readRegistryKey(RegistryKeys.WORLD);
         this.blockPos = buf.readBlockPos();
         this.blockIdentifier = buf.readIdentifier();
     }
 
     public void write(PacketByteBuf buf) {
         buf.writeUuid(this.playerId);
+        buf.writeRegistryKey(this.worldRegistryKey);
         buf.writeBlockPos(this.blockPos);
         buf.writeIdentifier(this.blockIdentifier);
     }
@@ -37,6 +43,7 @@ public class MarkBlockResultS2CPacket implements CustomPayload {
     public static MarkBlockResultS2CPacket create(ServerPartyMember serverPartyMember, BlockPos blockPos, BlockState blockState) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(serverPartyMember.id());
+        buf.writeRegistryKey(serverPartyMember.player().getWorld().getRegistryKey());
         buf.writeBlockPos(blockPos);
         buf.writeIdentifier(Registries.BLOCK.getId(blockState.getBlock()));
 
@@ -45,6 +52,10 @@ public class MarkBlockResultS2CPacket implements CustomPayload {
 
     public UUID playerId() {
         return playerId;
+    }
+
+    public RegistryKey<World> worldRegistryKey() {
+        return worldRegistryKey;
     }
 
     public BlockPos blockPos() {

@@ -1,14 +1,13 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
+import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
-import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyMemberFilters;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -24,13 +23,11 @@ public class RemoveMarkerC2SHandler implements ServerPacketHandler<RemoveMarkerC
 
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
-            ServerPartyMember playerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
 
             ServerWorld world = context.player().getServerWorld();
             PlayerEntity markerPlayer = world.getPlayerByUuid(payload.markerPlayerId());
 
-            PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(playerPartyMember);
-            for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
+            for (ServerPartyMember partyMember : party.partyMembers()) {
                 ServerNetworkSender.removeMarker(partyMember.player(), (ServerPlayerEntity) markerPlayer);
             }
         } catch (PartyNotFoundException e) {

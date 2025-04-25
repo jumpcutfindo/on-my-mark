@@ -1,14 +1,13 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkEntityC2SPacket;
+import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
-import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyMemberFilters;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
@@ -33,9 +32,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
                 return;
             }
 
-            // Send markers only to players in the same dimension
-            PartyMemberFilters.SameDimensionFilter sameDimensionFilter = new PartyMemberFilters.SameDimensionFilter(playerPartyMember);
-            for (ServerPartyMember partyMember : party.partyMembers(sameDimensionFilter)) {
+            for (ServerPartyMember partyMember : party.partyMembers()) {
                 ServerNetworkSender.sendEntityMarker(partyMember.player(), context.player(), entity);
             }
         } catch (PartyNotFoundException e) {

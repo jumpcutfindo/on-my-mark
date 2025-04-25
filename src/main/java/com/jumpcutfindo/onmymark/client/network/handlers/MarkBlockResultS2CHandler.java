@@ -25,7 +25,7 @@ public class MarkBlockResultS2CHandler implements ClientPacketHandler<MarkBlockR
 
             Block block = Registries.BLOCK.get(payload.blockIdentifier());
 
-            markerManager.setMarker(partyMember, new BlockMarker(partyMember, payload.blockPos(), block));
+            markerManager.setMarker(partyMember, new BlockMarker(partyMember, payload.worldRegistryKey(), payload.blockPos(), block));
         }
     }
 }

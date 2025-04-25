@@ -18,7 +18,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     private LabelType labelType;
 
     public EntityMarkerRenderer(MinecraftClient client, EntityMarker entityMarker) {
-        super(client);
+        super(client, entityMarker);
 
         this.entityMarker = entityMarker;
         this.determineLabelType();

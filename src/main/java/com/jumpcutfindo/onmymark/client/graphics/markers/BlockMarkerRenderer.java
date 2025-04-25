@@ -14,7 +14,7 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     private final BlockMarker blockMarker;
 
     public BlockMarkerRenderer(MinecraftClient client, BlockMarker blockMarker) {
-        super(client);
+        super(client, blockMarker);
 
         this.blockMarker = blockMarker;
     }

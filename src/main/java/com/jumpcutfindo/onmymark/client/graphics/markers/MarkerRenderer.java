@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.client.graphics.markers;
 
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.RenderMath;
+import com.jumpcutfindo.onmymark.marker.Marker;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -20,6 +21,7 @@ public abstract class MarkerRenderer {
     public static final float ICON_SIZE = 16F;
 
     protected MinecraftClient client;
+    protected Marker marker;
 
     // TODO(preference): Implement switching of player selection between circle and oval
     private ClampType clampType;
@@ -34,8 +36,9 @@ public abstract class MarkerRenderer {
 
     private float existTime;
 
-    protected MarkerRenderer(MinecraftClient client) {
+    protected MarkerRenderer(MinecraftClient client, Marker marker) {
         this.client = client;
+        this.marker = marker;
 
         this.screenPos = null;
         this.prevScreenPos = null;
@@ -127,7 +130,7 @@ public abstract class MarkerRenderer {
     }
 
     public boolean shouldDraw() {
-        return screenPos != null && screenPosNormal != null;
+        return screenPos != null && screenPosNormal != null && this.marker.isSameDimension(this.client.player);
     }
 
     abstract Vec3d getWorldPos();
