@@ -9,6 +9,9 @@ import com.jumpcutfindo.onmymark.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a party member attempts to leave the party they're in
+ */
 public class LeavePartyHandler implements ServerPacketHandler<LeavePartyPacket> {
     @Override
     public void handle(LeavePartyPacket payload, ServerPacketContext context) {

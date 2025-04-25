@@ -14,6 +14,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a party member attempts to remove a marker
+ */
 public class RemoveMarkerHandler implements ServerPacketHandler<RemoveMarkerPacket> {
     @Override
     public void handle(RemoveMarkerPacket payload, ServerPacketContext context) {

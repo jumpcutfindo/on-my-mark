@@ -10,6 +10,9 @@ import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.AlreadyInPartyException;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a player attempts to create a party
+ */
 public class CreatePartyHandler implements ServerPacketHandler<CreatePartyPacket> {
     @Override
     public void handle(CreatePartyPacket payload, ServerPacketContext context) {

@@ -15,6 +15,9 @@ import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a party leader attempts to kick a player out of the party
+ */
 public class KickPlayerHandler implements ServerPacketHandler<KickPlayerPacket> {
     @Override
     public void handle(KickPlayerPacket payload, ServerPacketContext context) {

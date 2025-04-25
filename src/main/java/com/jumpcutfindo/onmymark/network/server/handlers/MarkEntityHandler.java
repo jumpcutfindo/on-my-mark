@@ -14,6 +14,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a party member is attempting to mark an entity
+ */
 public class MarkEntityHandler implements ServerPacketHandler<MarkEntityPacket> {
     @Override
     public void handle(MarkEntityPacket payload, ServerPacketContext context) {

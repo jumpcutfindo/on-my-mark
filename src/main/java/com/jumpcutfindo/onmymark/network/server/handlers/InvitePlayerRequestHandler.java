@@ -15,6 +15,9 @@ import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a party leader requests for a specified player to be invited to a party
+ */
 public class InvitePlayerRequestHandler implements ServerPacketHandler<InvitePlayerRequestPacket> {
     @Override
     public void handle(InvitePlayerRequestPacket payload, ServerPacketContext context) {

@@ -11,6 +11,9 @@ import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a party member is attempting to mark a block
+ */
 public class MarkBlockHandler implements ServerPacketHandler<MarkBlockPacket> {
     @Override
     public void handle(MarkBlockPacket payload, ServerPacketContext context) {

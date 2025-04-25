@@ -14,6 +14,9 @@ import com.jumpcutfindo.onmymark.party.exceptions.PlayerAlreadyInPartyException;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+/**
+ * Handler for when a player submits a decision on whether to accept or reject a party invite
+ */
 public class InvitePlayerDecisionHandler implements ServerPacketHandler<InvitePlayerDecisionPacket> {
     @Override
     public void handle(InvitePlayerDecisionPacket payload, ServerPacketContext context) {
