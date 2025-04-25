@@ -8,13 +8,16 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public class PartyInvitationDecisionPacket implements CustomPayload {
-    public static final Id<PartyInvitationDecisionPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "party_invitation_decision"));
-    public static final PacketCodec<RegistryByteBuf, PartyInvitationDecisionPacket> PACKET_CODEC = PacketCodec.of(PartyInvitationDecisionPacket::write, PartyInvitationDecisionPacket::new);
+/**
+ * Decision of the player invited whether to join the party or not
+ */
+public class InvitePlayerDecisionPacket implements CustomPayload {
+    public static final Id<InvitePlayerDecisionPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_decision"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerDecisionPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerDecisionPacket::write, InvitePlayerDecisionPacket::new);
 
     private final boolean isAccept;
 
-    public PartyInvitationDecisionPacket(PacketByteBuf buf) {
+    public InvitePlayerDecisionPacket(PacketByteBuf buf) {
         this.isAccept = buf.readBoolean();
     }
 
@@ -26,11 +29,11 @@ public class PartyInvitationDecisionPacket implements CustomPayload {
         return isAccept;
     }
 
-    public static PartyInvitationDecisionPacket create(boolean isAccept) {
+    public static InvitePlayerDecisionPacket create(boolean isAccept) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(isAccept);
 
-        return new PartyInvitationDecisionPacket(buf);
+        return new InvitePlayerDecisionPacket(buf);
     }
 
     @Override

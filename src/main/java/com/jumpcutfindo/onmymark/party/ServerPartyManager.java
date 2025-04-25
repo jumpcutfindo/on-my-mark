@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class PartyManager {
+public class ServerPartyManager {
     private final List<ServerPartyMember> partyMembers;
     private final List<Party<ServerPartyMember>> parties;
     private final List<PartyInvite<ServerPartyMember>> partyInvites;
 
-    public PartyManager() {
+    public ServerPartyManager() {
         this.partyMembers = new ArrayList<>();
         this.parties = new ArrayList<>();
         this.partyInvites = new ArrayList<>();

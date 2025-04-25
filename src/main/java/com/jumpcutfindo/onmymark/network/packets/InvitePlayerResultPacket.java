@@ -8,13 +8,16 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public class InviteToPartyResponsePacket implements CustomPayload {
-    public static final Id<InviteToPartyResponsePacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_to_party_response"));
-    public static final PacketCodec<RegistryByteBuf, InviteToPartyResponsePacket> PACKET_CODEC = PacketCodec.of(InviteToPartyResponsePacket::write, InviteToPartyResponsePacket::new);
+/**
+ * Result of the entire party request transaction
+ */
+public class InvitePlayerResultPacket implements CustomPayload {
+    public static final Id<InvitePlayerResultPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_result"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerResultPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerResultPacket::write, InvitePlayerResultPacket::new);
 
     private boolean isSuccessful;
 
-    public InviteToPartyResponsePacket(PacketByteBuf buf) {
+    public InvitePlayerResultPacket(PacketByteBuf buf) {
         this.isSuccessful = buf.readBoolean();
     }
 
@@ -26,18 +29,18 @@ public class InviteToPartyResponsePacket implements CustomPayload {
         return isSuccessful;
     }
 
-    public static InviteToPartyResponsePacket successful() {
+    public static InvitePlayerResultPacket successful() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(true);
 
-        return new InviteToPartyResponsePacket(buf);
+        return new InvitePlayerResultPacket(buf);
     }
 
-    public static InviteToPartyResponsePacket unsuccessful() {
+    public static InvitePlayerResultPacket unsuccessful() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(false);
 
-        return new InviteToPartyResponsePacket(buf);
+        return new InvitePlayerResultPacket(buf);
     }
 
     @Override

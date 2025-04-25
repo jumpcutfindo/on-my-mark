@@ -16,8 +16,8 @@
 	"entrypoints": {
 		"main": [
 			"com.jumpcutfindo.onmymark.OnMyMarkMod",
-			"com.jumpcutfindo.onmymark.network.ServerNetworkReceiver",
-			"com.jumpcutfindo.onmymark.network.ServerNetworkSender"
+          "com.jumpcutfindo.onmymark.network.server.ServerNetworkReceiver",
+          "com.jumpcutfindo.onmymark.network.server.ServerNetworkSender"
 		],
 		"client": [
 			"com.jumpcutfindo.onmymark.client.OnMyMarkClientMod",

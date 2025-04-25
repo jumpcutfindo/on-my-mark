@@ -17,15 +17,18 @@ import net.minecraft.world.World;
 
 import java.util.UUID;
 
-public class PartyInvitationRequestPacket implements CustomPayload {
-    public static final Id<PartyInvitationRequestPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "party_invite"));
-    public static final PacketCodec<RegistryByteBuf, PartyInvitationRequestPacket> PACKET_CODEC = PacketCodec.of(PartyInvitationRequestPacket::write, PartyInvitationRequestPacket::new);
+/**
+ * Outgoing packet for the invitation details to the player that is being invited
+ */
+public class InvitePlayerInvitationPacket implements CustomPayload {
+    public static final Id<InvitePlayerInvitationPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_invitation"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerInvitationPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerInvitationPacket::write, InvitePlayerInvitationPacket::new);
 
     private UUID partyId;
     private String partyName;
     private PartyMember partyLeader;
 
-    public PartyInvitationRequestPacket(PacketByteBuf buf) {
+    public InvitePlayerInvitationPacket(PacketByteBuf buf) {
         this.partyId = buf.readUuid();
         this.partyName = buf.readString();
         this.partyLeader = buf.readNullable(OnMyMarkCodecs.PARTY_MEMBER);
@@ -49,13 +52,13 @@ public class PartyInvitationRequestPacket implements CustomPayload {
         return partyName;
     }
 
-    public static <T extends PartyMember> PartyInvitationRequestPacket create(Party<T> party) {
+    public static <T extends PartyMember> InvitePlayerInvitationPacket create(Party<T> party) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(party.partyId());
         buf.writeString(party.partyName());
         buf.writeNullable(party.partyLeader(), OnMyMarkCodecs.PARTY_MEMBER);
 
-        return new PartyInvitationRequestPacket(buf);
+        return new InvitePlayerInvitationPacket(buf);
     }
 
     public PartyInvite<ClientPartyMember> toPartyInvite(World world, PlayerEntity player) {

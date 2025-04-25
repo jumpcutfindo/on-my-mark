@@ -61,13 +61,13 @@ public class ClientNetworkReceiver implements ClientModInitializer {
     }
 
     public static void onInviteToPartyResponse() {
-        ClientPlayNetworking.registerGlobalReceiver(InviteToPartyResponsePacket.PACKET_ID, ((inviteToPartyResponsePacket, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(InvitePlayerResultPacket.PACKET_ID, ((inviteToPartyResponsePacket, context) -> {
             // TODO: Update window to close if invite was successful; if not, maybe show error?
         }));
     }
 
     public static void onPartyInvitation() {
-        ClientPlayNetworking.registerGlobalReceiver(PartyInvitationRequestPacket.PACKET_ID, (packet, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(InvitePlayerInvitationPacket.PACKET_ID, (packet, context) -> {
             ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
             PartyInvite<ClientPartyMember> partyInvite = packet.toPartyInvite(context.player().getWorld(), context.player());
 

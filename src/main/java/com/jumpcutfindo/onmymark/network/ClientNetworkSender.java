@@ -32,18 +32,18 @@ public class ClientNetworkSender implements ClientModInitializer {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(playerName);
 
-        ClientPlayNetworking.send(new InviteToPartyPacket(buf));
+        ClientPlayNetworking.send(new InvitePlayerRequestPacket(buf));
     }
 
     public static void kickFromParty(UUID playerId) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(playerId);
 
-        ClientPlayNetworking.send(new KickFromPartyPacket(buf));
+        ClientPlayNetworking.send(new KickPlayerPacket(buf));
     }
 
     public static void sendInvitationResponse(boolean isAccept) {
-        ClientPlayNetworking.send(PartyInvitationDecisionPacket.create(isAccept));
+        ClientPlayNetworking.send(InvitePlayerDecisionPacket.create(isAccept));
     }
 
     public static void markBlock(PlayerEntity player, BlockPos blockPos) {

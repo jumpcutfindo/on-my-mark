@@ -1,8 +1,8 @@
 package com.jumpcutfindo.onmymark;
 
-import com.jumpcutfindo.onmymark.network.ServerNetworkSender;
+import com.jumpcutfindo.onmymark.network.server.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.PartyManager;
+import com.jumpcutfindo.onmymark.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.PlayerNotInPartyException;
 import net.fabricmc.api.ModInitializer;
@@ -19,7 +19,7 @@ public class OnMyMarkMod implements ModInitializer {
 	public static final String MOD_ID = "onmymark";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static PartyManager PARTY_MANAGER = null;
+	public static ServerPartyManager PARTY_MANAGER = null;
 
 	@Override
 	public void onInitialize() {
@@ -31,7 +31,7 @@ public class OnMyMarkMod implements ModInitializer {
 
 	public void onServerStarted(MinecraftServer server) {
 		// Initialize the party system
-		PARTY_MANAGER = new PartyManager();
+		PARTY_MANAGER = new ServerPartyManager();
 
 		LOGGER.info("Party manager initialized!");
 	}
@@ -41,7 +41,7 @@ public class OnMyMarkMod implements ModInitializer {
 
 		try {
 			Party<ServerPartyMember> party = PARTY_MANAGER.handlePlayerConnected(serverPlayer);
-			ServerNetworkSender.sendPartyInfoToParty(party);
+			ServerNetworkSender.sendPartyInfo(party);
 		} catch (PlayerNotInPartyException ignored) {
 		}
 	}
@@ -51,7 +51,7 @@ public class OnMyMarkMod implements ModInitializer {
 
 		try {
 			Party<ServerPartyMember> party = PARTY_MANAGER.handlePlayerDisconnected(serverPlayer);
-			ServerNetworkSender.sendPartyInfoToParty(party);
+			ServerNetworkSender.sendPartyInfo(party);
 		} catch (PlayerNotInPartyException ignored) {
 		}
 	}

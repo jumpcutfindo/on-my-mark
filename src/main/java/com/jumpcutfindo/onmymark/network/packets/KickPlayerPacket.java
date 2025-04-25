@@ -9,13 +9,13 @@ import net.minecraft.util.Identifier;
 
 import java.util.UUID;
 
-public class KickFromPartyPacket implements CustomPayload {
-    public static final Id<KickFromPartyPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "kick_from_party"));
-    public static final PacketCodec<RegistryByteBuf, KickFromPartyPacket> PACKET_CODEC = PacketCodec.of(KickFromPartyPacket::write, KickFromPartyPacket::new);
+public class KickPlayerPacket implements CustomPayload {
+    public static final Id<KickPlayerPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "kick_player"));
+    public static final PacketCodec<RegistryByteBuf, KickPlayerPacket> PACKET_CODEC = PacketCodec.of(KickPlayerPacket::write, KickPlayerPacket::new);
 
     private final UUID playerId;
 
-    public KickFromPartyPacket(PacketByteBuf buf) {
+    public KickPlayerPacket(PacketByteBuf buf) {
         this.playerId = buf.readUuid();
     }
 

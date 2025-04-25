@@ -7,13 +7,16 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public class InviteToPartyPacket implements CustomPayload {
-    public static final Id<InviteToPartyPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_to_party"));
-    public static final PacketCodec<RegistryByteBuf, InviteToPartyPacket> PACKET_CODEC = PacketCodec.of(InviteToPartyPacket::write, InviteToPartyPacket::new);
+/**
+ * Incoming packet from a party leader to invite a player
+ */
+public class InvitePlayerRequestPacket implements CustomPayload {
+    public static final Id<InvitePlayerRequestPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_request"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerRequestPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerRequestPacket::write, InvitePlayerRequestPacket::new);
 
     private final String playerName;
 
-    public InviteToPartyPacket(PacketByteBuf buf) {
+    public InvitePlayerRequestPacket(PacketByteBuf buf) {
         this.playerName = buf.readString();
     }
 

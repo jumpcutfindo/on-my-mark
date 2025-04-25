@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.utils;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import com.jumpcutfindo.onmymark.network.server.ServerPacketContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -28,11 +28,11 @@ public class EntityUtils {
 
     /**
      * Retrieves a player by their name on the server.
-     * @param context Server context
+     * @param context Server networkContext
      * @param playerName Player's name
      * @return Server player, if they exist
      */
-    public static ServerPlayerEntity getPlayerByName(ServerPlayNetworking.Context context, String playerName) {
+    public static ServerPlayerEntity getPlayerByName(ServerPacketContext context, String playerName) {
         for (ServerWorld world : context.server().getWorlds()) {
             for (ServerPlayerEntity player : world.getPlayers()) {
                 if (player.getName().getLiteralString().equals(playerName)) {
@@ -46,11 +46,11 @@ public class EntityUtils {
 
     /**
      * Retrieves a player by their ID, across all dimensions
-     * @param context Server context
+     * @param context Server packet context
      * @param playerId Player's id
      * @return Server player, if they exist
      */
-    public static ServerPlayerEntity getPlayerById(ServerPlayNetworking.Context context, UUID playerId) {
+    public static ServerPlayerEntity getPlayerById(ServerPacketContext context, UUID playerId) {
         for (ServerWorld world : context.server().getWorlds()) {
             ServerPlayerEntity player = (ServerPlayerEntity) world.getPlayerByUuid(playerId);
 

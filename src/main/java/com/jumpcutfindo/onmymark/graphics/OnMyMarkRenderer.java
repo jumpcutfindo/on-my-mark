@@ -42,7 +42,7 @@ public class OnMyMarkRenderer {
 
     /**
      * Performs a render action for the mod. Runs every render tick.
-     * @param drawContext Draw context
+     * @param drawContext Draw networkContext
      * @param tickCounter Tick counter
      */
     public void render(DrawContext drawContext, RenderTickCounter tickCounter) {
