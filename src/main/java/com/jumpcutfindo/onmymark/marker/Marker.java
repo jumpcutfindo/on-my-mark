@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.marker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public abstract class Marker {
         return this.owner.id().equals(player.getUuid());
     }
 
-    public abstract Vec3d getExactPosition();
+    public abstract Vec3d getExactPosition(World world);
 
     @Override
     public boolean equals(Object o) {

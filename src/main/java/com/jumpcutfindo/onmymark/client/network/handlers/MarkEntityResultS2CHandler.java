@@ -32,7 +32,7 @@ public class MarkEntityResultS2CHandler implements ClientPacketHandler<MarkEntit
             ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();
             PartyMember partyMember = party.getMemberWithId(payload.playerId());
 
-            markerManager.setMarker(partyMember, new EntityMarker(partyMember, payload.entityId(), payload.entityName(), entity));
+            markerManager.setMarker(partyMember, new EntityMarker(partyMember, payload.entityId(), payload.entityName()));
         }
     }
 }

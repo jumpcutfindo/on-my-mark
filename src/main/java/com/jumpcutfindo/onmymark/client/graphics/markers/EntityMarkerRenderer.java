@@ -25,7 +25,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     }
 
     private void determineLabelType() {
-        Entity entity = this.entityMarker.entity();
+        Entity entity = this.entityMarker.entity(this.client.world);
 
         if (entity instanceof VehicleEntity || entity instanceof ItemEntity) {
             this.labelType = LabelType.ICON;
@@ -41,18 +41,18 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     Vec3d getWorldPos() {
-        return entityMarker.getExactPosition();
+        return entityMarker.getExactPosition(this.client.world);
     }
 
     @Override
     Vec3d getMarkerWorldPos() {
-        Vec3d worldPos = entityMarker.getExactPosition();
+        Vec3d worldPos = entityMarker.getExactPosition(this.client.world);
 
-        if (this.entityMarker.entity() instanceof ItemEntity) {
+        if (this.entityMarker.entity(MinecraftClient.getInstance().world) instanceof ItemEntity) {
             return worldPos.add(new Vec3d(0.0F, 1.0F, 0.0F));
         }
 
-        return worldPos.add(new Vec3d(0.0f, entityMarker.entity().getHeight(), 0.0f));
+        return worldPos.add(new Vec3d(0.0f, entityMarker.entity(this.client.world).getHeight(), 0.0f));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
             return;
         }
 
-        Entity entity = this.entityMarker.entity();
+        Entity entity = this.entityMarker.entity(this.client.world);
 
         if (entity instanceof ItemEntity item) {
             DrawUtils.drawItemOutlined(drawContext, item.getStack(), (int) screenX, (int) screenY, this.getPointerColor());
@@ -74,7 +74,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     boolean isMoving() {
-        Vec3d velocity = entityMarker.entity().getVelocity();
+        Vec3d velocity = entityMarker.entity(this.client.world).getVelocity();
         return !velocity.equals(Vec3d.ZERO);
     }
 
@@ -86,11 +86,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     @Override
     public boolean shouldDraw() {
         // Avoid drawing marker if the marker is placed on the player themselves
-        if (this.entityMarker.entity().equals(MinecraftClient.getInstance().player)) {
+        if (this.entityMarker.entity(this.client.world).equals(MinecraftClient.getInstance().player)) {
             return false;
         }
 
-        return super.shouldDraw() && !this.entityMarker.entity().isRemoved();
+        return super.shouldDraw() && !this.entityMarker.entity(this.client.world).isRemoved();
     }
 
     @Override

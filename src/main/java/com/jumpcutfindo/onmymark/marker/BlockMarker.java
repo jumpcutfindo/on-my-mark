@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class BlockMarker extends Marker {
     private final BlockPos blockPos;
@@ -32,7 +33,7 @@ public class BlockMarker extends Marker {
     }
 
     @Override
-    public Vec3d getExactPosition() {
+    public Vec3d getExactPosition(World world) {
         return blockPos.toCenterPos();
     }
 }

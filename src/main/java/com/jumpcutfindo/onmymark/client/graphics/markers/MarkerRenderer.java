@@ -19,7 +19,7 @@ public abstract class MarkerRenderer {
 
     public static final float ICON_SIZE = 16F;
 
-    private MinecraftClient client;
+    protected MinecraftClient client;
 
     // TODO(preference): Implement switching of player selection between circle and oval
     private ClampType clampType;
