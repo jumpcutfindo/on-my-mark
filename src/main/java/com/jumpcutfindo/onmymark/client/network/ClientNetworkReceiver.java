@@ -38,8 +38,6 @@ public class ClientNetworkReceiver implements ClientModInitializer {
             ClientPacketHandler<T> handler
     ) {
         ClientPlayNetworking.registerGlobalReceiver(payloadId, ((payload, context) -> {
-            // Avoid registering payloads here as the server has already registered them
-
             handler.handle(payload, new ClientPacketContext(context, OnMyMarkClientMod.INSTANCE.clientMarkerManager(), OnMyMarkClientMod.INSTANCE.clientPartyManager()));
         }));
     }

@@ -14,7 +14,6 @@ import java.util.UUID;
 public class ClientNetworkSender implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-
     }
 
     public static void createParty(String partyName) {

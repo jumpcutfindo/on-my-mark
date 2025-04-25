@@ -1,12 +1,11 @@
 package com.jumpcutfindo.onmymark.client.input;
 
-import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
-import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.client.graphics.markers.MarkerRenderer;
-import com.jumpcutfindo.onmymark.marker.Marker;
+import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
-import net.minecraft.block.BlockState;
+import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
+import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -73,8 +72,6 @@ public class OnPlayerMarkInputHandler implements InputHandler {
             BlockPos blockPos = blockHitResult.getBlockPos();
 
             if (client.world == null) return;
-
-            BlockState blockState = client.world.getBlockState(blockPos);
 
             ClientNetworkSender.markBlock(client.player, blockPos);
         }

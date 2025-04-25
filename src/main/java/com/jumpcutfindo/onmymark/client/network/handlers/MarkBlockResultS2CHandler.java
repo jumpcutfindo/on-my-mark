@@ -9,6 +9,8 @@ import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.network.packets.clientbound.MarkBlockResultS2CPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
 
 public class MarkBlockResultS2CHandler implements ClientPacketHandler<MarkBlockResultS2CPacket> {
     @Override
@@ -21,7 +23,9 @@ public class MarkBlockResultS2CHandler implements ClientPacketHandler<MarkBlockR
         if (party.hasMemberWithId(payload.playerId())){
             PartyMember partyMember = party.getMemberWithId(payload.playerId());
 
-            markerManager.setMarker(partyMember, new BlockMarker(partyMember, payload.blockPos(), context.client().world.getBlockState(payload.blockPos())));
+            Block block = Registries.BLOCK.get(payload.blockIdentifier());
+
+            markerManager.setMarker(partyMember, new BlockMarker(partyMember, payload.blockPos(), block));
         }
     }
 }

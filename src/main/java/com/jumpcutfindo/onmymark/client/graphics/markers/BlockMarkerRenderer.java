@@ -21,7 +21,7 @@ public class BlockMarkerRenderer extends MarkerRenderer {
 
     @Override
     public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
-        ItemStack blockItem = this.blockMarker.blockState().getBlock().asItem().getDefaultStack();
+        ItemStack blockItem = this.blockMarker.block().asItem().getDefaultStack();
         DrawUtils.drawItemOutlined(drawContext, blockItem, (int) screenX, (int) screenY, this.getPointerColor());
     }
 

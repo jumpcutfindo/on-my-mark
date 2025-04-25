@@ -36,7 +36,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     String getName() {
-        return this.entityMarker.entity().getName().getString();
+        return this.entityMarker.entityName();
     }
 
     @Override

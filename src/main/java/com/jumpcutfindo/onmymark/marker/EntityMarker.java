@@ -23,6 +23,14 @@ public class EntityMarker extends Marker {
         return entity;
     }
 
+    public UUID entityId() {
+        return entityId;
+    }
+
+    public String entityName() {
+        return entityName;
+    }
+
     @Override
     public Vec3d getExactPosition() {
         return entity.getPos();
