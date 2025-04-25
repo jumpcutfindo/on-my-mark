@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network;
+package com.jumpcutfindo.onmymark.network.client;
 
 import com.jumpcutfindo.onmymark.network.packets.*;
 import net.fabricmc.api.ClientModInitializer;

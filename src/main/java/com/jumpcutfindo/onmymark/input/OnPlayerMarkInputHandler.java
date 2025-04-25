@@ -5,7 +5,7 @@ import com.jumpcutfindo.onmymark.client.ClientPartyManager;
 import com.jumpcutfindo.onmymark.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.graphics.markers.MarkerRenderer;
 import com.jumpcutfindo.onmymark.marker.Marker;
-import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.network.client.ClientNetworkSender;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;

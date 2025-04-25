@@ -4,7 +4,7 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.components.OnMyMarkButton;
-import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.network.client.ClientNetworkSender;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;

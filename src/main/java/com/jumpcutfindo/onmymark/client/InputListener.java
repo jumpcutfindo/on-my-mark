@@ -5,7 +5,7 @@ import com.jumpcutfindo.onmymark.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.input.InputHandler;
 import com.jumpcutfindo.onmymark.input.OnPlayerMarkInputHandler;
-import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.network.client.ClientNetworkSender;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;

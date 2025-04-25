@@ -5,7 +5,7 @@ import com.jumpcutfindo.onmymark.client.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.graphics.screen.components.OnMyMarkButton;
-import com.jumpcutfindo.onmymark.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.network.client.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.gui.DrawContext;
