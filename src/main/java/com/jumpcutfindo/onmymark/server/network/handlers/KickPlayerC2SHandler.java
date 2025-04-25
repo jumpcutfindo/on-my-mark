@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
-import com.jumpcutfindo.onmymark.network.packets.KickPlayerPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.KickPlayerC2SPacket;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -18,9 +18,9 @@ import net.minecraft.text.Text;
 /**
  * Handler for when a party leader attempts to kick a player out of the party
  */
-public class KickPlayerHandler implements ServerPacketHandler<KickPlayerPacket> {
+public class KickPlayerC2SHandler implements ServerPacketHandler<KickPlayerC2SPacket> {
     @Override
-    public void handle(KickPlayerPacket payload, ServerPacketContext context) {
+    public void handle(KickPlayerC2SPacket payload, ServerPacketContext context) {
         ServerPartyManager partyManager = context.partyManager();
         ServerPlayerEntity player = context.player();
         ServerPlayerEntity otherPlayer = EntityUtils.getPlayerById(context, payload.playerId());

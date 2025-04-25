@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
-import com.jumpcutfindo.onmymark.network.packets.CreatePartyPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.CreatePartyC2SPacket;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -13,9 +13,9 @@ import net.minecraft.text.Text;
 /**
  * Handler for when a player attempts to create a party
  */
-public class CreatePartyHandler implements ServerPacketHandler<CreatePartyPacket> {
+public class CreatePartyC2SHandler implements ServerPacketHandler<CreatePartyC2SPacket> {
     @Override
-    public void handle(CreatePartyPacket payload, ServerPacketContext context) {
+    public void handle(CreatePartyC2SPacket payload, ServerPacketContext context) {
         ServerPartyManager partyManager = context.partyManager();
 
         try {

@@ -6,7 +6,7 @@ import com.jumpcutfindo.onmymark.OnMyMarkClientMod;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketContext;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketHandler;
-import com.jumpcutfindo.onmymark.network.packets.MarkEntityPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkEntityC2SPacket;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
@@ -14,9 +14,9 @@ import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 
-public class MarkEntityHandler implements ClientPacketHandler<MarkEntityPacket> {
+public class MarkEntityS2CHandler implements ClientPacketHandler<MarkEntityC2SPacket> {
     @Override
-    public void handle(MarkEntityPacket payload, ClientPacketContext context) {
+    public void handle(MarkEntityC2SPacket payload, ClientPacketContext context) {
         ClientWorld world = context.client().world;
         
         if (world == null) {

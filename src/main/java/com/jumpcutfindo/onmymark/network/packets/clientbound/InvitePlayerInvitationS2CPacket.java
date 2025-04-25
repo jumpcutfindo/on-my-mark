@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.clientbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.codecs.OnMyMarkCodecs;
@@ -20,15 +20,15 @@ import java.util.UUID;
 /**
  * Outgoing packet for the invitation details to the player that is being invited
  */
-public class InvitePlayerInvitationPacket implements CustomPayload {
-    public static final Id<InvitePlayerInvitationPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_invitation"));
-    public static final PacketCodec<RegistryByteBuf, InvitePlayerInvitationPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerInvitationPacket::write, InvitePlayerInvitationPacket::new);
+public class InvitePlayerInvitationS2CPacket implements CustomPayload {
+    public static final Id<InvitePlayerInvitationS2CPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_invitation"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerInvitationS2CPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerInvitationS2CPacket::write, InvitePlayerInvitationS2CPacket::new);
 
     private UUID partyId;
     private String partyName;
     private PartyMember partyLeader;
 
-    public InvitePlayerInvitationPacket(PacketByteBuf buf) {
+    public InvitePlayerInvitationS2CPacket(PacketByteBuf buf) {
         this.partyId = buf.readUuid();
         this.partyName = buf.readString();
         this.partyLeader = buf.readNullable(OnMyMarkCodecs.PARTY_MEMBER);
@@ -52,13 +52,13 @@ public class InvitePlayerInvitationPacket implements CustomPayload {
         return partyName;
     }
 
-    public static <T extends PartyMember> InvitePlayerInvitationPacket create(Party<T> party) {
+    public static <T extends PartyMember> InvitePlayerInvitationS2CPacket create(Party<T> party) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(party.partyId());
         buf.writeString(party.partyName());
         buf.writeNullable(party.partyLeader(), OnMyMarkCodecs.PARTY_MEMBER);
 
-        return new InvitePlayerInvitationPacket(buf);
+        return new InvitePlayerInvitationS2CPacket(buf);
     }
 
     public PartyInvite<ClientPartyMember> toPartyInvite(World world, PlayerEntity player) {

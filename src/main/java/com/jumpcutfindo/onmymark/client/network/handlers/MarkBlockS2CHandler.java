@@ -5,14 +5,14 @@ import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketContext;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketHandler;
-import com.jumpcutfindo.onmymark.network.packets.MarkBlockPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkBlockC2SPacket;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 
-public class MarkBlockHandler implements ClientPacketHandler<MarkBlockPacket> {
+public class MarkBlockS2CHandler implements ClientPacketHandler<MarkBlockC2SPacket> {
     @Override
-    public void handle(MarkBlockPacket payload, ClientPacketContext context) {
+    public void handle(MarkBlockC2SPacket payload, ClientPacketContext context) {
         ClientPartyManager partyManager = context.partyManager();
         ClientMarkerManager markerManager = context.markerManager();
 

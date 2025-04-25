@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.serverbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.minecraft.network.PacketByteBuf;
@@ -7,13 +7,13 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public class CreatePartyPacket implements CustomPayload {
-    public static final Id<CreatePartyPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "create_party"));
-    public static final PacketCodec<RegistryByteBuf, CreatePartyPacket> PACKET_CODEC = PacketCodec.of(CreatePartyPacket::write, CreatePartyPacket::new);
+public class CreatePartyC2SPacket implements CustomPayload {
+    public static final Id<CreatePartyC2SPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "create_party"));
+    public static final PacketCodec<RegistryByteBuf, CreatePartyC2SPacket> PACKET_CODEC = PacketCodec.of(CreatePartyC2SPacket::write, CreatePartyC2SPacket::new);
 
     private final String partyName;
 
-    public CreatePartyPacket(PacketByteBuf buf) {
+    public CreatePartyC2SPacket(PacketByteBuf buf) {
         this.partyName = buf.readString();
     }
 

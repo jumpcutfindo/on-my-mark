@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.serverbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.minecraft.network.PacketByteBuf;
@@ -9,13 +9,13 @@ import net.minecraft.util.Identifier;
 
 import java.util.UUID;
 
-public class KickPlayerPacket implements CustomPayload {
-    public static final Id<KickPlayerPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "kick_player"));
-    public static final PacketCodec<RegistryByteBuf, KickPlayerPacket> PACKET_CODEC = PacketCodec.of(KickPlayerPacket::write, KickPlayerPacket::new);
+public class KickPlayerC2SPacket implements CustomPayload {
+    public static final Id<KickPlayerC2SPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "kick_player"));
+    public static final PacketCodec<RegistryByteBuf, KickPlayerC2SPacket> PACKET_CODEC = PacketCodec.of(KickPlayerC2SPacket::write, KickPlayerC2SPacket::new);
 
     private final UUID playerId;
 
-    public KickPlayerPacket(PacketByteBuf buf) {
+    public KickPlayerC2SPacket(PacketByteBuf buf) {
         this.playerId = buf.readUuid();
     }
 

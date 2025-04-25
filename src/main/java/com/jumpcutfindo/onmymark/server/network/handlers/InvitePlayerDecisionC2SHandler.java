@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
-import com.jumpcutfindo.onmymark.network.packets.InvitePlayerDecisionPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerDecisionC2SPacket;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -17,9 +17,9 @@ import net.minecraft.text.Text;
 /**
  * Handler for when a player submits a decision on whether to accept or reject a party invite
  */
-public class InvitePlayerDecisionHandler implements ServerPacketHandler<InvitePlayerDecisionPacket> {
+public class InvitePlayerDecisionC2SHandler implements ServerPacketHandler<InvitePlayerDecisionC2SPacket> {
     @Override
-    public void handle(InvitePlayerDecisionPacket payload, ServerPacketContext context) {
+    public void handle(InvitePlayerDecisionC2SPacket payload, ServerPacketContext context) {
         ServerPartyManager serverPartyManager = context.partyManager();
         ServerPlayerEntity invitedPlayer = context.player();
 

@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
-import com.jumpcutfindo.onmymark.network.packets.*;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.*;
 import com.jumpcutfindo.onmymark.server.network.handlers.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -11,29 +11,29 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 
 public class ServerNetworkReceiver implements ModInitializer {
-    private final CreatePartyHandler createPartyHandler = new CreatePartyHandler();
-    private final LeavePartyHandler leavePartyHandler = new LeavePartyHandler();
-    private final KickPlayerHandler kickPlayerHandler = new KickPlayerHandler();
-    private final InvitePlayerRequestHandler invitePlayerRequestHandler = new InvitePlayerRequestHandler();
-    private final InvitePlayerDecisionHandler invitePlayerDecisionHandler = new InvitePlayerDecisionHandler();
+    private final CreatePartyC2SHandler createPartyHandler = new CreatePartyC2SHandler();
+    private final LeavePartyC2SHandler leavePartyHandler = new LeavePartyC2SHandler();
+    private final KickPlayerC2SHandler kickPlayerHandler = new KickPlayerC2SHandler();
+    private final InvitePlayerRequestC2SHandler invitePlayerRequestHandler = new InvitePlayerRequestC2SHandler();
+    private final InvitePlayerDecisionC2SHandler invitePlayerDecisionHandler = new InvitePlayerDecisionC2SHandler();
 
-    private final MarkEntityHandler markEntityHandler = new MarkEntityHandler();
-    private final MarkBlockHandler markBlockHandler = new MarkBlockHandler();
-    private final RemoveMarkerHandler removeMarkerHandler = new RemoveMarkerHandler();
+    private final MarkEntityC2SHandler markEntityHandler = new MarkEntityC2SHandler();
+    private final MarkBlockC2SHandler markBlockHandler = new MarkBlockC2SHandler();
+    private final RemoveMarkerC2SHandler removeMarkerHandler = new RemoveMarkerC2SHandler();
 
     @Override
     public void onInitialize() {
         // Register all receivers
-        register(CreatePartyPacket.PACKET_ID, CreatePartyPacket.PACKET_CODEC, createPartyHandler);
-        register(LeavePartyPacket.PACKET_ID, LeavePartyPacket.PACKET_CODEC, leavePartyHandler);
-        register(KickPlayerPacket.PACKET_ID, KickPlayerPacket.PACKET_CODEC, kickPlayerHandler);
+        register(CreatePartyC2SPacket.PACKET_ID, CreatePartyC2SPacket.PACKET_CODEC, createPartyHandler);
+        register(LeavePartyC2SPacket.PACKET_ID, LeavePartyC2SPacket.PACKET_CODEC, leavePartyHandler);
+        register(KickPlayerC2SPacket.PACKET_ID, KickPlayerC2SPacket.PACKET_CODEC, kickPlayerHandler);
 
-        register(InvitePlayerRequestPacket.PACKET_ID, InvitePlayerRequestPacket.PACKET_CODEC, invitePlayerRequestHandler);
-        register(InvitePlayerDecisionPacket.PACKET_ID, InvitePlayerDecisionPacket.PACKET_CODEC, invitePlayerDecisionHandler);
+        register(InvitePlayerRequestC2SPacket.PACKET_ID, InvitePlayerRequestC2SPacket.PACKET_CODEC, invitePlayerRequestHandler);
+        register(InvitePlayerDecisionC2SPacket.PACKET_ID, InvitePlayerDecisionC2SPacket.PACKET_CODEC, invitePlayerDecisionHandler);
 
-        register(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC, markEntityHandler);
-        register(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC, markBlockHandler);
-        register(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC, removeMarkerHandler);
+        register(MarkEntityC2SPacket.PACKET_ID, MarkEntityC2SPacket.PACKET_CODEC, markEntityHandler);
+        register(MarkBlockC2SPacket.PACKET_ID, MarkBlockC2SPacket.PACKET_CODEC, markBlockHandler);
+        register(RemoveMarkerC2SPacket.PACKET_ID, RemoveMarkerC2SPacket.PACKET_CODEC, removeMarkerHandler);
     }
 
     private <T extends CustomPayload> void register(

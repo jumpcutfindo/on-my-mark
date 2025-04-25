@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.serverbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -12,14 +12,14 @@ import net.minecraft.util.Identifier;
 
 import java.util.UUID;
 
-public class MarkEntityPacket implements CustomPayload {
-    public static final Id<MarkEntityPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "mark_entity"));
-    public static final PacketCodec<RegistryByteBuf, MarkEntityPacket> PACKET_CODEC = PacketCodec.of(MarkEntityPacket::write, MarkEntityPacket::new);
+public class MarkEntityC2SPacket implements CustomPayload {
+    public static final Id<MarkEntityC2SPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "mark_entity"));
+    public static final PacketCodec<RegistryByteBuf, MarkEntityC2SPacket> PACKET_CODEC = PacketCodec.of(MarkEntityC2SPacket::write, MarkEntityC2SPacket::new);
 
     private UUID playerId;
     private UUID entityId;
 
-    public MarkEntityPacket(PacketByteBuf buf) {
+    public MarkEntityC2SPacket(PacketByteBuf buf) {
         this.playerId = buf.readUuid();
         this.entityId = buf.readUuid();
     }
@@ -29,12 +29,12 @@ public class MarkEntityPacket implements CustomPayload {
         buf.writeUuid(this.entityId);
     }
 
-    public static MarkEntityPacket create(PlayerEntity player, Entity entity) {
+    public static MarkEntityC2SPacket create(PlayerEntity player, Entity entity) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(player.getUuid());
         buf.writeUuid(entity.getUuid());
 
-        return new MarkEntityPacket(buf);
+        return new MarkEntityC2SPacket(buf);
     }
 
     public UUID playerId() {

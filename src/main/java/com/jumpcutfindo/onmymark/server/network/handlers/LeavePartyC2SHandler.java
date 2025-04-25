@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
+import com.jumpcutfindo.onmymark.network.packets.serverbound.LeavePartyC2SPacket;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
-import com.jumpcutfindo.onmymark.network.packets.LeavePartyPacket;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -12,9 +12,9 @@ import net.minecraft.text.Text;
 /**
  * Handler for when a party member attempts to leave the party they're in
  */
-public class LeavePartyHandler implements ServerPacketHandler<LeavePartyPacket> {
+public class LeavePartyC2SHandler implements ServerPacketHandler<LeavePartyC2SPacket> {
     @Override
-    public void handle(LeavePartyPacket payload, ServerPacketContext context) {
+    public void handle(LeavePartyC2SPacket payload, ServerPacketContext context) {
         ServerPartyManager partyManager = context.partyManager();
 
         Party<ServerPartyMember> party = partyManager.leaveParty(context.player());

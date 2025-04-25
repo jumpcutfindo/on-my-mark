@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.serverbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -11,13 +11,13 @@ import net.minecraft.util.Identifier;
 /**
  * Decision of the player invited whether to join the party or not
  */
-public class InvitePlayerDecisionPacket implements CustomPayload {
-    public static final Id<InvitePlayerDecisionPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_decision"));
-    public static final PacketCodec<RegistryByteBuf, InvitePlayerDecisionPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerDecisionPacket::write, InvitePlayerDecisionPacket::new);
+public class InvitePlayerDecisionC2SPacket implements CustomPayload {
+    public static final Id<InvitePlayerDecisionC2SPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_decision"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerDecisionC2SPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerDecisionC2SPacket::write, InvitePlayerDecisionC2SPacket::new);
 
     private final boolean isAccept;
 
-    public InvitePlayerDecisionPacket(PacketByteBuf buf) {
+    public InvitePlayerDecisionC2SPacket(PacketByteBuf buf) {
         this.isAccept = buf.readBoolean();
     }
 
@@ -29,11 +29,11 @@ public class InvitePlayerDecisionPacket implements CustomPayload {
         return isAccept;
     }
 
-    public static InvitePlayerDecisionPacket create(boolean isAccept) {
+    public static InvitePlayerDecisionC2SPacket create(boolean isAccept) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(isAccept);
 
-        return new InvitePlayerDecisionPacket(buf);
+        return new InvitePlayerDecisionC2SPacket(buf);
     }
 
     @Override

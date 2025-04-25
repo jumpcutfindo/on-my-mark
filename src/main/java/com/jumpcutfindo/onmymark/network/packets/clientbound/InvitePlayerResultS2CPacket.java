@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.clientbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -11,13 +11,13 @@ import net.minecraft.util.Identifier;
 /**
  * Result of the entire party request transaction
  */
-public class InvitePlayerResultPacket implements CustomPayload {
-    public static final Id<InvitePlayerResultPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_result"));
-    public static final PacketCodec<RegistryByteBuf, InvitePlayerResultPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerResultPacket::write, InvitePlayerResultPacket::new);
+public class InvitePlayerResultS2CPacket implements CustomPayload {
+    public static final Id<InvitePlayerResultS2CPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_result"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerResultS2CPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerResultS2CPacket::write, InvitePlayerResultS2CPacket::new);
 
     private boolean isSuccessful;
 
-    public InvitePlayerResultPacket(PacketByteBuf buf) {
+    public InvitePlayerResultS2CPacket(PacketByteBuf buf) {
         this.isSuccessful = buf.readBoolean();
     }
 
@@ -29,18 +29,18 @@ public class InvitePlayerResultPacket implements CustomPayload {
         return isSuccessful;
     }
 
-    public static InvitePlayerResultPacket successful() {
+    public static InvitePlayerResultS2CPacket successful() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(true);
 
-        return new InvitePlayerResultPacket(buf);
+        return new InvitePlayerResultS2CPacket(buf);
     }
 
-    public static InvitePlayerResultPacket unsuccessful() {
+    public static InvitePlayerResultS2CPacket unsuccessful() {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBoolean(false);
 
-        return new InvitePlayerResultPacket(buf);
+        return new InvitePlayerResultS2CPacket(buf);
     }
 
     @Override

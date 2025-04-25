@@ -4,21 +4,17 @@ import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketContext;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketHandler;
-import com.jumpcutfindo.onmymark.network.packets.PartyInfoPacket;
-import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
-import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.network.packets.clientbound.RemovePartyInfoS2CPacket;
 
-public class PartyInfoHandler implements ClientPacketHandler<PartyInfoPacket> {
+public class RemovePartyInfoS2CHandler implements ClientPacketHandler<RemovePartyInfoS2CPacket> {
     @Override
-    public void handle(PartyInfoPacket payload, ClientPacketContext context) {
+    public void handle(RemovePartyInfoS2CPacket payload, ClientPacketContext context) {
         ClientPartyManager partyManager = context.partyManager();
-        Party<ClientPartyMember> party = payload.toParty();
-
-        partyManager.setParty(party);
+        partyManager.setParty(null);
 
         // Update screen if the player is looking
         if (context.client().currentScreen instanceof PartyScreen partyScreen) {
-            partyScreen.setParty(party);
+            partyScreen.setParty(null);
         }
     }
 }

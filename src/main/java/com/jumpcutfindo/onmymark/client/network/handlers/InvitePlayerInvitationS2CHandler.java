@@ -6,13 +6,13 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.party.PartyScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.toast.OnMyMarkToast;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketContext;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketHandler;
-import com.jumpcutfindo.onmymark.network.packets.InvitePlayerInvitationPacket;
+import com.jumpcutfindo.onmymark.network.packets.clientbound.InvitePlayerInvitationS2CPacket;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 
-public class InvitePlayerInvitationHandler implements ClientPacketHandler<InvitePlayerInvitationPacket> {
+public class InvitePlayerInvitationS2CHandler implements ClientPacketHandler<InvitePlayerInvitationS2CPacket> {
     @Override
-    public void handle(InvitePlayerInvitationPacket payload, ClientPacketContext context) {
+    public void handle(InvitePlayerInvitationS2CPacket payload, ClientPacketContext context) {
         ClientPartyManager partyManager = context.partyManager();
         PartyInvite<ClientPartyMember> partyInvite = payload.toPartyInvite(context.player().getWorld(), context.player());
 

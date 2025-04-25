@@ -1,6 +1,13 @@
 package com.jumpcutfindo.onmymark.server.network;
 
-import com.jumpcutfindo.onmymark.network.packets.*;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerRequestC2SPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkBlockC2SPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkEntityC2SPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
+import com.jumpcutfindo.onmymark.network.packets.clientbound.InvitePlayerInvitationS2CPacket;
+import com.jumpcutfindo.onmymark.network.packets.clientbound.InvitePlayerResultS2CPacket;
+import com.jumpcutfindo.onmymark.network.packets.clientbound.PartyInfoS2CPacket;
+import com.jumpcutfindo.onmymark.network.packets.clientbound.RemovePartyInfoS2CPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import net.fabricmc.api.ModInitializer;
@@ -15,16 +22,16 @@ import net.minecraft.util.math.BlockPos;
 public class ServerNetworkSender implements ModInitializer {
     @Override
     public void onInitialize() {
-        PayloadTypeRegistry.playS2C().register(PartyInfoPacket.PACKET_ID, PartyInfoPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(RemovePartyInfoPacket.PACKET_ID, RemovePartyInfoPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(PartyInfoS2CPacket.PACKET_ID, PartyInfoS2CPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(RemovePartyInfoS2CPacket.PACKET_ID, RemovePartyInfoS2CPacket.PACKET_CODEC);
 
-        PayloadTypeRegistry.playS2C().register(InvitePlayerInvitationPacket.PACKET_ID, InvitePlayerInvitationPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(InvitePlayerResultPacket.PACKET_ID, InvitePlayerResultPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(InvitePlayerRequestPacket.PACKET_ID, InvitePlayerRequestPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(InvitePlayerInvitationS2CPacket.PACKET_ID, InvitePlayerInvitationS2CPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(InvitePlayerResultS2CPacket.PACKET_ID, InvitePlayerResultS2CPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(InvitePlayerRequestC2SPacket.PACKET_ID, InvitePlayerRequestC2SPacket.PACKET_CODEC);
 
-        PayloadTypeRegistry.playS2C().register(MarkBlockPacket.PACKET_ID, MarkBlockPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(MarkEntityPacket.PACKET_ID, MarkEntityPacket.PACKET_CODEC);
-        PayloadTypeRegistry.playS2C().register(RemoveMarkerPacket.PACKET_ID, RemoveMarkerPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(MarkBlockC2SPacket.PACKET_ID, MarkBlockC2SPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(MarkEntityC2SPacket.PACKET_ID, MarkEntityC2SPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(RemoveMarkerC2SPacket.PACKET_ID, RemoveMarkerC2SPacket.PACKET_CODEC);
     }
 
     public static void sendPartyInfo(Party<ServerPartyMember> party) {
@@ -38,33 +45,33 @@ public class ServerNetworkSender implements ModInitializer {
     }
 
     public static void sendPartyInfo(ServerPlayerEntity player, Party<ServerPartyMember> party) {
-        ServerPlayNetworking.send(player, PartyInfoPacket.fromParty(party));
+        ServerPlayNetworking.send(player, PartyInfoS2CPacket.fromParty(party));
     }
 
     public static void removePartyInfo(ServerPlayerEntity player) {
-        ServerPlayNetworking.send(player, new RemovePartyInfoPacket(PacketByteBufs.create()));
+        ServerPlayNetworking.send(player, new RemovePartyInfoS2CPacket(PacketByteBufs.create()));
     }
 
     public static void sendPlayerInviteResponse(ServerPlayerEntity player, boolean isSuccessful) {
         ServerPlayNetworking.send(player,
-                isSuccessful ? InvitePlayerResultPacket.successful() : InvitePlayerResultPacket.unsuccessful()
+                isSuccessful ? InvitePlayerResultS2CPacket.successful() : InvitePlayerResultS2CPacket.unsuccessful()
         );
     }
 
     public static void sendPlayerInvitation(ServerPlayerEntity player, Party<ServerPartyMember> party) {
-        ServerPlayNetworking.send(player, InvitePlayerInvitationPacket.create(party));
+        ServerPlayNetworking.send(player, InvitePlayerInvitationS2CPacket.create(party));
     }
 
     public static void sendBlockMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, BlockPos blockPos) {
-        ServerPlayNetworking.send(player, MarkBlockPacket.create(markerPlayer, blockPos));
+        ServerPlayNetworking.send(player, MarkBlockC2SPacket.create(markerPlayer, blockPos));
     }
 
     public static void sendEntityMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, Entity entity) {
-        ServerPlayNetworking.send(player, MarkEntityPacket.create(markerPlayer, entity));
+        ServerPlayNetworking.send(player, MarkEntityC2SPacket.create(markerPlayer, entity));
     }
 
     public static void removeMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer) {
-        ServerPlayNetworking.send(player, RemoveMarkerPacket.create(markerPlayer));
+        ServerPlayNetworking.send(player, RemoveMarkerC2SPacket.create(markerPlayer));
     }
 
     public static void sendMessageToPlayer(ServerPlayerEntity player, Text message) {

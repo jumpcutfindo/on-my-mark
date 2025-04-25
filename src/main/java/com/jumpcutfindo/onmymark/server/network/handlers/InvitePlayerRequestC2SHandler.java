@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
-import com.jumpcutfindo.onmymark.network.packets.InvitePlayerRequestPacket;
+import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerRequestC2SPacket;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
@@ -18,9 +18,9 @@ import net.minecraft.text.Text;
 /**
  * Handler for when a party leader requests for a specified player to be invited to a party
  */
-public class InvitePlayerRequestHandler implements ServerPacketHandler<InvitePlayerRequestPacket> {
+public class InvitePlayerRequestC2SHandler implements ServerPacketHandler<InvitePlayerRequestC2SPacket> {
     @Override
-    public void handle(InvitePlayerRequestPacket payload, ServerPacketContext context) {
+    public void handle(InvitePlayerRequestC2SPacket payload, ServerPacketContext context) {
         // Find the player if they exist in any world
         ServerPlayerEntity invitee = EntityUtils.getPlayerByName(context, payload.playerName());
 

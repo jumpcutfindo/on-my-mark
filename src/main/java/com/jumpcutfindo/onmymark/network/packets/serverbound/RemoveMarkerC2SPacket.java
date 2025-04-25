@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.serverbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -11,13 +11,13 @@ import net.minecraft.util.Identifier;
 
 import java.util.UUID;
 
-public class RemoveMarkerPacket implements CustomPayload {
-    public static final CustomPayload.Id<RemoveMarkerPacket> PACKET_ID = new CustomPayload.Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "remove_marker"));
-    public static final PacketCodec<RegistryByteBuf, RemoveMarkerPacket> PACKET_CODEC = PacketCodec.of(RemoveMarkerPacket::write, RemoveMarkerPacket::new);
+public class RemoveMarkerC2SPacket implements CustomPayload {
+    public static final CustomPayload.Id<RemoveMarkerC2SPacket> PACKET_ID = new CustomPayload.Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "remove_marker"));
+    public static final PacketCodec<RegistryByteBuf, RemoveMarkerC2SPacket> PACKET_CODEC = PacketCodec.of(RemoveMarkerC2SPacket::write, RemoveMarkerC2SPacket::new);
 
     private final UUID markerPlayerId;
 
-    public RemoveMarkerPacket(PacketByteBuf buf) {
+    public RemoveMarkerC2SPacket(PacketByteBuf buf) {
         this.markerPlayerId = buf.readUuid();
     }
 
@@ -29,11 +29,11 @@ public class RemoveMarkerPacket implements CustomPayload {
         return markerPlayerId;
     }
 
-    public static RemoveMarkerPacket create(PlayerEntity player) {
+    public static RemoveMarkerC2SPacket create(PlayerEntity player) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(player.getUuid());
 
-        return new RemoveMarkerPacket(buf);
+        return new RemoveMarkerC2SPacket(buf);
     }
 
     @Override

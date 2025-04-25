@@ -1,4 +1,4 @@
-package com.jumpcutfindo.onmymark.network.packets;
+package com.jumpcutfindo.onmymark.network.packets.serverbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import net.minecraft.network.PacketByteBuf;
@@ -10,13 +10,13 @@ import net.minecraft.util.Identifier;
 /**
  * Incoming packet from a party leader to invite a player
  */
-public class InvitePlayerRequestPacket implements CustomPayload {
-    public static final Id<InvitePlayerRequestPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_request"));
-    public static final PacketCodec<RegistryByteBuf, InvitePlayerRequestPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerRequestPacket::write, InvitePlayerRequestPacket::new);
+public class InvitePlayerRequestC2SPacket implements CustomPayload {
+    public static final Id<InvitePlayerRequestC2SPacket> PACKET_ID = new Id<>(Identifier.of(OnMyMarkMod.MOD_ID, "invite_player_request"));
+    public static final PacketCodec<RegistryByteBuf, InvitePlayerRequestC2SPacket> PACKET_CODEC = PacketCodec.of(InvitePlayerRequestC2SPacket::write, InvitePlayerRequestC2SPacket::new);
 
     private final String playerName;
 
-    public InvitePlayerRequestPacket(PacketByteBuf buf) {
+    public InvitePlayerRequestC2SPacket(PacketByteBuf buf) {
         this.playerName = buf.readString();
     }
 
