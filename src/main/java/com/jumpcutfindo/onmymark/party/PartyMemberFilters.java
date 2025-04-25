@@ -1,5 +1,7 @@
 package com.jumpcutfindo.onmymark.party;
 
+import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
+
 import java.util.function.Predicate;
 
 public class PartyMemberFilters {

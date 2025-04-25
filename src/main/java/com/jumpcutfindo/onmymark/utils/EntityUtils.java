@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.utils;
 
-import com.jumpcutfindo.onmymark.network.server.ServerPacketContext;
+import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -34,6 +34,7 @@ public class EntityUtils {
      */
     public static ServerPlayerEntity getPlayerByName(ServerPacketContext context, String playerName) {
         for (ServerWorld world : context.server().getWorlds()) {
+
             for (ServerPlayerEntity player : world.getPlayers()) {
                 if (player.getName().getLiteralString().equals(playerName)) {
                     return player;

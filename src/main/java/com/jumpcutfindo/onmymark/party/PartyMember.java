@@ -4,10 +4,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 public abstract class PartyMember {
-    UUID id;
-    String displayName;
+    protected UUID id;
+    protected String displayName;
 
-    PartyMember.State state;
+    protected PartyMember.State state;
 
     public PartyMember(UUID playerId, String displayName, PartyMember.State initialState) {
         this.id = playerId;

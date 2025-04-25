@@ -16,13 +16,13 @@
 	"entrypoints": {
 		"main": [
 			"com.jumpcutfindo.onmymark.OnMyMarkMod",
-          "com.jumpcutfindo.onmymark.network.server.ServerNetworkReceiver",
-          "com.jumpcutfindo.onmymark.network.server.ServerNetworkSender"
+			"com.jumpcutfindo.onmymark.server.network.ServerNetworkReceiver",
+			"com.jumpcutfindo.onmymark.server.network.ServerNetworkSender"
 		],
 		"client": [
-			"com.jumpcutfindo.onmymark.client.OnMyMarkClientMod",
-			"com.jumpcutfindo.onmymark.network.client.ClientNetworkReceiver",
-			"com.jumpcutfindo.onmymark.network.client.ClientNetworkSender"
+			"com.jumpcutfindo.onmymark.OnMyMarkClientMod",
+			"com.jumpcutfindo.onmymark.client.network.ClientNetworkReceiver",
+			"com.jumpcutfindo.onmymark.client.network.ClientNetworkSender"
 		]
 	},
 	"mixins": [

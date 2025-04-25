@@ -2,7 +2,7 @@ package com.jumpcutfindo.onmymark.network.packets;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.network.codecs.OnMyMarkCodecs;
-import com.jumpcutfindo.onmymark.party.ClientPartyMember;
+import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;

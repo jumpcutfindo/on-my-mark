@@ -1,9 +1,9 @@
 package com.jumpcutfindo.onmymark;
 
-import com.jumpcutfindo.onmymark.network.server.ServerNetworkSender;
+import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.ServerPartyManager;
-import com.jumpcutfindo.onmymark.party.ServerPartyMember;
+import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
+import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.party.exceptions.PlayerNotInPartyException;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;

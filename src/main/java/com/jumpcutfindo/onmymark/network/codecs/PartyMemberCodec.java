@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.network.codecs;
 
-import com.jumpcutfindo.onmymark.party.ClientPartyMember;
+import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
