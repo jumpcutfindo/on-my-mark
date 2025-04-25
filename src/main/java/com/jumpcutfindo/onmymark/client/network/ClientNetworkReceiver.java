@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.client.network;
 
-import com.jumpcutfindo.onmymark.OnMyMarkClientMod;
+import com.jumpcutfindo.onmymark.client.OnMyMarkClient;
 import com.jumpcutfindo.onmymark.client.network.handlers.*;
 import com.jumpcutfindo.onmymark.network.packets.clientbound.*;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
@@ -38,7 +38,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
             ClientPacketHandler<T> handler
     ) {
         ClientPlayNetworking.registerGlobalReceiver(payloadId, ((payload, context) -> {
-            handler.handle(payload, new ClientPacketContext(context, OnMyMarkClientMod.INSTANCE.clientMarkerManager(), OnMyMarkClientMod.INSTANCE.clientPartyManager()));
+            handler.handle(payload, new ClientPacketContext(context, OnMyMarkClient.INSTANCE.clientMarkerManager(), OnMyMarkClient.INSTANCE.clientPartyManager()));
         }));
     }
 }

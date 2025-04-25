@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.screen.party;
 
-import com.jumpcutfindo.onmymark.OnMyMarkClientMod;
+import com.jumpcutfindo.onmymark.client.OnMyMarkClient;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.IconButton;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
@@ -51,7 +51,7 @@ public class PartyScreen extends OnMyMarkScreen {
         }, Text.translatable("onmymark.menu.kickPlayer.tooltip"));
 
         // If there is a pending invite, we show immediately
-        PartyInvite<ClientPartyMember> existingPartyInvite = OnMyMarkClientMod.INSTANCE.clientPartyManager().partyInvite();
+        PartyInvite<ClientPartyMember> existingPartyInvite = OnMyMarkClient.INSTANCE.clientPartyManager().partyInvite();
         if (existingPartyInvite != null) {
             this.setActiveWindow(new PartyInviteWindow(this, existingPartyInvite));
         }
@@ -69,7 +69,7 @@ public class PartyScreen extends OnMyMarkScreen {
         // Calculate the state
         if (this.party == null) {
             state = State.NO_PARTY;
-        } else if (OnMyMarkClientMod.INSTANCE.clientPartyManager().isPartyLeader()) {
+        } else if (OnMyMarkClient.INSTANCE.clientPartyManager().isPartyLeader()) {
             if (this.partyMemberListView.isAnySelected()) {
                 state = State.IN_PARTY_AS_LEADER_MEMBER_SELECTED;
             } else {

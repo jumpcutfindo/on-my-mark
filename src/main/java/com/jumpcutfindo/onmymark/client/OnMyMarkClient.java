@@ -1,5 +1,6 @@
-package com.jumpcutfindo.onmymark;
+package com.jumpcutfindo.onmymark.client;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.input.InputListener;
@@ -13,8 +14,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
-public class OnMyMarkClientMod implements ClientModInitializer {
-    public static OnMyMarkClientMod INSTANCE;
+public class OnMyMarkClient implements ClientModInitializer {
+    public static OnMyMarkClient INSTANCE;
 
     private InputListener inputListener;
     private OnMyMarkRenderer renderer;

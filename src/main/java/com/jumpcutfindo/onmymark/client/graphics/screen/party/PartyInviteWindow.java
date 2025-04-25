@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.client.graphics.screen.party;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
-import com.jumpcutfindo.onmymark.OnMyMarkClientMod;
+import com.jumpcutfindo.onmymark.client.OnMyMarkClient;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
@@ -100,6 +100,6 @@ public class PartyInviteWindow extends OnMyMarkWindow {
         ClientNetworkSender.sendInvitationResponse(isAccept);
 
         // Remove locally stored invite
-        OnMyMarkClientMod.INSTANCE.clientPartyManager().setPartyInvite(null);
+        OnMyMarkClient.INSTANCE.clientPartyManager().setPartyInvite(null);
     }
 }

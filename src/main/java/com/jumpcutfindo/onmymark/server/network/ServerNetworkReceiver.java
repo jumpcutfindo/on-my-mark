@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.server.network;
 
-import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.server.OnMyMarkServer;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.*;
 import com.jumpcutfindo.onmymark.server.network.handlers.*;
 import net.fabricmc.api.ModInitializer;
@@ -43,7 +43,7 @@ public class ServerNetworkReceiver implements ModInitializer {
     ) {
         PayloadTypeRegistry.playC2S().register(payloadId, codec);
         ServerPlayNetworking.registerGlobalReceiver(payloadId, ((payload, context) -> {
-            handler.handle(payload, new ServerPacketContext(context, OnMyMarkMod.PARTY_MANAGER));
+            handler.handle(payload, new ServerPacketContext(context, OnMyMarkServer.INSTANCE.serverPartyManager()));
         }));
     }
 }

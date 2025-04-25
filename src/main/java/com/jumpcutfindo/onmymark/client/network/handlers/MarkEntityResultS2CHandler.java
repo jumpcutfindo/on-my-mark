@@ -1,6 +1,6 @@
 package com.jumpcutfindo.onmymark.client.network.handlers;
 
-import com.jumpcutfindo.onmymark.OnMyMarkClientMod;
+import com.jumpcutfindo.onmymark.client.OnMyMarkClient;
 import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketContext;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketHandler;
@@ -25,11 +25,11 @@ public class MarkEntityResultS2CHandler implements ClientPacketHandler<MarkEntit
 
         Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
 
-        ClientPartyManager partyManager = OnMyMarkClientMod.INSTANCE.clientPartyManager();
+        ClientPartyManager partyManager = OnMyMarkClient.INSTANCE.clientPartyManager();
         Party<ClientPartyMember> party = partyManager.party();
 
         if (party.hasMemberWithId(payload.playerId())){
-            ClientMarkerManager markerManager = OnMyMarkClientMod.INSTANCE.clientMarkerManager();
+            ClientMarkerManager markerManager = OnMyMarkClient.INSTANCE.clientMarkerManager();
             PartyMember partyMember = party.getMemberWithId(payload.playerId());
 
             markerManager.setMarker(partyMember, new EntityMarker(partyMember, payload.worldRegistryKey(), payload.entityId(), payload.entityName()));

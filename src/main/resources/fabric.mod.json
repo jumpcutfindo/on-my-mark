@@ -15,12 +15,12 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.jumpcutfindo.onmymark.OnMyMarkMod",
+			"com.jumpcutfindo.onmymark.server.OnMyMarkServer",
 			"com.jumpcutfindo.onmymark.server.network.ServerNetworkReceiver",
 			"com.jumpcutfindo.onmymark.server.network.ServerNetworkSender"
 		],
 		"client": [
-			"com.jumpcutfindo.onmymark.OnMyMarkClientMod",
+			"com.jumpcutfindo.onmymark.client.OnMyMarkClient",
 			"com.jumpcutfindo.onmymark.client.network.ClientNetworkReceiver",
 			"com.jumpcutfindo.onmymark.client.network.ClientNetworkSender"
 		]
