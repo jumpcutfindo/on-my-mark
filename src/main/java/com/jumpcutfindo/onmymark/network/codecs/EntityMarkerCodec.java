@@ -24,6 +24,7 @@ public class EntityMarkerCodec implements PacketCodec<PacketByteBuf, EntityMarke
     @Override
     public void encode(PacketByteBuf buf, EntityMarker marker) {
         buf.writeNullable(marker.owner(), OnMyMarkCodecs.PARTY_MEMBER);
+        buf.writeRegistryKey(marker.worldRegistryKey());
         buf.writeUuid(marker.entityId());
         buf.writeString(marker.entityName());
     }
