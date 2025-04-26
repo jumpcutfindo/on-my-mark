@@ -1,8 +1,12 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkEntityC2SPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
+import com.jumpcutfindo.onmymark.server.marker.ServerMarkerManager;
+import com.jumpcutfindo.onmymark.server.marker.exceptions.UnhandledMarkerException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
@@ -20,10 +24,11 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
     @Override
     public void handle(MarkEntityC2SPacket payload, ServerPacketContext context) {
         ServerPartyManager serverPartyManager = context.partyManager();
+        ServerMarkerManager serverMarkerManager = context.markerManager();
 
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
-            ServerPartyMember playerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
+            ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
             ServerWorld world = context.player().getServerWorld();
 
             Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
@@ -32,11 +37,16 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
                 return;
             }
 
+            EntityMarker entityMarker = new EntityMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), entity.getUuid(), entity.getName().getString());
+            serverMarkerManager.addMarker(party, entityMarker);
+
             for (ServerPartyMember partyMember : party.partyMembers()) {
-                ServerNetworkSender.sendEntityMarker(partyMember.player(), context.player(), entity);
+                ServerNetworkSender.sendEntityMarker(partyMember.player(), markerPartyMember, entityMarker);
             }
         } catch (PartyNotFoundException e) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+        } catch (UnhandledMarkerException e) {
+            OnMyMarkMod.LOGGER.error("Unhandled marker type");
         }
     }
 }

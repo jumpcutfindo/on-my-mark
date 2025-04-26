@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.server;
 
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.exceptions.PlayerNotInPartyException;
+import com.jumpcutfindo.onmymark.server.marker.ServerMarkerManager;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
@@ -16,12 +17,14 @@ public class OnMyMarkServer implements ModInitializer {
 	public static OnMyMarkServer INSTANCE = null;
 
 	private ServerPartyManager serverPartyManager = null;
+	private ServerMarkerManager serverMarkerManager = null;
 
 	@Override
 	public void onInitialize() {
 		INSTANCE = this;
 
 		this.serverPartyManager = new ServerPartyManager();
+		this.serverMarkerManager = new ServerMarkerManager();
 
 		ServerPlayConnectionEvents.JOIN.register(this::onPlayerConnected);
 		ServerPlayConnectionEvents.DISCONNECT.register(this::onPlayerDisconnected);
@@ -49,5 +52,9 @@ public class OnMyMarkServer implements ModInitializer {
 
 	public ServerPartyManager serverPartyManager() {
 		return serverPartyManager;
+	}
+
+	public ServerMarkerManager serverMarkerManager() {
+		return serverMarkerManager;
 	}
 }

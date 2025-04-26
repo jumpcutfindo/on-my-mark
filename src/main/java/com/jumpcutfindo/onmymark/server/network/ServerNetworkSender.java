@@ -1,5 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network;
 
+import com.jumpcutfindo.onmymark.marker.BlockMarker;
+import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.network.packets.clientbound.*;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerRequestC2SPacket;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
@@ -9,11 +11,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 
 public class ServerNetworkSender implements ModInitializer {
     @Override
@@ -58,12 +57,18 @@ public class ServerNetworkSender implements ModInitializer {
         ServerPlayNetworking.send(player, InvitePlayerInvitationS2CPacket.create(party));
     }
 
-    public static void sendBlockMarker(ServerPlayerEntity player, ServerPartyMember markerMember, BlockPos blockPos, BlockState blockState) {
-        ServerPlayNetworking.send(player, MarkBlockResultS2CPacket.create(markerMember, blockPos, blockState));
+    public static void sendBlockMarker(ServerPlayerEntity player, ServerPartyMember markerPartyMember, BlockMarker blockMarker) {
+        ServerPlayNetworking.send(player, MarkBlockResultS2CPacket.create(markerPartyMember, blockMarker));
     }
 
-    public static void sendEntityMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer, Entity entity) {
-        ServerPlayNetworking.send(player, MarkEntityResultS2CPacket.create(markerPlayer, entity));
+    public static void sendEntityMarker(ServerPlayerEntity player, ServerPartyMember markerPartyMember, EntityMarker entityMarker) {
+        ServerPlayNetworking.send(player, MarkEntityResultS2CPacket.create(markerPartyMember, entityMarker));
+    }
+
+    public static void removeMarker(Party<ServerPartyMember> party, ServerPlayerEntity markerPlayer) {
+        for (ServerPartyMember partyMember : party.partyMembers()) {
+            removeMarker(partyMember.player(), markerPlayer);
+        }
     }
 
     public static void removeMarker(ServerPlayerEntity player, ServerPlayerEntity markerPlayer) {

@@ -1,9 +1,9 @@
 package com.jumpcutfindo.onmymark.network.packets.clientbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.marker.EntityMarker;
+import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -38,12 +38,12 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
         buf.writeString(this.entityName);
     }
 
-    public static MarkEntityResultS2CPacket create(PlayerEntity player, Entity entity) {
+    public static MarkEntityResultS2CPacket create(ServerPartyMember markerPartyMember, EntityMarker entityMarker) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeUuid(player.getUuid());
-        buf.writeRegistryKey(player.getWorld().getRegistryKey());
-        buf.writeUuid(entity.getUuid());
-        buf.writeString(entity.getDisplayName().getString());
+        buf.writeUuid(markerPartyMember.player().getUuid());
+        buf.writeRegistryKey(entityMarker.worldRegistryKey());
+        buf.writeUuid(entityMarker.entityId());
+        buf.writeString(entityMarker.entityName());
 
         return new MarkEntityResultS2CPacket(buf);
     }

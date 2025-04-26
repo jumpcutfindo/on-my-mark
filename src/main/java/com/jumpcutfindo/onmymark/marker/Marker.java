@@ -28,6 +28,10 @@ public abstract class Marker {
         return this.owner;
     }
 
+    public RegistryKey<World> worldRegistryKey() {
+        return worldRegistryKey;
+    }
+
     public boolean isOwner(PlayerEntity player) {
         return this.owner.id().equals(player.getUuid());
     }

@@ -1,9 +1,9 @@
 package com.jumpcutfindo.onmymark.network.packets.clientbound;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.block.BlockState;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -40,12 +40,12 @@ public class MarkBlockResultS2CPacket implements CustomPayload {
         buf.writeIdentifier(this.blockIdentifier);
     }
 
-    public static MarkBlockResultS2CPacket create(ServerPartyMember serverPartyMember, BlockPos blockPos, BlockState blockState) {
+    public static MarkBlockResultS2CPacket create(ServerPartyMember serverPartyMember, BlockMarker blockMarker) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeUuid(serverPartyMember.id());
-        buf.writeRegistryKey(serverPartyMember.player().getWorld().getRegistryKey());
-        buf.writeBlockPos(blockPos);
-        buf.writeIdentifier(Registries.BLOCK.getId(blockState.getBlock()));
+        buf.writeRegistryKey(blockMarker.worldRegistryKey());
+        buf.writeBlockPos(blockMarker.blockPos());
+        buf.writeIdentifier(Registries.BLOCK.getId(blockMarker.block()));
 
         return new MarkBlockResultS2CPacket(buf);
     }

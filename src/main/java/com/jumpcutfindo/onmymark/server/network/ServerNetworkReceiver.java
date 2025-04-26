@@ -43,7 +43,7 @@ public class ServerNetworkReceiver implements ModInitializer {
     ) {
         PayloadTypeRegistry.playC2S().register(payloadId, codec);
         ServerPlayNetworking.registerGlobalReceiver(payloadId, ((payload, context) -> {
-            handler.handle(payload, new ServerPacketContext(context, OnMyMarkServer.INSTANCE.serverPartyManager()));
+            handler.handle(payload, new ServerPacketContext(context, OnMyMarkServer.INSTANCE.serverPartyManager(), OnMyMarkServer.INSTANCE.serverMarkerManager()));
         }));
     }
 }
