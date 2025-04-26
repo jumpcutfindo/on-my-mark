@@ -4,7 +4,7 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.*;
+import com.jumpcutfindo.onmymark.server.party.exceptions.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.ArrayList;

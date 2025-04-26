@@ -2,7 +2,7 @@ package com.jumpcutfindo.onmymark.server.network.handlers;
 
 import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;

@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server;
 
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.party.exceptions.PlayerNotInPartyException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PlayerNotInPartyException;
 import com.jumpcutfindo.onmymark.server.marker.ServerMarkerManager;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;

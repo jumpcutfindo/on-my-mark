@@ -7,10 +7,10 @@ import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsException;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyInviteNotFoundException;
-import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
-import com.jumpcutfindo.onmymark.party.exceptions.PlayerAlreadyInPartyException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.InvalidPartyPermissionsException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PartyInviteNotFoundException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PartyNotFoundException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PlayerAlreadyInPartyException;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 

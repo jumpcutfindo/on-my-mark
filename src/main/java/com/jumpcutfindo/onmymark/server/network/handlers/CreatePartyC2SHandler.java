@@ -7,7 +7,7 @@ import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
-import com.jumpcutfindo.onmymark.party.exceptions.AlreadyInPartyException;
+import com.jumpcutfindo.onmymark.server.party.exceptions.AlreadyInPartyException;
 import net.minecraft.text.Text;
 
 /**
