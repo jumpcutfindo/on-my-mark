@@ -144,6 +144,9 @@ public abstract class MarkerRenderer {
     abstract boolean isMoving();
 
     public void draw(DrawContext drawContext) {
+        float horizontalness = Math.abs(screenPosNormal.dot(new Vector2f(1F, 0F)));
+        float verticalness = Math.abs(screenPosNormal.dot(new Vector2f(0F, 1F)));
+
         // Calculate distance label variables
         float distanceLabelScale = 0.65F; // TODO(preference): Implement adjusting of distance label size
         String distanceLabelString = this.getDistanceLabelString();
@@ -159,13 +162,14 @@ public abstract class MarkerRenderer {
 
         // TODO(preference): Implement toggling of pointer
         if (this.isClamped) {
+
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
-            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 24F);
+
+            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 16F + distanceLabelHeight * screenPosNormal.y);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y(), true);
 
-            Vector2f distanceLabelPos = this.getClampedLabelPos(distanceLabelWidth, distanceLabelHeight, 10F);
-            this.drawDistanceLabel(drawContext, distanceLabelPos.x(), distanceLabelPos.y(), distanceLabelScale);
+            this.drawDistanceLabel(drawContext, iconPos.x() + getLabelWidth() / 2F - distanceLabelWidth / 2F, iconPos.y() + getLabelHeight() + 4F, distanceLabelScale);
         } else {
             // Draw pointer that points directly toward object
 
