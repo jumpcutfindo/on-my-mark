@@ -2,11 +2,10 @@ package com.jumpcutfindo.onmymark.client.graphics.markers;
 
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
-import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
+import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 
@@ -63,8 +62,6 @@ public class BlockMarkerRenderer extends MarkerRenderer {
 
     @Override
     public boolean shouldDraw() {
-        ClientWorld world = MinecraftClient.getInstance().world;
-
-        return super.shouldDraw() && world != null && !world.getBlockState(this.blockMarker.blockPos()).isAir();
+        return super.shouldDraw();
     }
 }
