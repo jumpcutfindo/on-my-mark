@@ -59,6 +59,9 @@ public class OnMyMarkRenderer {
         if (clientMarkerManager == null) return;
 
         for (Marker marker : clientMarkerManager.markers()) {
+            // Update markers before any rendering is done
+            marker.update(client.world);
+
             MarkerRenderer markerRenderer = this.getOrCreateRenderer(marker);
 
             if (markerRenderer == null) continue;

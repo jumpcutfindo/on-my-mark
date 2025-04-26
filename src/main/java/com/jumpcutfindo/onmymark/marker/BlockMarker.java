@@ -3,6 +3,7 @@ package com.jumpcutfindo.onmymark.marker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -15,10 +16,21 @@ public class BlockMarker extends Marker {
     private BlockState blockState;
 
     public BlockMarker(PartyMember owner, RegistryKey<World> worldRegistryKey, BlockPos blockPos, Block block) {
-        super(owner, worldRegistryKey);
+        super(owner, worldRegistryKey, blockPos.toCenterPos());
 
         this.blockPos = blockPos;
         this.block = block;
+    }
+
+    @Override
+    public void update(World world) {
+        this.blockState = world.getBlockState(blockPos);
+
+        if (blockState.getBlock().equals(Blocks.VOID_AIR)) {
+            this.setLiveness(Liveness.DORMANT);
+        } else {
+            this.setLiveness(Liveness.LIVE);
+        }
     }
 
     public BlockState blockState() {

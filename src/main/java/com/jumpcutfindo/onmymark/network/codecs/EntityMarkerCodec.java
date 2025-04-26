@@ -6,6 +6,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -17,8 +18,9 @@ public class EntityMarkerCodec implements PacketCodec<PacketByteBuf, EntityMarke
         RegistryKey<World> worldRegistryKey = buf.readRegistryKey(RegistryKeys.WORLD);
         UUID entityId = buf.readUuid();
         String entityName = buf.readString();
+        Vec3d lastPos = buf.readVec3d();
 
-        return new EntityMarker(partyMember, worldRegistryKey, entityId, entityName);
+        return new EntityMarker(partyMember, worldRegistryKey, entityId, entityName, lastPos);
     }
 
     @Override
@@ -27,5 +29,6 @@ public class EntityMarkerCodec implements PacketCodec<PacketByteBuf, EntityMarke
         buf.writeRegistryKey(marker.worldRegistryKey());
         buf.writeUuid(marker.entityId());
         buf.writeString(marker.entityName());
+        buf.writeVec3d(marker.lastPos());
     }
 }

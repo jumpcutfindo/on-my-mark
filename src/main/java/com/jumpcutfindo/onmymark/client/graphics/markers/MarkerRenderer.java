@@ -195,7 +195,15 @@ public abstract class MarkerRenderer {
     }
 
     private String getDistanceLabelString() {
-        return String.format("%dm", (int) distanceFromPlayer);
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("%dm", (int) distanceFromPlayer));
+
+        // Append an asterisk if not live
+        if (this.marker.liveness() == Marker.Liveness.DORMANT) {
+            sb.append("*");
+        }
+
+        return sb.toString();
     }
 
     private void drawDistanceLabel(DrawContext drawContext, float screenX, float screenY, float scale) {

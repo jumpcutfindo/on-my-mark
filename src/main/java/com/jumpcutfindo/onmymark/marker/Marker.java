@@ -12,16 +12,25 @@ import java.util.UUID;
 public abstract class Marker {
     private final UUID id;
     private final PartyMember owner;
-
     private final RegistryKey<World> worldRegistryKey;
     // TODO: Add handling for marker expiry
 //    private final long expiryTick;
 
-    public Marker(PartyMember owner, RegistryKey<World> worldRegistryKey) {
+    private final Vec3d initialPos;
+    private Vec3d lastPos;
+
+    private Liveness liveness;
+
+    public Marker(PartyMember owner, RegistryKey<World> worldRegistryKey, Vec3d initialPos) {
         this.id = UUID.randomUUID();
         this.owner = owner;
 
         this.worldRegistryKey = worldRegistryKey;
+
+        this.initialPos = initialPos;
+        this.lastPos = initialPos;
+
+        this.liveness = Liveness.DORMANT;
     }
 
     public PartyMember owner() {
@@ -30,6 +39,22 @@ public abstract class Marker {
 
     public RegistryKey<World> worldRegistryKey() {
         return worldRegistryKey;
+    }
+
+    public Vec3d lastPos() {
+        return lastPos;
+    }
+
+    public void setLastPos(Vec3d lastPos) {
+        this.lastPos = lastPos;
+    }
+
+    public Liveness liveness() {
+        return liveness;
+    }
+
+    protected void setLiveness(Liveness liveness) {
+        this.liveness = liveness;
     }
 
     public boolean isOwner(PlayerEntity player) {
@@ -42,6 +67,8 @@ public abstract class Marker {
 
     public abstract Vec3d getExactPosition(World world);
 
+    public abstract void update(World world);
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -52,5 +79,14 @@ public abstract class Marker {
     @Override
     public int hashCode() {
         return Objects.hash(id, owner);
+    }
+
+    /**
+     * Liveness indicates whether the marker can be seen on the thread that is
+     * using it.
+     * Should primarily be used by the client.
+     */
+    public enum Liveness {
+        LIVE, DORMANT
     }
 }

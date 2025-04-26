@@ -47,7 +47,7 @@ public class BlockMarkerRenderer extends MarkerRenderer {
 
     @Override
     String getName() {
-        return this.blockMarker.blockState().getBlock().getName().getString();
+        return this.blockMarker.block().getName().getString();
     }
 
     @Override

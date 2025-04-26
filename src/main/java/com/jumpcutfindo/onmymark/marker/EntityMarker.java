@@ -12,14 +12,26 @@ public class EntityMarker extends Marker {
     private final UUID entityId;
     private final String entityName;
 
-    public EntityMarker(PartyMember owner, RegistryKey<World> worldRegistryKey, UUID entityId, String entityName) {
-        super(owner, worldRegistryKey);
+    private Entity entity;
+
+    public EntityMarker(PartyMember owner, RegistryKey<World> worldRegistryKey, UUID entityId, String entityName, Vec3d lastPos) {
+        super(owner, worldRegistryKey, lastPos);
         this.entityId = entityId;
         this.entityName = entityName;
     }
 
-    public Entity entity(World world) {
-        return world.getEntity(entityId);
+    public void update(World world) {
+        this.entity = world.getEntity(entityId);
+
+        if (entity == null) {
+            this.setLiveness(Liveness.DORMANT);
+        } else {
+            this.setLiveness(Liveness.LIVE);
+        }
+    }
+
+    public Entity entity() {
+        return entity;
     }
 
     public UUID entityId() {
@@ -32,6 +44,12 @@ public class EntityMarker extends Marker {
 
     @Override
     public Vec3d getExactPosition(World world) {
-        return this.entity(world).getPos();
+        Entity entity = this.entity();
+
+        if (entity != null) {
+            this.setLastPos(entity.getPos());
+        }
+
+        return entity != null ? entity.getPos() : this.lastPos();
     }
 }

@@ -37,7 +37,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
                 return;
             }
 
-            EntityMarker entityMarker = new EntityMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), entity.getUuid(), entity.getName().getString());
+            EntityMarker entityMarker = new EntityMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), entity.getUuid(), entity.getName().getString(), entity.getPos());
             serverMarkerManager.addMarker(party, entityMarker);
 
             for (ServerPartyMember partyMember : party.partyMembers()) {

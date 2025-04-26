@@ -11,6 +11,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -23,12 +24,14 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
     private RegistryKey<World> worldRegistryKey;
     private UUID entityId;
     private String entityName;
+    private Vec3d lastPos;
 
     public MarkEntityResultS2CPacket(PacketByteBuf buf) {
         this.playerId = buf.readUuid();
         this.worldRegistryKey = buf.readRegistryKey(RegistryKeys.WORLD);
         this.entityId = buf.readUuid();
         this.entityName = buf.readString();
+        this.lastPos = buf.readVec3d();
     }
 
     public void write(PacketByteBuf buf) {
@@ -36,6 +39,7 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
         buf.writeRegistryKey(this.worldRegistryKey);
         buf.writeUuid(this.entityId);
         buf.writeString(this.entityName);
+        buf.writeVec3d(this.lastPos);
     }
 
     public static MarkEntityResultS2CPacket create(ServerPartyMember markerPartyMember, EntityMarker entityMarker) {
@@ -44,6 +48,7 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
         buf.writeRegistryKey(entityMarker.worldRegistryKey());
         buf.writeUuid(entityMarker.entityId());
         buf.writeString(entityMarker.entityName());
+        buf.writeVec3d(entityMarker.lastPos());
 
         return new MarkEntityResultS2CPacket(buf);
     }
@@ -62,6 +67,10 @@ public class MarkEntityResultS2CPacket implements CustomPayload {
 
     public String entityName() {
         return entityName;
+    }
+
+    public Vec3d lastPos() {
+        return lastPos;
     }
 
     @Override
