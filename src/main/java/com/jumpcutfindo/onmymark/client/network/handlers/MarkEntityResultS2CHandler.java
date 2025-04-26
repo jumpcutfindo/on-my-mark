@@ -10,9 +10,7 @@ import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.network.packets.clientbound.MarkEntityResultS2CPacket;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyMember;
-import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
 
 public class MarkEntityResultS2CHandler implements ClientPacketHandler<MarkEntityResultS2CPacket> {
     @Override
@@ -22,8 +20,6 @@ public class MarkEntityResultS2CHandler implements ClientPacketHandler<MarkEntit
         if (world == null) {
             return;
         }
-
-        Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
 
         ClientPartyManager partyManager = OnMyMarkClient.INSTANCE.clientPartyManager();
         Party<ClientPartyMember> party = partyManager.party();

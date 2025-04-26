@@ -11,7 +11,7 @@ import com.jumpcutfindo.onmymark.party.exceptions.AlreadyInPartyException;
 import com.jumpcutfindo.onmymark.party.exceptions.ExistingInviteException;
 import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsException;
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
-import com.jumpcutfindo.onmymark.utils.EntityUtils;
+import com.jumpcutfindo.onmymark.server.utils.ServerEntityUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
@@ -22,7 +22,7 @@ public class InvitePlayerRequestC2SHandler implements ServerPacketHandler<Invite
     @Override
     public void handle(InvitePlayerRequestC2SPacket payload, ServerPacketContext context) {
         // Find the player if they exist in any world
-        ServerPlayerEntity invitee = EntityUtils.getPlayerByName(context, payload.playerName());
+        ServerPlayerEntity invitee = ServerEntityUtils.getPlayerByName(context, payload.playerName());
 
         if (invitee == null) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));

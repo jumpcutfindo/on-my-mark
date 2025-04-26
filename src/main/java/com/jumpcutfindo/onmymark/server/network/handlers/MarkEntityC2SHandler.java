@@ -12,7 +12,6 @@ import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
-import com.jumpcutfindo.onmymark.utils.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -31,7 +30,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
             ServerWorld world = context.player().getServerWorld();
 
-            Entity entity = EntityUtils.getEntityByUuid(world, context.player().getPos(), payload.entityId());
+            Entity entity = world.getEntity(payload.entityId());
 
             if (entity == null) {
                 return;

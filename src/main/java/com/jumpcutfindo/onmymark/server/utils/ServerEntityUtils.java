@@ -1,31 +1,12 @@
-package com.jumpcutfindo.onmymark.utils;
+package com.jumpcutfindo.onmymark.server.utils;
 
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
-import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.UUID;
 
-public class EntityUtils {
-    /**
-     * Retrieves an entity by their UUID.
-     * @param world The world of the entity
-     * @param pos The reference pos to start the search from
-     * @param entityId The UUID of the entity
-     * @return The entity, if it exists
-     */
-    public static Entity getEntityByUuid(World world, Vec3d pos, UUID entityId) {
-        return world.getEntitiesByClass(
-                Entity.class,
-                Box.of(pos, 1024, 1024, 1024),
-                e -> e.getUuid().equals(entityId)
-        ).getFirst();
-    }
-
+public class ServerEntityUtils {
     /**
      * Retrieves a player by their name on the server.
      * @param context Server networkContext

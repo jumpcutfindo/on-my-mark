@@ -11,7 +11,7 @@ import com.jumpcutfindo.onmymark.party.exceptions.InvalidPartyPermissionsExcepti
 import com.jumpcutfindo.onmymark.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.party.exceptions.PlayerNotInPartyException;
 import com.jumpcutfindo.onmymark.party.exceptions.RemovePartyLeaderException;
-import com.jumpcutfindo.onmymark.utils.EntityUtils;
+import com.jumpcutfindo.onmymark.server.utils.ServerEntityUtils;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
@@ -23,7 +23,7 @@ public class KickPlayerC2SHandler implements ServerPacketHandler<KickPlayerC2SPa
     public void handle(KickPlayerC2SPacket payload, ServerPacketContext context) {
         ServerPartyManager partyManager = context.partyManager();
         ServerPlayerEntity player = context.player();
-        ServerPlayerEntity otherPlayer = EntityUtils.getPlayerById(context, payload.playerId());
+        ServerPlayerEntity otherPlayer = ServerEntityUtils.getPlayerById(context, payload.playerId());
 
         if (otherPlayer == null) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
