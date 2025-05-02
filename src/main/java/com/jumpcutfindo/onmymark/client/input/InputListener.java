@@ -1,11 +1,10 @@
 package com.jumpcutfindo.onmymark.client.input;
 
 
-import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
-import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.client.graphics.screen.party.PartyScreen;
-import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
+import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
+import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
@@ -31,13 +30,13 @@ public class InputListener {
             )
     );
 
-    private static final KeyBinding DEBUG_BINDING = KeyBindingHelper.registerKeyBinding(
-                new KeyBinding(
-                    "key.onmymark.debug",
+    private static final KeyBinding PLAYER_REPORT_BINDING = KeyBindingHelper.registerKeyBinding(
+            new KeyBinding(
+                    "key.onmymark.playerReport",
                     InputUtil.Type.KEYSYM,
-                    GLFW.GLFW_KEY_O,
+                    GLFW.GLFW_KEY_U,
                     "category.onmymark.keybinds"
-                )
+            )
     );
 
     private final ClientPartyManager clientPartyManager;
@@ -52,14 +51,14 @@ public class InputListener {
 
     public void onInput(MinecraftClient client) {
         if (client.player != null) {
-            while (DEBUG_BINDING.wasPressed()) {
-                ClientNetworkSender.createParty("New party name");
-                ClientNetworkSender.leaveParty();
-            }
-
             while (MARK_BINDING.wasPressed()) {
                 // TODO: Add cooldown to marking
                 InputHandler inputHandler = new OnPlayerMarkInputHandler(clientPartyManager, clientMarkerManager, renderer);
+                inputHandler.execute(client);
+            }
+
+            while (PLAYER_REPORT_BINDING.wasPressed()) {
+                InputHandler inputHandler = new PlayerReportInputHandler(clientPartyManager, clientMarkerManager, renderer);
                 inputHandler.execute(client);
             }
 

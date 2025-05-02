@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.client.marker;
 
 import com.jumpcutfindo.onmymark.marker.Marker;
+import com.jumpcutfindo.onmymark.marker.PlayerMarker;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import com.jumpcutfindo.onmymark.client.sounds.SoundPlayer;
 import net.minecraft.client.MinecraftClient;
@@ -25,7 +26,13 @@ public class ClientMarkerManager {
     public void setMarker(PartyMember partyMember, Marker marker) {
         this.markerMap.put(partyMember, marker);
 
+        // Don't play any sounds if the marker is not visible from the current player's perspective
         if (!marker.isVisible(MinecraftClient.getInstance().player)) {
+            return;
+        }
+
+        if (marker instanceof PlayerMarker) {
+            SoundPlayer.playPlayerReportSound(MinecraftClient.getInstance().getSoundManager());
             return;
         }
 

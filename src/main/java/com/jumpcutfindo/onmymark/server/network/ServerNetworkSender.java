@@ -2,6 +2,7 @@ package com.jumpcutfindo.onmymark.server.network;
 
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
+import com.jumpcutfindo.onmymark.marker.PlayerMarker;
 import com.jumpcutfindo.onmymark.network.packets.clientbound.*;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerRequestC2SPacket;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.RemoveMarkerC2SPacket;
@@ -26,6 +27,8 @@ public class ServerNetworkSender implements ModInitializer {
 
         PayloadTypeRegistry.playS2C().register(MarkBlockResultS2CPacket.PACKET_ID, MarkBlockResultS2CPacket.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(MarkEntityResultS2CPacket.PACKET_ID, MarkEntityResultS2CPacket.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(MarkPlayerResultS2CPacket.PACKET_ID, MarkPlayerResultS2CPacket.PACKET_CODEC);
+
         PayloadTypeRegistry.playS2C().register(RemoveMarkerC2SPacket.PACKET_ID, RemoveMarkerC2SPacket.PACKET_CODEC);
     }
 
@@ -63,6 +66,10 @@ public class ServerNetworkSender implements ModInitializer {
 
     public static void sendEntityMarker(ServerPlayerEntity player, ServerPartyMember markerPartyMember, EntityMarker entityMarker) {
         ServerPlayNetworking.send(player, MarkEntityResultS2CPacket.create(markerPartyMember, entityMarker));
+    }
+
+    public static void sendPlayerMarker(ServerPlayerEntity player, ServerPartyMember markerPartyMember, PlayerMarker playerMarker) {
+        ServerPlayNetworking.send(player, MarkPlayerResultS2CPacket.create(markerPartyMember, playerMarker));
     }
 
     public static void removeMarker(Party<ServerPartyMember> party, ServerPlayerEntity markerPlayer) {

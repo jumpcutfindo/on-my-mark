@@ -19,6 +19,7 @@ public class ServerNetworkReceiver implements ModInitializer {
 
     private final MarkEntityC2SHandler markEntityHandler = new MarkEntityC2SHandler();
     private final MarkBlockC2SHandler markBlockHandler = new MarkBlockC2SHandler();
+    private final PlayerReportC2SHandler playerReportHandler = new PlayerReportC2SHandler();
     private final RemoveMarkerC2SHandler removeMarkerHandler = new RemoveMarkerC2SHandler();
 
     @Override
@@ -33,6 +34,7 @@ public class ServerNetworkReceiver implements ModInitializer {
 
         register(MarkEntityC2SPacket.PACKET_ID, MarkEntityC2SPacket.PACKET_CODEC, markEntityHandler);
         register(MarkBlockC2SPacket.PACKET_ID, MarkBlockC2SPacket.PACKET_CODEC, markBlockHandler);
+        register(PlayerReportC2SPacket.PACKET_ID, PlayerReportC2SPacket.PACKET_CODEC, playerReportHandler);
         register(RemoveMarkerC2SPacket.PACKET_ID, RemoveMarkerC2SPacket.PACKET_CODEC, removeMarkerHandler);
     }
 

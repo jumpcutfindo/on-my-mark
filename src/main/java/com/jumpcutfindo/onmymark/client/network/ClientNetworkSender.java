@@ -53,6 +53,10 @@ public class ClientNetworkSender implements ClientModInitializer {
         ClientPlayNetworking.send(MarkEntityC2SPacket.create(player, entity));
     }
 
+    public static void playerReport() {
+        ClientPlayNetworking.send(new PlayerReportC2SPacket(PacketByteBufs.create()));
+    }
+
     public static void removeMarker(PlayerEntity player) {
         ClientPlayNetworking.send(RemoveMarkerC2SPacket.create(player));
     }

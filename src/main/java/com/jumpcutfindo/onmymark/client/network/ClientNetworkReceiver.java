@@ -17,6 +17,7 @@ public class ClientNetworkReceiver implements ClientModInitializer {
 
     private final MarkBlockResultS2CHandler markBlockHandler = new MarkBlockResultS2CHandler();
     private final MarkEntityResultS2CHandler markEntityHandler = new MarkEntityResultS2CHandler();
+    private final MarkPlayerResultS2CHandler markPlayerHandler = new MarkPlayerResultS2CHandler();
     private final RemoveMarkerS2CHandler removeMarkerHandler = new RemoveMarkerS2CHandler();
 
     @Override
@@ -27,8 +28,9 @@ public class ClientNetworkReceiver implements ClientModInitializer {
         register(InvitePlayerInvitationS2CPacket.PACKET_ID, InvitePlayerInvitationS2CPacket.PACKET_CODEC, invitePlayerInvitationHandler);
 
         register(MarkBlockResultS2CPacket.PACKET_ID, MarkBlockResultS2CPacket.PACKET_CODEC, markBlockHandler);
-
         register(MarkEntityResultS2CPacket.PACKET_ID, MarkEntityResultS2CPacket.PACKET_CODEC, markEntityHandler);
+        register(MarkPlayerResultS2CPacket.PACKET_ID, MarkPlayerResultS2CPacket.PACKET_CODEC, markPlayerHandler);
+
         register(RemoveMarkerC2SPacket.PACKET_ID, RemoveMarkerC2SPacket.PACKET_CODEC, removeMarkerHandler);
     }
 

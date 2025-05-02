@@ -1,12 +1,14 @@
 package com.jumpcutfindo.onmymark.client.graphics;
 
-import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.client.graphics.markers.BlockMarkerRenderer;
 import com.jumpcutfindo.onmymark.client.graphics.markers.EntityMarkerRenderer;
 import com.jumpcutfindo.onmymark.client.graphics.markers.MarkerRenderer;
+import com.jumpcutfindo.onmymark.client.graphics.markers.PlayerMarkerRenderer;
+import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
+import com.jumpcutfindo.onmymark.marker.PlayerMarker;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -105,10 +107,11 @@ public class OnMyMarkRenderer {
         if (marker instanceof BlockMarker blockMarker) {
             newRenderer = new BlockMarkerRenderer(client, blockMarker);
             this.markerRendererMap.put(marker, newRenderer);
-
-
         } else if (marker instanceof EntityMarker entityMarker) {
             newRenderer = new EntityMarkerRenderer(client, entityMarker);
+            this.markerRendererMap.put(marker, newRenderer);
+        } else if (marker instanceof PlayerMarker playerMarker) {
+            newRenderer = new PlayerMarkerRenderer(client, playerMarker);
             this.markerRendererMap.put(marker, newRenderer);
         }
 
