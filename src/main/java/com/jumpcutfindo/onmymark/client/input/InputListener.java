@@ -14,7 +14,7 @@ import org.lwjgl.glfw.GLFW;
 public class InputListener {
     public static final KeyBinding GUI_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
-                    "key.onmymark.party",
+                    "onmymark.keybind.party",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_O,
                     "category.onmymark.keybinds"
@@ -23,7 +23,7 @@ public class InputListener {
 
     private static final KeyBinding MARK_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
-                    "key.onmymark.mark",
+                    "onmymark.keybind.mark",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_R,
                     "category.onmymark.keybinds"
@@ -32,7 +32,7 @@ public class InputListener {
 
     private static final KeyBinding PLAYER_REPORT_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
-                    "key.onmymark.playerReport",
+                    "onmymark.keybind.playerReport",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_U,
                     "category.onmymark.keybinds"

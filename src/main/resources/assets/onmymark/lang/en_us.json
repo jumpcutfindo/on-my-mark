@@ -1,6 +1,11 @@
 {
   "onmymark.modName": "On My Mark",
 
+  "category.onmymark.keybinds": "On My Mark",
+  "onmymark.keybind.mark": "Mark Object",
+  "onmymark.keybind.playerReport": "Report Location",
+  "onmymark.keybind.party": "Open Party Interface",
+
   "onmymark.menu.party.partyLeader": "Party Leader",
 
   "onmymark.menu.createParty.tooltip": "Create a party",
@@ -25,6 +30,8 @@
   "onmymark.toast.partyInvite.description": "%s wants you to join their party",
 
   "onmymark.action.placeMarker.notInParty": "You need to be in a party before you can place a marker",
+
+  "onmymark.action.playerReport.notInParty": "You need to be in a party before you can report your location",
 
   "onmymark.action.onCreateParty": "Created party \"%s\"",
   "onmymark.action.onLeaveParty.self": "You have left the party",
