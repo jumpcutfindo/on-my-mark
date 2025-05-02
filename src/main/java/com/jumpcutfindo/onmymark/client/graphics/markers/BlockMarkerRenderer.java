@@ -13,7 +13,7 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     private final BlockMarker blockMarker;
 
     public BlockMarkerRenderer(MinecraftClient client, BlockMarker blockMarker) {
-        super(client, blockMarker);
+        super(client, blockMarker, PointerShape.TRIANGLE);
 
         this.blockMarker = blockMarker;
     }

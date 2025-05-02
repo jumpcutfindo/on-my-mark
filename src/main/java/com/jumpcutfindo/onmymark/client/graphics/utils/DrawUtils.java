@@ -4,10 +4,10 @@ import com.jumpcutfindo.onmymark.client.graphics.render.CustomRenderLayers;
 import com.jumpcutfindo.onmymark.mixin.DrawContextMixin;
 import com.jumpcutfindo.onmymark.mixin.ItemRenderStateMixin;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -17,6 +17,7 @@ import net.minecraft.util.crash.CrashException;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
 import net.minecraft.world.World;
+import org.joml.Matrix4f;
 
 /**
  * Provides some additional utilities on top of Minecraft's DrawContext.
@@ -66,6 +67,44 @@ public class DrawUtils {
 
             // Draw item normally
               drawContext.drawItem(stack, x, y);
+        }
+    }
+
+
+    /**
+     * Draws a triangle with the specified dimensions.
+     */
+    public static void drawTriangle(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, int argb) {
+        Matrix4f transformationMatrix = drawContext.getMatrices().peek().getPositionMatrix();
+        Tessellator tessellator = Tessellator.getInstance();
+
+        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
+
+        buffer.vertex(transformationMatrix, x1, y1, 5).color(argb);
+        buffer.vertex(transformationMatrix, x2, y2, 5).color(argb);
+        buffer.vertex(transformationMatrix, x3, y3, 5).color(argb);
+
+        try (BuiltBuffer builtBuffer = buffer.end()) {
+            RenderLayer.getDebugTriangleFan().draw(builtBuffer);
+        }
+    }
+
+    /**
+     * Draws a diamond with the specified dimensions.
+     */
+    public static void drawDiamond(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int argb) {
+        Matrix4f transformationMatrix = drawContext.getMatrices().peek().getPositionMatrix();
+        Tessellator tessellator = Tessellator.getInstance();
+
+        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
+
+        buffer.vertex(transformationMatrix, x1, y1, 5).color(argb);
+        buffer.vertex(transformationMatrix, x2, y2, 5).color(argb);
+        buffer.vertex(transformationMatrix, x3, y3, 5).color(argb);
+        buffer.vertex(transformationMatrix, x4, y4, 5).color(argb);
+
+        try (BuiltBuffer builtBuffer = buffer.end()) {
+            RenderLayer.getDebugTriangleFan().draw(builtBuffer);
         }
     }
 }

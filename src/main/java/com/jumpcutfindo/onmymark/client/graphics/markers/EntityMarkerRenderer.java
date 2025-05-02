@@ -19,7 +19,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     private LabelType labelType;
 
     public EntityMarkerRenderer(MinecraftClient client, EntityMarker entityMarker) {
-        super(client, entityMarker);
+        super(client, entityMarker, PointerShape.TRIANGLE);
 
         this.entityMarker = entityMarker;
 

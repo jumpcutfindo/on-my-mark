@@ -1,15 +1,13 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
+import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.RenderMath;
 import com.jumpcutfindo.onmymark.marker.Marker;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -33,10 +31,11 @@ public abstract class MarkerRenderer {
     protected double distanceFromPlayer;
 
     private int pointerColor;
+    private final PointerShape pointerShape;
 
     private float existTime;
 
-    protected MarkerRenderer(MinecraftClient client, Marker marker) {
+    protected MarkerRenderer(MinecraftClient client, Marker marker, PointerShape pointerShape) {
         this.client = client;
         this.marker = marker;
 
@@ -44,7 +43,9 @@ public abstract class MarkerRenderer {
         this.prevScreenPos = null;
 
         this.clampType = ClampType.OVAL;
+
         this.pointerColor = -1;
+        this.pointerShape = pointerShape;
     }
 
     public Vector4f screenPos() {
@@ -183,16 +184,31 @@ public abstract class MarkerRenderer {
     }
 
     private void drawPointer(DrawContext drawContext, float width, float height, int color) {
+        // Tip is always at the screen pos
         float x1 = this.screenPos.x();
         float y1 = this.screenPos.y();
 
-        float x2 = this.screenPos.x - width / 2F;
-        float y2 = this.screenPos.y - height;
+        if (pointerShape == PointerShape.TRIANGLE) {
+            float x2 = this.screenPos.x - width / 2F;
+            float y2 = this.screenPos.y - height;
 
-        float x3 = this.screenPos.x + width / 2F;
-        float y3 = this.screenPos.y - height;
+            float x3 = this.screenPos.x + width / 2F;
+            float y3 = this.screenPos.y - height;
 
-        MarkerRenderer.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, color);
+            DrawUtils.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, color);
+        } else {
+            float x2 = this.screenPos.x - width / 2F;
+            float y2 = this.screenPos.y - height / 2F;
+
+            float x3 = this.screenPos.x;
+            float y3 = this.screenPos.y - height;
+
+            float x4 = this.screenPos.x + width / 2F;
+            float y4 = this.screenPos.y - height / 2F;
+
+            DrawUtils.drawDiamond(drawContext, x1, y1, x2, y2, x3, y3, x4, y4, color);
+        }
+
     }
 
     private String getDistanceLabelString() {
@@ -221,46 +237,67 @@ public abstract class MarkerRenderer {
         int windowWidth = drawContext.getScaledWindowWidth();
         int windowHeight = drawContext.getScaledWindowHeight();
 
-        float centerX = windowWidth / 2f;
-        float centerY = windowHeight / 2f;
+        float windowCenterX = windowWidth / 2f;
+        float windowCenterY = windowHeight / 2f;
 
-        Vector2f normal = RenderMath.getNormalToEllipse(centerX, centerY, clampWidth / 2f, clampHeight / 2f, screenPos.x(), screenPos.y());
+        Vector2f normal = RenderMath.getNormalToEllipse(windowCenterX, windowCenterY, clampWidth / 2f, clampHeight / 2f, screenPos.x(), screenPos.y());
 
         Vector2f perpendicular = new Vector2f(-normal.y, normal.x);
 
-        // Tip of the triangle
+        // Tip
         float tipX = screenPos.x();
         float tipY = screenPos.y();
 
-        // Base center point (back from tip along the normal)
-        float baseCenterX = tipX - normal.x * height;
-        float baseCenterY = tipY - normal.y * width;
+        if (this.pointerShape == PointerShape.TRIANGLE) {
+            // Base center point (back from tip along the normal)
+            float baseCenterX = tipX - normal.x * height;
+            float baseCenterY = tipY - normal.y * width;
 
-        // Base corners (perpendicular from base center)
-        float baseOffsetX = perpendicular.x * (width / 2f);
-        float baseOffsetY = perpendicular.y * (width / 2f);
+            // Base corners (perpendicular from base center)
+            float baseOffsetX = perpendicular.x * (width / 2f);
+            float baseOffsetY = perpendicular.y * (width / 2f);
 
-        float baseLeftX = baseCenterX - baseOffsetX;
-        float baseLeftY = baseCenterY - baseOffsetY;
+            float baseLeftX = baseCenterX - baseOffsetX;
+            float baseLeftY = baseCenterY - baseOffsetY;
 
-        float baseRightX = baseCenterX + baseOffsetX;
-        float baseRightY = baseCenterY + baseOffsetY;
+            float baseRightX = baseCenterX + baseOffsetX;
+            float baseRightY = baseCenterY + baseOffsetY;
 
-        MarkerRenderer.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, color);
-    }
+            DrawUtils.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, color);
+        } else {
+            float centerX = tipX - normal.x * height / 2;
+            float centerY = tipY - normal.y * height / 2;
 
-    private static void drawTriangle(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, int argb) {
-        Matrix4f transformationMatrix = drawContext.getMatrices().peek().getPositionMatrix();
-        Tessellator tessellator = Tessellator.getInstance();
+            // Half-width and half-height
+            float hw = width / 2F;
+            float hh = height / 2F;
 
-        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
+            // Points: top, left, bottom, right (clockwise)
+            float x1 = centerX;
+            float y1 = centerY - hh;
 
-        buffer.vertex(transformationMatrix, x1, y1, 5).color(argb);
-        buffer.vertex(transformationMatrix, x2, y2, 5).color(argb);
-        buffer.vertex(transformationMatrix, x3, y3, 5).color(argb);
+            float x2 = centerX - hw;
+            float y2 = centerY;
 
-        try (BuiltBuffer builtBuffer = buffer.end()) {
-            RenderLayer.getDebugTriangleFan().draw(builtBuffer);
+            float x3 = centerX;
+            float y3 = centerY + hh;
+
+            float x4 = centerX + hw;
+            float y4 = centerY;
+
+            // Optionally, rotate according to `normal` and `perpendicular`
+            Vector2f top = new Vector2f(normal).mul(hh).add(centerX, centerY);
+            Vector2f bottom = new Vector2f(normal).mul(-hh).add(centerX, centerY);
+            Vector2f left = new Vector2f(perpendicular).mul(-hw).add(centerX, centerY);
+            Vector2f right = new Vector2f(perpendicular).mul(hw).add(centerX, centerY);
+
+            DrawUtils.drawDiamond(drawContext,
+                    top.x, top.y,
+                    right.x, right.y,
+                    bottom.x, bottom.y,
+                    left.x, left.y,
+                    color
+            );
         }
     }
 
@@ -304,5 +341,9 @@ public abstract class MarkerRenderer {
 
     public enum ClampType {
         CIRCLE, OVAL
+    }
+
+    public enum PointerShape {
+        TRIANGLE, DIAMOND
     }
 }

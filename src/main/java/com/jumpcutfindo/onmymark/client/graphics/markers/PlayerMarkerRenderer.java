@@ -18,7 +18,7 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
     private final SkinTextures playerSkinTextures;
 
     public PlayerMarkerRenderer(MinecraftClient client, PlayerMarker marker) {
-        super(client, marker);
+        super(client, marker, PointerShape.DIAMOND);
 
         this.playerMarker = marker;
 
