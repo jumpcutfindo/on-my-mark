@@ -43,23 +43,34 @@ public class InputListener {
     private final ClientMarkerManager clientMarkerManager;
     private final OnMyMarkRenderer renderer;
 
+    private final InputHandler placeMarkerHandler, removeMarkerHandler, playerReportHandler;
+
     public InputListener(ClientPartyManager clientPartyManager, ClientMarkerManager clientMarkerManager, OnMyMarkRenderer renderer) {
         this.clientPartyManager = clientPartyManager;
         this.clientMarkerManager = clientMarkerManager;
         this.renderer = renderer;
+
+        this.placeMarkerHandler = new PlaceMarkerInputHandler(MinecraftClient.getInstance(), clientPartyManager);
+        this.removeMarkerHandler = new RemoveMarkerInputHandler(MinecraftClient.getInstance(), clientMarkerManager, clientPartyManager, renderer);
+        this.playerReportHandler = new PlayerReportInputHandler(MinecraftClient.getInstance(), clientPartyManager);
     }
 
     public void onInput(MinecraftClient client) {
         if (client.player != null) {
             while (MARK_BINDING.wasPressed()) {
-                // TODO: Add cooldown to marking
-                InputHandler inputHandler = new OnPlayerMarkInputHandler(clientPartyManager, clientMarkerManager, renderer);
-                inputHandler.execute(client);
+                if (removeMarkerHandler.canExecute() && removeMarkerHandler.execute()) {
+                    return;
+                }
+
+                if (placeMarkerHandler.canExecute()) {
+                    placeMarkerHandler.execute();
+                }
             }
 
             while (PLAYER_REPORT_BINDING.wasPressed()) {
-                InputHandler inputHandler = new PlayerReportInputHandler(clientPartyManager, clientMarkerManager, renderer);
-                inputHandler.execute(client);
+                if (playerReportHandler.canExecute()) {
+                    playerReportHandler.execute();
+                }
             }
 
             while (GUI_BINDING.wasPressed()) {
