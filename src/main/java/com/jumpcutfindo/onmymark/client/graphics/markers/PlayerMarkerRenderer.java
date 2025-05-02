@@ -41,6 +41,11 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    public long getLifetimeMs() {
+        return 20000L;
+    }
+
+    @Override
     Vec3d getWorldPos() {
         return this.playerMarker.getExactPosition(this.client.world);
     }
@@ -76,6 +81,6 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
 
     @Override
     public boolean shouldDraw() {
-        return !this.playerMarker.playerId().equals(this.client.player.getUuid());
+        return !this.playerMarker.playerId().equals(this.client.player.getUuid()) && super.shouldDraw();
     }
 }

@@ -117,6 +117,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
         return this.labelType == LabelType.ICON ? (int) MarkerRenderer.ICON_SIZE : super.getLabelHeight();
     }
 
+    @Override
+    public long getLifetimeMs() {
+        return 120000L;
+    }
+
     public enum LabelType {
         TEXT, ICON
     }

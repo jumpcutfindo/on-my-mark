@@ -35,6 +35,11 @@ public class BlockMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    public long getLifetimeMs() {
+        return 120000L;
+    }
+
+    @Override
     Vec3d getWorldPos() {
         return blockMarker.getExactPosition(this.client.world);
     }

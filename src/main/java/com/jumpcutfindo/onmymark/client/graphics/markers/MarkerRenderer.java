@@ -11,6 +11,8 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import java.time.Instant;
+
 public abstract class MarkerRenderer {
     // TODO(preference): Implement adjusting of pointer dimensions
     public static final float POINTER_WIDTH = 6F;
@@ -20,6 +22,9 @@ public abstract class MarkerRenderer {
 
     protected MinecraftClient client;
     protected Marker marker;
+
+    private final Instant creationTime;
+    private long existTimeMs;
 
     // TODO(preference): Implement switching of player selection between circle and oval
     private ClampType clampType;
@@ -33,8 +38,6 @@ public abstract class MarkerRenderer {
     private int pointerColor;
     private final PointerShape pointerShape;
 
-    private float existTime;
-
     protected MarkerRenderer(MinecraftClient client, Marker marker, PointerShape pointerShape) {
         this.client = client;
         this.marker = marker;
@@ -46,6 +49,8 @@ public abstract class MarkerRenderer {
 
         this.pointerColor = -1;
         this.pointerShape = pointerShape;
+
+        this.creationTime = Instant.now();
     }
 
     public Vector4f screenPos() {
@@ -53,7 +58,7 @@ public abstract class MarkerRenderer {
     }
 
     public void renderTick(DrawContext drawContext, float tickDelta, float fovDegrees, boolean isFovChanging) {
-        existTime++;
+        this.existTimeMs = Instant.now().toEpochMilli() - creationTime.toEpochMilli();
 
         // Calculate screen position
         prevScreenPos = screenPos;
@@ -131,7 +136,10 @@ public abstract class MarkerRenderer {
     }
 
     public boolean shouldDraw() {
-        return screenPos != null && screenPosNormal != null && this.marker.isVisible(this.client.player);
+        return this.getLifetimeMs() > this.existTimeMs
+                && screenPos != null
+                && screenPosNormal != null
+                && this.marker.isVisible(this.client.player);
     }
 
     abstract Vec3d getWorldPos();
@@ -153,10 +161,10 @@ public abstract class MarkerRenderer {
         int distanceLabelHeight = (int) ((float) client.textRenderer.fontHeight * distanceLabelScale);
 
         // Calculate pointer values
-        float pointerSizeModifier = existTime >= 80F ? 1.0F : (float) (Math.abs(Math.sin(existTime / 20F))) * 1.4F;
+        float pointerSizeModifier = existTimeMs >= 1100L ? 1.0F : (float) (Math.abs(Math.sin((((float) existTimeMs / 10F) / 20F)))) * 1.3F;
         float pointerWidth = POINTER_WIDTH * pointerSizeModifier;
         float pointerHeight = POINTER_HEIGHT * pointerSizeModifier;
-        int pointerColor = ColorUtils.setOpacity(this.pointerColor, Math.min(existTime / 20, 1.0F));
+        int pointerColor = ColorUtils.setOpacity(this.pointerColor, Math.min((float) existTimeMs / 20, 1.0F));
 
         // TODO(preference): Implement toggling of pointer
         if (this.isClamped) {
@@ -272,20 +280,7 @@ public abstract class MarkerRenderer {
             float hw = width / 2F;
             float hh = height / 2F;
 
-            // Points: top, left, bottom, right (clockwise)
-            float x1 = centerX;
-            float y1 = centerY - hh;
-
-            float x2 = centerX - hw;
-            float y2 = centerY;
-
-            float x3 = centerX;
-            float y3 = centerY + hh;
-
-            float x4 = centerX + hw;
-            float y4 = centerY;
-
-            // Optionally, rotate according to `normal` and `perpendicular`
+            // Rotate according to `normal` and `perpendicular`
             Vector2f top = new Vector2f(normal).mul(hh).add(centerX, centerY);
             Vector2f bottom = new Vector2f(normal).mul(-hh).add(centerX, centerY);
             Vector2f left = new Vector2f(perpendicular).mul(-hw).add(centerX, centerY);
@@ -338,6 +333,8 @@ public abstract class MarkerRenderer {
     public int getLabelHeight() {
         return client.textRenderer.fontHeight;
     }
+
+    public abstract long getLifetimeMs();
 
     public enum ClampType {
         CIRCLE, OVAL
