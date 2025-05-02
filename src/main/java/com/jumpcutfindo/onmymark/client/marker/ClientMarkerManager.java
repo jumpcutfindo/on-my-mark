@@ -23,6 +23,12 @@ public class ClientMarkerManager {
     }
 
     public void setMarker(PartyMember partyMember, Marker marker) {
+        this.markerMap.put(partyMember, marker);
+
+        if (!marker.isVisible(MinecraftClient.getInstance().player)) {
+            return;
+        }
+
         if (partyMember.id().equals(MinecraftClient.getInstance().player.getUuid())) {
             // Marker was placed by self
             SoundPlayer.playPlaceMarkerSound(MinecraftClient.getInstance().getSoundManager());
@@ -31,7 +37,6 @@ public class ClientMarkerManager {
             SoundPlayer.playOtherMarkerSound(MinecraftClient.getInstance().getSoundManager());
         }
 
-        this.markerMap.put(partyMember, marker);
     }
 
     public void removeMarkerOf(PartyMember partyMember) {

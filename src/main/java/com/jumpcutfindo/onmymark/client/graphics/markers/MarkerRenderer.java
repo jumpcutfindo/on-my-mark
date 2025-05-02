@@ -130,7 +130,7 @@ public abstract class MarkerRenderer {
     }
 
     public boolean shouldDraw() {
-        return screenPos != null && screenPosNormal != null && this.marker.isSameDimension(this.client.player);
+        return screenPos != null && screenPosNormal != null && this.marker.isVisible(this.client.player);
     }
 
     abstract Vec3d getWorldPos();

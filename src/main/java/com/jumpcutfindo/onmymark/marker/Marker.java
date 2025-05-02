@@ -65,6 +65,13 @@ public abstract class Marker {
         return player.getWorld().getRegistryKey().equals(worldRegistryKey);
     }
 
+    /**
+     * Determines whether the marker is visible
+     */
+    public boolean isVisible(PlayerEntity player) {
+        return this.isSameDimension(player);
+    }
+
     public abstract Vec3d getExactPosition(World world);
 
     public abstract void update(World world);
