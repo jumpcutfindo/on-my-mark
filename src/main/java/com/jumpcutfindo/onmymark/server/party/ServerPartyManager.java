@@ -185,18 +185,22 @@ public class ServerPartyManager {
         return piOpt.isPresent();
     }
 
-    public Party<ServerPartyMember> handlePlayerConnected(ServerPlayerEntity player) throws PlayerNotInPartyException {
+    public Party<ServerPartyMember> handlePlayerConnected(ServerPlayerEntity player) throws PlayerNotInPartyException, PartyUnavailableException {
         ServerPartyMember partyMember = this.getOrCreatePlayer(player);
 
         // Update player as the old reference points to a different object
         partyMember.setPlayer(player);
 
-        if (partyMember.isInParty()) {
+        if (partyMember.currentParty() == null) {
+            throw new PlayerNotInPartyException(player.getDisplayName().getString());
+        }
+
+        if (partyMember.currentParty().state() == Party.State.ACTIVE) {
             partyMember.setState(PartyMember.State.IN_PARTY);
             return partyMember.currentParty();
         }
 
-        throw new PlayerNotInPartyException(player.getDisplayName().getString());
+        throw new PartyUnavailableException();
     }
 
     public Party<ServerPartyMember> handlePlayerDisconnected(ServerPlayerEntity player) throws PlayerNotInPartyException {

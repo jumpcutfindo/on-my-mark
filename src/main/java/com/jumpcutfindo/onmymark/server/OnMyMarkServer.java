@@ -1,6 +1,7 @@
 package com.jumpcutfindo.onmymark.server;
 
 import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PartyUnavailableException;
 import com.jumpcutfindo.onmymark.server.party.exceptions.PlayerNotInPartyException;
 import com.jumpcutfindo.onmymark.server.marker.ServerMarkerManager;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
@@ -36,9 +37,9 @@ public class OnMyMarkServer implements ModInitializer {
 		try {
 			Party<ServerPartyMember> party = serverPartyManager.handlePlayerConnected(serverPlayer);
 			ServerNetworkSender.sendPartyInfo(party);
-		} catch (PlayerNotInPartyException ignored) {
+		} catch (PlayerNotInPartyException | PartyUnavailableException ignored) {
 		}
-	}
+    }
 
 	public void onPlayerDisconnected(ServerPlayNetworkHandler networkHandler, MinecraftServer minecraftServer) {
 		ServerPlayerEntity serverPlayer = networkHandler.getPlayer();
