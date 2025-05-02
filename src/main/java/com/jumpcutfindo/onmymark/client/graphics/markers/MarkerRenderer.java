@@ -144,9 +144,6 @@ public abstract class MarkerRenderer {
     abstract boolean isMoving();
 
     public void draw(DrawContext drawContext) {
-        float horizontalness = Math.abs(screenPosNormal.dot(new Vector2f(1F, 0F)));
-        float verticalness = Math.abs(screenPosNormal.dot(new Vector2f(0F, 1F)));
-
         // Calculate distance label variables
         float distanceLabelScale = 0.65F; // TODO(preference): Implement adjusting of distance label size
         String distanceLabelString = this.getDistanceLabelString();

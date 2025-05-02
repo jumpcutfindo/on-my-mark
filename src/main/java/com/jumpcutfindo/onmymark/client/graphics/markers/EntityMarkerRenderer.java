@@ -22,6 +22,18 @@ public class EntityMarkerRenderer extends MarkerRenderer {
         super(client, entityMarker);
 
         this.entityMarker = entityMarker;
+
+        this.determineLabelType();
+    }
+
+    private void determineLabelType() {
+        Entity entity = entityMarker.entity();
+
+        if (entity instanceof VehicleEntity || entity instanceof ItemEntity) {
+            labelType = LabelType.ICON;
+        } else {
+            labelType = LabelType.TEXT;
+        }
     }
 
     @Override

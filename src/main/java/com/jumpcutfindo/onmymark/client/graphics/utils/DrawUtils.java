@@ -10,11 +10,9 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.crash.CrashException;
 import net.minecraft.util.crash.CrashReport;
 import net.minecraft.util.crash.CrashReportSection;
@@ -35,7 +33,6 @@ public class DrawUtils {
         World world = MinecraftClient.getInstance().world;
         LivingEntity entity = MinecraftClient.getInstance().player;
         MatrixStack matrices = drawContext.getMatrices();
-        Identifier texture = stack.get(DataComponentTypes.ITEM_MODEL);
 
         if (!stack.isEmpty()) {
             // Draw the outline as the item but in the background
