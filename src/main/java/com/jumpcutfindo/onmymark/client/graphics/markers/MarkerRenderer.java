@@ -163,7 +163,7 @@ public abstract class MarkerRenderer {
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
-            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 16F + distanceLabelHeight * screenPosNormal.y);
+            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(),  16F + distanceLabelHeight * screenPosNormal.y);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y(), true);
 
             this.drawDistanceLabel(drawContext, iconPos.x() + getLabelWidth() / 2F - distanceLabelWidth / 2F, iconPos.y() + getLabelHeight() + 4F, distanceLabelScale);
@@ -279,8 +279,8 @@ public abstract class MarkerRenderer {
         inwardNormal.negate();
 
         // Compute the center of the icon along the inward direction
-        float labelCenterX = offsetPos.x + inwardNormal.x * labelWidth;
-        float labelCenterY = offsetPos.y + inwardNormal.y * labelHeight;
+        float labelCenterX = offsetPos.x + inwardNormal.x * POINTER_WIDTH + inwardNormal.x * labelWidth / 2;
+        float labelCenterY = offsetPos.y + inwardNormal.y * POINTER_HEIGHT + inwardNormal.y * labelHeight / 2;
 
         // Compute the top-left corner to draw the icon centered at that point
         int iconX = (int) (labelCenterX - labelWidth / 2F);
