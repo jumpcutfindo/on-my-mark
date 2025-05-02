@@ -221,6 +221,10 @@ public class ServerPartyManager {
     private void disbandParty(Party<ServerPartyMember> party) {
         party.setState(Party.State.DISBANDED);
         this.parties.remove(party);
+
+        for (ServerPartyMember serverPartyMember : party.partyMembers()) {
+            serverPartyMember.removeCurrentParty();
+        }
     }
 
     public Party<ServerPartyMember> getPartyById(UUID partyId) throws PartyNotFoundException {
