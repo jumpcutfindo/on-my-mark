@@ -12,6 +12,7 @@
   "onmymark.menu.leaveParty.tooltip": "Leave party",
   "onmymark.menu.invitePlayer.tooltip": "Invite a player",
   "onmymark.menu.kickPlayer.tooltip": "Kick selected player",
+  "onmymark.menu.selectMarkerColor.tooltip": "Select marker color",
 
   "onmymark.menu.createParty.windowTitle": "Create a party",
   "onmymark.menu.createParty.partyNameLabel": "Party name",
