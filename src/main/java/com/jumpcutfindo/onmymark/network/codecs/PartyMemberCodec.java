@@ -2,8 +2,11 @@ package com.jumpcutfindo.onmymark.network.codecs;
 
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 
 import java.util.UUID;
 
@@ -18,7 +21,10 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
         boolean isPartyLeader = buf.readBoolean();
         PartyMember.State state = buf.readEnumConstant(PartyMember.State.class);
 
-        return new ClientPartyMember(playerId, playerName, isPartyLeader, state);
+        GameProfile gameProfile = new GameProfile(playerId, playerName);
+        gameProfile.getProperties().putAll(PacketCodecs.PROPERTY_MAP.decode(buf));
+
+        return new ClientPartyMember(playerId, playerName, isPartyLeader, state, gameProfile);
     }
 
     @Override
@@ -27,5 +33,8 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
         buf.writeString(partyMember.displayName());
         buf.writeBoolean(partyMember.isPartyLeader());
         buf.writeEnumConstant(partyMember.state());
+
+        GameProfile gameProfile = ((ServerPartyMember) partyMember).player().getGameProfile();
+        PacketCodecs.PROPERTY_MAP.encode(buf, gameProfile.getProperties());
     }
 }

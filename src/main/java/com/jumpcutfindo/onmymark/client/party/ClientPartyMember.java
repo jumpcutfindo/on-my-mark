@@ -10,10 +10,14 @@ public class ClientPartyMember extends PartyMember {
     private Party<ClientPartyMember> currentParty;
     private final boolean isPartyLeader;
 
-    public ClientPartyMember(UUID playerId, String displayName, boolean isPartyLeader, PartyMember.State state) {
+    private final GameProfile gameProfile;
+
+    public ClientPartyMember(UUID playerId, String displayName, boolean isPartyLeader, PartyMember.State state, GameProfile gameProfile) {
         super(playerId, displayName, state);
 
         this.isPartyLeader = isPartyLeader;
+
+        this.gameProfile = gameProfile;
     }
 
     @Override
@@ -35,6 +39,6 @@ public class ClientPartyMember extends PartyMember {
     }
 
     public GameProfile gameProfile() {
-        return new GameProfile(id, displayName);
+        return this.gameProfile;
     }
 }

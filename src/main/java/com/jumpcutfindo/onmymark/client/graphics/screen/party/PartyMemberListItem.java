@@ -7,21 +7,28 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.utils.StringUtils;
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.texture.PlayerSkinProvider;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     private static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/party_screen.png");
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
 
-    private SkinTextures playerSkinTextures;
+    private final SkinTextures playerSkinTextures;
 
     public PartyMemberListItem(OnMyMarkScreen screen, ClientPartyMember partyMember, int index) {
         super(screen, partyMember, index);
@@ -60,7 +67,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
 
         // Draw player icon
         if (this.playerSkinTextures != null) {
-            PlayerSkinDrawer.draw(context, this.playerSkinTextures, x + 11, y + 3, 12);
+            PlayerSkinDrawer.draw(context, this.playerSkinTextures.texture(), x + 11, y + 3, 12, false, false, -1);
         }
 
         // Draw crown if party leader
@@ -91,5 +98,23 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     @Override
     public boolean canSelect() {
         return !this.item.isPartyLeader();
+    }
+
+    /**
+     * Derived from PlayerListEntry#texturesSupplier
+     *
+     */
+    private static Supplier<SkinTextures> texturesSupplier(GameProfile profile) {
+        MinecraftClient minecraftClient = MinecraftClient.getInstance();
+        PlayerSkinProvider playerSkinProvider = minecraftClient.getSkinProvider();
+
+        CompletableFuture<Optional<SkinTextures>> completableFuture = playerSkinProvider.fetchSkinTextures(profile);
+        boolean bl = !minecraftClient.uuidEquals(profile.getId());
+        SkinTextures skinTextures = DefaultSkinHelper.getSkinTextures(profile);
+
+        return () -> {
+            SkinTextures skinTextures2 = completableFuture.getNow(Optional.empty()).orElse(skinTextures);
+            return bl && !skinTextures2.secure() ? skinTextures : skinTextures2;
+        };
     }
 }

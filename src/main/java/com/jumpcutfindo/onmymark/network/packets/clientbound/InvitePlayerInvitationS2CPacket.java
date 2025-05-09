@@ -64,7 +64,7 @@ public class InvitePlayerInvitationS2CPacket implements CustomPayload {
     public PartyInvite<ClientPartyMember> toPartyInvite(World world, PlayerEntity player) {
         Party<ClientPartyMember> party = Party.withPartyId(partyId, partyName, (ClientPartyMember) partyLeader);
 
-        ClientPartyMember invitee = new ClientPartyMember(player.getUuid(), player.getDisplayName().getString(), false, PartyMember.State.AVAILABLE);
+        ClientPartyMember invitee = new ClientPartyMember(player.getUuid(), player.getDisplayName().getString(), false, PartyMember.State.AVAILABLE, player.getGameProfile());
 
         return new PartyInvite<>(party, (ClientPartyMember) partyLeader, invitee);
     }
