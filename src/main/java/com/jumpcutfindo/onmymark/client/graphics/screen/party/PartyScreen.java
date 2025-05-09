@@ -39,10 +39,10 @@ public class PartyScreen extends OnMyMarkScreen {
         // Recreate the relevant views
         this.partyMemberListView = new PartyMemberListView(this, this.party, x, y);
 
-        this.createPartyButton = new IconButton(this, x + 192, y + 6, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
-        this.leavePartyButton = new IconButton(this, x + 192, y + 6, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
-        this.invitePlayerButton = new IconButton(this, x + 174, y + 6, 32, 16, this::onInvitePlayer, Text.translatable("onmymark.menu.invitePlayer.tooltip"));
-        this.kickPlayerButton = new IconButton(this, x + 192, y + 6, 48, 16, () -> {
+        this.createPartyButton = new IconButton(this, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
+        this.leavePartyButton = new IconButton(this, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
+        this.invitePlayerButton = new IconButton(this, 32, 16, this::onInvitePlayer, Text.translatable("onmymark.menu.invitePlayer.tooltip"));
+        this.kickPlayerButton = new IconButton(this, 48, 16, () -> {
             List<PartyMemberListItem> selectedPartyMembers = this.partyMemberListView.getSelectedItems();
             if (selectedPartyMembers.isEmpty()) {
                 return;
@@ -98,17 +98,17 @@ public class PartyScreen extends OnMyMarkScreen {
     private void drawButtons(DrawContext context, int mouseX, int mouseY) {
         switch (this.state) {
             case NO_PARTY -> {
-                this.createPartyButton.render(context, mouseX, mouseY, 0);
+                this.createPartyButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_MEMBER -> {
-                this.leavePartyButton.render(context, mouseX, mouseY, 0);
+                this.leavePartyButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_LEADER -> {
-                this.invitePlayerButton.render(context, mouseX, mouseY, 0);
-                this.leavePartyButton.render(context, mouseX, mouseY, 0);
+                this.invitePlayerButton.render(context, x + 174, y + 6, mouseX, mouseY, 0);
+                this.leavePartyButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
-                this.kickPlayerButton.render(context, mouseX, mouseY, 0);
+                this.kickPlayerButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
             }
         }
     }

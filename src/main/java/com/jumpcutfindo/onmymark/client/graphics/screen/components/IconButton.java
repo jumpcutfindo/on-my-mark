@@ -17,7 +17,7 @@ public class IconButton implements Interactable {
     private static final int BUTTONS_TEXTURE_HEIGHT = 256;
     
     private final OnMyMarkScreen screen;
-    private final int x, y;
+    private int x, y;
     private final int u, v;
     private final int width, height;
 
@@ -26,11 +26,8 @@ public class IconButton implements Interactable {
 
     private final MutableText tooltip;
 
-    public IconButton(OnMyMarkScreen screen, int x, int y, int u, int v, Runnable action, MutableText tooltip) {
+    public IconButton(OnMyMarkScreen screen, int u, int v, Runnable action, MutableText tooltip) {
         this.screen = screen;
-
-        this.x = x;
-        this.y = y;
 
         this.u = u;
         this.v = v;
@@ -44,7 +41,10 @@ public class IconButton implements Interactable {
         this.tooltip = tooltip;
     }
 
-    public void render(DrawContext context, int mouseX, int mouseY, int delta) {
+    public void render(DrawContext context, int x, int y, int mouseX, int mouseY, int delta) {
+        this.x = x;
+        this.y = y;
+
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         if (isDisabled()) {
             // Disabled
