@@ -23,6 +23,9 @@ public class LeavePartyC2SHandler implements ServerPacketHandler<LeavePartyC2SPa
         ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onLeaveParty.self"));
         ServerNetworkSender.removePartyInfo(context.player());
 
+        // Remove player's markers
+        ServerNetworkSender.removeMarker(party, context.player());
+
         ServerNetworkSender.sendMessageToParty(party, Text.translatable("onmymark.action.onLeaveParty.other", context.player().getName()));
 
         if (party.state() == Party.State.DISBANDED) {

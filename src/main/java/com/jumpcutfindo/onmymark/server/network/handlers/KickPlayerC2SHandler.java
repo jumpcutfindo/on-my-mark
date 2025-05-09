@@ -34,6 +34,9 @@ public class KickPlayerC2SHandler implements ServerPacketHandler<KickPlayerC2SPa
             Party<ServerPartyMember> party = partyManager.getPartyOfPlayer(player);
             partyManager.removePlayerFromParty(party.partyId(), player, otherPlayer);
 
+            // Remove player's markers
+            ServerNetworkSender.removeMarker(party, otherPlayer);
+
             ServerNetworkSender.sendMessageToPlayer(otherPlayer, Text.translatable("onmymark.action.onKickFromParty.self"));
             ServerNetworkSender.removePartyInfo(otherPlayer);
 
