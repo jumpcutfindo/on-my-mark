@@ -17,7 +17,7 @@ public class ServerEntityUtils {
         for (ServerWorld world : context.server().getWorlds()) {
 
             for (ServerPlayerEntity player : world.getPlayers()) {
-                if (player.getName().getLiteralString().equals(playerName)) {
+                if (player.getName().getLiteralString().toLowerCase().equals(playerName.toLowerCase())) {
                     return player;
                 }
             }
