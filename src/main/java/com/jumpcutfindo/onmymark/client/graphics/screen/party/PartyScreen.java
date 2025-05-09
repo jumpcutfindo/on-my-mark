@@ -18,7 +18,7 @@ public class PartyScreen extends OnMyMarkScreen {
     private int x, y;
 
     private PartyMemberListView partyMemberListView;
-    private IconButton createPartyButton, leavePartyButton, invitePlayerButton, kickPlayerButton;
+    private IconButton createPartyButton, leavePartyButton, invitePlayerButton, kickPlayerButton, selectMarkerColorButton;
 
     private Party<ClientPartyMember> party;
 
@@ -49,6 +49,8 @@ public class PartyScreen extends OnMyMarkScreen {
             }
             this.onKickPlayer(selectedPartyMembers.getFirst().getItem());
         }, Text.translatable("onmymark.menu.kickPlayer.tooltip"));
+
+        this.selectMarkerColorButton = new IconButton(this, 64, 16, this::onSelectMarkerColor, Text.translatable("onmymark.menu.selectMarkerColor.tooltip"));
 
         // If there is a pending invite, we show immediately
         PartyInvite<ClientPartyMember> existingPartyInvite = OnMyMarkClient.INSTANCE.clientPartyManager().partyInvite();
@@ -102,10 +104,12 @@ public class PartyScreen extends OnMyMarkScreen {
             }
             case IN_PARTY_AS_MEMBER -> {
                 this.leavePartyButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
+                this.selectMarkerColorButton.render(context, x + 174, y + 6, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_LEADER -> {
                 this.invitePlayerButton.render(context, x + 174, y + 6, mouseX, mouseY, 0);
                 this.leavePartyButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
+                this.selectMarkerColorButton.render(context, x + 156, y + 6, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
                 this.kickPlayerButton.render(context, x + 192, y + 6, mouseX, mouseY, 0);
@@ -124,10 +128,12 @@ public class PartyScreen extends OnMyMarkScreen {
             }
             case IN_PARTY_AS_MEMBER -> {
                 this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
+                this.selectMarkerColorButton.renderTooltip(context, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_LEADER -> {
                 this.invitePlayerButton.renderTooltip(context, mouseX, mouseY, 0);
                 this.leavePartyButton.renderTooltip(context, mouseX, mouseY, 0);
+                this.selectMarkerColorButton.renderTooltip(context, mouseX, mouseY, 0);
             }
             case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
                 this.kickPlayerButton.renderTooltip(context, mouseX, mouseY, 0);
@@ -151,11 +157,13 @@ public class PartyScreen extends OnMyMarkScreen {
                 return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
             }
             case IN_PARTY_AS_MEMBER -> {
-                return this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+                return this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button)
+                        || this.selectMarkerColorButton.mouseClicked((int) mouseX, (int) mouseY, button);
             }
             case IN_PARTY_AS_LEADER -> {
                 return this.invitePlayerButton.mouseClicked((int) mouseX, (int) mouseY, button)
-                        || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+                        || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button)
+                        || this.selectMarkerColorButton.mouseClicked((int) mouseX, (int) mouseY, button);
             }
             case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
                 return this.kickPlayerButton.mouseClicked((int) mouseX, (int) mouseY, button);
@@ -209,6 +217,10 @@ public class PartyScreen extends OnMyMarkScreen {
 
     private void onKickPlayer(PartyMember partyMember) {
         ClientNetworkSender.kickFromParty(partyMember.id());
+    }
+
+    private void onSelectMarkerColor() {
+        this.setActiveWindow(new MarkerColorWindow(this));
     }
 
     private enum State {
