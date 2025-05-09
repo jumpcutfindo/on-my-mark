@@ -42,7 +42,8 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
 
     @Override
     public long getLifetimeMs() {
-        return 20000L;
+        // TODO: Change to server configurable value
+        return 60000L;
     }
 
     @Override

@@ -119,6 +119,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     public long getLifetimeMs() {
+        // TODO: Change to server configurable value
         return 120000L;
     }
 
