@@ -228,7 +228,7 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     private void onSelectMarkerColor() {
-        this.setActiveWindow(new MarkerColorWindow(this));
+        this.setActiveWindow(new MarkerColorWindow(this, 0xFFFFFFFF));
     }
 
     private enum State {
