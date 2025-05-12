@@ -175,20 +175,28 @@ public class PartyScreen extends OnMyMarkScreen {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+        if (isWindowOpen()) {
+            return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        }
+
         if (isMouseInList(mouseX, mouseY)) {
             return this.partyMemberListView.mouseDragged((int) mouseX, (int) mouseY, button, deltaX, deltaY);
         }
 
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return false;
     }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (isWindowOpen()) {
+            return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        }
+
         if (isMouseInList(mouseX, mouseY)) {
             return this.partyMemberListView.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
         }
 
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return false;
     }
 
     public void setParty(Party<ClientPartyMember> party) {
