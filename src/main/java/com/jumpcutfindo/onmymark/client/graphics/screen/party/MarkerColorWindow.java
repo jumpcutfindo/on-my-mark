@@ -4,12 +4,11 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MarkerColorWindow extends OnMyMarkWindow {
     public static final int WINDOW_WIDTH = 138, WINDOW_HEIGHT = 92;
@@ -52,46 +51,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        Optional<ClickableWidget> widget = getHoveredWidget(this.getWidgets(), mouseX, mouseY);
-
-        if (widget.isPresent()) {
-            return widget.get().mouseClicked(mouseX, mouseY, button);
-        }
-
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        Optional<ClickableWidget> widget = getHoveredWidget(this.getWidgets(), mouseX, mouseY);
-
-        if (widget.isPresent()) {
-            return widget.get().mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-        }
-
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        Optional<ClickableWidget> widget = getHoveredWidget(this.getWidgets(), mouseX, mouseY);
-
-        if (widget.isPresent()) {
-            return widget.get().mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-        }
-
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
-    }
-
-    private static Optional<ClickableWidget> getHoveredWidget(List<ClickableWidget> widgets, double mouseX, double mouseY) {
-        return widgets.stream()
-                .filter(cw -> cw.isMouseOver(mouseX, mouseY))
-                .findFirst();
-    }
-
-    @Override
-    public List<ClickableWidget> getWidgets() {
+    public List<? extends Element> children() {
         return List.of(redSlider, redField, greenSlider, greenField, blueSlider, blueField);
     }
 }

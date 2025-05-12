@@ -6,7 +6,7 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
@@ -35,6 +35,8 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
             this.createParty();
             this.screen.setActiveWindow(null);
         });
+
+        this.setFocused(this.playerNameField);
     }
 
     @Override
@@ -64,24 +66,7 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button)
-                || this.playerNameField.mouseClicked(mouseX, mouseY, button)
-                || this.submitButton.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return this.playerNameField.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-    @Override
-    public boolean charTyped(char chr, int modifiers) {
-        return this.playerNameField.charTyped(chr, modifiers);
-    }
-
-    @Override
-    public List<ClickableWidget> getWidgets() {
+    public List<? extends Element> children() {
         return List.of(this.playerNameField, this.submitButton);
     }
 

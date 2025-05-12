@@ -9,7 +9,7 @@ import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
@@ -77,14 +77,7 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button)
-                || this.acceptButton.mouseClicked(mouseX, mouseY, button)
-                || this.rejectButton.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public List<ClickableWidget> getWidgets() {
+    public List<? extends Element> children() {
         return List.of(this.acceptButton, this.rejectButton);
     }
 

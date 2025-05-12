@@ -122,7 +122,7 @@ public abstract class OnMyMarkScreen extends Screen {
 
         if (window == null) return;
 
-        this.activeWindow.getWidgets().forEach(this::addSelectableChild);
+        // this.activeWindow.getWidgets().forEach(this::addSelectableChild);
     }
 
     public OnMyMarkWindow getActiveWindow() {

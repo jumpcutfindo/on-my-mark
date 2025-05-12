@@ -1,15 +1,11 @@
 package com.jumpcutfindo.onmymark.client.graphics.screen;
 
-import com.jumpcutfindo.onmymark.client.graphics.screen.components.Interactable;
-import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
+import net.minecraft.client.gui.AbstractParentElement;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
-import java.util.List;
-
-public abstract class OnMyMarkWindow implements Interactable {
+public abstract class OnMyMarkWindow extends AbstractParentElement {
     protected OnMyMarkScreen screen;
     protected int x, y;
     protected int width, height;
@@ -67,33 +63,6 @@ public abstract class OnMyMarkWindow implements Interactable {
     public void tick() {
 
     }
-
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        return false;
-    }
-
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        return false;
-    }
-
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        if (!ScreenUtils.isWithin(mouseX, mouseY, x, y, width, height)) {
-            screen.setActiveWindow(null);
-            if (screen.isStandalone()) screen.close();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return false;
-    }
-
-    public boolean charTyped(char chr, int modifiers) {
-        return false;
-    }
-
-    public abstract List<ClickableWidget> getWidgets();
 
     private void renderBackgroundGradient(DrawContext context) {
         screen.drawBackgroundGradient(context);
