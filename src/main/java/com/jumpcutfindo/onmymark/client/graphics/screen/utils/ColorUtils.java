@@ -24,6 +24,26 @@ public class ColorUtils {
         return newAlpha | rgb;
     }
 
+    public static int[] toRgba(int color) {
+        int r = (color >> 24) & 0xFF;
+        int g = (color >> 16) & 0xFF;
+        int b = (color >> 8) & 0xFF;
+        int a = color & 0xFF;
+        return new int[] { r, g, b, a };
+    }
+
+    public static int fromRgba(int[] rgba) {
+        if (rgba == null || rgba.length != 4) {
+            throw new IllegalArgumentException("RGBA array must have exactly 4 elements");
+        }
+
+        int r = (rgba[0] & 0xFF) << 24;
+        int g = (rgba[1] & 0xFF) << 16;
+        int b = (rgba[2] & 0xFF) << 8;
+        int a = (rgba[3] & 0xFF);
+        return r | g | b | a;
+    }
+
     // TODO: Fix this formula, or implement better way for color
     public static int getColorOfIndex(int index) {
         if (index == -1) {
