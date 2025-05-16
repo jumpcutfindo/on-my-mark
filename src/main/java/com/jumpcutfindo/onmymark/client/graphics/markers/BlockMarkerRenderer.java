@@ -1,8 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
-import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
-import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

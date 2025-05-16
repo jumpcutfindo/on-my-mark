@@ -1,8 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
-import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
-import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import com.jumpcutfindo.onmymark.mixin.VehicleEntityMixin;

@@ -3,7 +3,6 @@ package com.jumpcutfindo.onmymark.client.graphics.screen.party;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ListItem;
-import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.utils.StringUtils;

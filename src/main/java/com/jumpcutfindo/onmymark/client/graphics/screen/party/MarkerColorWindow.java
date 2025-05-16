@@ -5,7 +5,6 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
-import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;

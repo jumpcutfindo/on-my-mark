@@ -1,7 +1,5 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
-import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
-import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import com.jumpcutfindo.onmymark.marker.PlayerMarker;
 import com.mojang.authlib.GameProfile;
