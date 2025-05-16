@@ -4,6 +4,7 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
+import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
@@ -36,9 +37,12 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
         super.renderContent(context, mouseX, mouseY);
 
+        int color = ColorUtils.fromRgba(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue(), 255);
+        DrawUtils.drawQuad(context, x, y, x + 168, y, x + 168, y + 40, x, y + 40, color);
+
         this.redWidget.render(context, x, y + 20, mouseX, mouseY);
-        this.blueWidget.render(context, x, y + 40, mouseX, mouseY);
-        this.greenWidget.render(context, x, y + 60, mouseX, mouseY);
+        this.greenWidget.render(context, x, y + 40, mouseX, mouseY);
+        this.blueWidget.render(context, x, y + 60, mouseX, mouseY);
     }
 
     @Override
@@ -108,20 +112,24 @@ public class MarkerColorWindow extends OnMyMarkWindow {
             slider.setPosition(x, y);
             slider.render(drawContext, mouseX, mouseY, 0);
 
-            field.setPosition(x + SLIDER_WIDTH, y);
+            field.setPosition(x + SLIDER_WIDTH + 2, y);
             field.render(drawContext, mouseX, mouseY, 0);
         }
 
         public List<? extends Element> getWidgets() {
             return List.of(slider, field);
         }
+
+        public int getColorValue() {
+            return this.slider.getColorValue();
+        }
     }
 
     private enum SliderType {
         // TODO: Move labels to translateables
-        RED("Red", (color) -> ColorUtils.toRgba(color)[0]),
-        GREEN("Green", (color) -> ColorUtils.toRgba(color)[1]),
-        BLUE("Blue", (color) -> ColorUtils.toRgba(color)[2]);
+        RED("Red", (color) -> ColorUtils.toArgb(color)[1]),
+        GREEN("Green", (color) -> ColorUtils.toArgb(color)[2]),
+        BLUE("Blue", (color) -> ColorUtils.toArgb(color)[3]);
 
         private final String label;
         private final Function<Integer, Integer> valueFromColor;

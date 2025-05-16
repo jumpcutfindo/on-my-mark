@@ -24,12 +24,16 @@ public class ColorUtils {
         return newAlpha | rgb;
     }
 
-    public static int[] toRgba(int color) {
-        int r = (color >> 24) & 0xFF;
-        int g = (color >> 16) & 0xFF;
-        int b = (color >> 8) & 0xFF;
-        int a = color & 0xFF;
-        return new int[] { r, g, b, a };
+    public static int[] toArgb(int color) {
+        int a = (color >> 24) & 0xFF;
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+        return new int[] { a, r, g, b };
+    }
+
+    public static int fromRgba(int r, int g, int b, int a) {
+        return fromRgba(new int[] { r, g, b, a });
     }
 
     public static int fromRgba(int[] rgba) {
@@ -37,10 +41,10 @@ public class ColorUtils {
             throw new IllegalArgumentException("RGBA array must have exactly 4 elements");
         }
 
-        int r = (rgba[0] & 0xFF) << 24;
-        int g = (rgba[1] & 0xFF) << 16;
-        int b = (rgba[2] & 0xFF) << 8;
-        int a = (rgba[3] & 0xFF);
+        int r = (rgba[0] & 0xFF) << 16;
+        int g = (rgba[1] & 0xFF) << 8;
+        int b = (rgba[2] & 0xFF);
+        int a = (rgba[3] & 0xFF) << 24;
         return r | g | b | a;
     }
 
