@@ -34,17 +34,16 @@ public class ColorSlider extends SliderWidget {
 
     @Override
     protected void applyValue() {
-        int newValue = (int) (this.value * 255);
-
-        this.setColorValue(newValue);
+        this.colorValue = (int) (this.value * 255.0d);
 
         if (this.changedListener != null) {
-            this.changedListener.accept(newValue);
+            this.changedListener.accept(this.colorValue);
         }
     }
 
     public void setColorValue(int colorValue) {
-        this.colorValue = colorValue;
+        this.value = colorValue / 255.0d;
+        this.applyValue();
     }
 
     public int getColorValue() {

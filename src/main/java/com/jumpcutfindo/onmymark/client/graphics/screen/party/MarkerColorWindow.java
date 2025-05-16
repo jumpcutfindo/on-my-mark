@@ -52,6 +52,10 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         public static final int SLIDER_WIDTH = 128, SLIDER_HEIGHT = 18, FIELD_WIDTH = 36;
 
         private static final Predicate<String> COLOR_VALUE_PREDICATE = (text) -> {
+            if (text.isEmpty()) {
+                return true;
+            }
+
             try {
                 int value = Integer.parseInt(text);
                 return value >= 0 && value <= 255;
@@ -76,17 +80,28 @@ public class MarkerColorWindow extends OnMyMarkWindow {
 
             this.slider = new ColorSlider(SLIDER_WIDTH, SLIDER_HEIGHT, Text.literal(sliderType.label), colorValue / 255d);
 
-            this.slider.setChangedListener((value) -> {
-                this.field.setText(Integer.toString(value));
-            });
+            this.slider.setChangedListener(this::onSliderChanged);
+            this.field.setChangedListener(this::onFieldChanged);
+        }
 
-            this.field.setChangedListener((value) -> {
-                if (COLOR_VALUE_PREDICATE.test(value)) {
-                    return;
-                }
+        public void onSliderChanged(int value) {
+            this.field.setChangedListener(null);
+            this.field.setText(Integer.toString(value));
+            this.field.setChangedListener(this::onFieldChanged);
+        }
 
+        public void onFieldChanged(String value) {
+             if (!COLOR_VALUE_PREDICATE.test(value)) {
+                return;
+            }
+
+            this.slider.setChangedListener(null);
+            if (value.isEmpty()) {
+                this.slider.setColorValue(0);
+            } else {
                 this.slider.setColorValue(Integer.parseInt(value));
-            });
+            }
+            this.slider.setChangedListener(this::onSliderChanged);
         }
 
         public void render(DrawContext drawContext, int x, int y, int mouseX, int mouseY) {
