@@ -63,7 +63,7 @@ public class BlockMarkerRenderer extends MarkerRenderer {
 
     @Override
     int getPointerColor() {
-        return ColorUtils.getColorOfIndex(((ClientPartyMember) this.blockMarker.owner()).getPartyIndex());
+        return blockMarker.owner().color();
     }
 
     @Override

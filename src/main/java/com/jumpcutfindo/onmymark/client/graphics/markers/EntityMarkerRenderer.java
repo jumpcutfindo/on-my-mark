@@ -93,7 +93,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     int getPointerColor() {
-        return ColorUtils.getColorOfIndex(((ClientPartyMember) this.entityMarker.owner()).getPartyIndex());
+        return entityMarker.owner().color();
     }
 
     @Override

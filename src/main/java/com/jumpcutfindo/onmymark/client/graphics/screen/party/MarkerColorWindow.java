@@ -15,6 +15,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 
 import java.util.List;
 import java.util.function.Function;
@@ -39,6 +40,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
 
         this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.selectMarkerColor.submitButton"), (widget) -> {
             this.screen.setActiveWindow(null);
+            this.onSelectMarkerColor();
         });
 
         this.redWidget = new ColorSliderWithField(screen.getTextRenderer(), SliderType.RED, initialColor);
@@ -56,7 +58,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
         super.renderContent(context, mouseX, mouseY);
 
-        int color = ColorUtils.fromRgba(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue(), 255);
+        int color = ColorHelper.getArgb(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue());
         DrawUtils.drawQuad(context, x + 7, y + 21, x + 171, y + 21, x + 171, y + 59, x + 7, y + 59, color);
 
         int widgetX = x + 6;
@@ -70,9 +72,13 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         this.submitButton.render(context, mouseX, mouseY, 0);
     }
 
+    private void onSelectMarkerColor() {
+
+    }
+
     @Override
     public List<? extends Element> children() {
-        return Stream.of(redWidget.getWidgets(), greenWidget.getWidgets(), blueWidget.getWidgets())
+        return Stream.of(redWidget.getWidgets(), greenWidget.getWidgets(), blueWidget.getWidgets(), List.of(submitButton))
                 .flatMap(List::stream)
                 .toList();
     }
@@ -151,9 +157,9 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     }
 
     private enum SliderType {
-        RED("onmymark.menu.selectMarkerColor.red", (color) -> ColorUtils.toArgb(color)[1]),
-        GREEN("onmymark.menu.selectMarkerColor.green", (color) -> ColorUtils.toArgb(color)[2]),
-        BLUE("onmymark.menu.selectMarkerColor.blue", (color) -> ColorUtils.toArgb(color)[3]);
+        RED("onmymark.menu.selectMarkerColor.red", ColorHelper::getRed),
+        GREEN("onmymark.menu.selectMarkerColor.green", ColorHelper::getGreen),
+        BLUE("onmymark.menu.selectMarkerColor.blue", ColorHelper::getBlue);
 
         private final String labelKey;
         private final Function<Integer, Integer> valueFromColor;

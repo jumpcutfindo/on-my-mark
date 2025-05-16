@@ -8,8 +8,8 @@ public class ServerPartyMember extends PartyMember {
     private ServerPlayerEntity player;
     private Party<ServerPartyMember> currentParty;
 
-    public ServerPartyMember(ServerPlayerEntity player) {
-        super(player.getUuid(), player.getDisplayName().getString(), State.AVAILABLE);
+    public ServerPartyMember(ServerPlayerEntity player, int color) {
+        super(player.getUuid(), player.getDisplayName().getString(), color, State.AVAILABLE);
 
         this.player = player;
     }

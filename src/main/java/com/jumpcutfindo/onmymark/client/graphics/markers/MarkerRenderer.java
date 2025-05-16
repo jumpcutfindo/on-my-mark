@@ -6,6 +6,7 @@ import com.jumpcutfindo.onmymark.client.graphics.utils.RenderMath;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector2f;
@@ -35,7 +36,6 @@ public abstract class MarkerRenderer {
     protected Vector2f screenPosNormal;
     protected double distanceFromPlayer;
 
-    private int pointerColor;
     private final PointerShape pointerShape;
 
     protected MarkerRenderer(MinecraftClient client, Marker marker, PointerShape pointerShape) {
@@ -47,7 +47,6 @@ public abstract class MarkerRenderer {
 
         this.clampType = ClampType.OVAL;
 
-        this.pointerColor = -1;
         this.pointerShape = pointerShape;
 
         this.creationTime = Instant.now();
@@ -98,11 +97,6 @@ public abstract class MarkerRenderer {
 
         // Calculate and store distance from player
         this.distanceFromPlayer = this.client.player.getPos().distanceTo(this.getWorldPos());
-
-        // Calculate color if not yet done
-        if (this.pointerColor <= -1) {
-            this.pointerColor = this.getPointerColor();
-        }
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
@@ -164,7 +158,7 @@ public abstract class MarkerRenderer {
         float pointerSizeModifier = existTimeMs >= 1100L ? 1.0F : (float) (Math.abs(Math.sin((((float) existTimeMs / 10F) / 20F)))) * 1.3F;
         float pointerWidth = POINTER_WIDTH * pointerSizeModifier;
         float pointerHeight = POINTER_HEIGHT * pointerSizeModifier;
-        int pointerColor = ColorUtils.setOpacity(this.pointerColor, Math.min((float) existTimeMs / 20, 1.0F));
+        int pointerColor = ColorHelper.withAlpha((int) Math.min((float) existTimeMs / 20, 1.0F) * 255, this.getPointerColor());
 
         // TODO(preference): Implement toggling of pointer
         if (this.isClamped) {

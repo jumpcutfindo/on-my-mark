@@ -9,10 +9,13 @@ public abstract class PartyMember {
 
     protected PartyMember.State state;
 
-    public PartyMember(UUID playerId, String displayName, PartyMember.State initialState) {
+    protected int color;
+
+    public PartyMember(UUID playerId, String displayName, int color, PartyMember.State initialState) {
         this.id = playerId;
         this.displayName = displayName;
 
+        this.color = color;
         this.state = initialState;
     }
 
@@ -22,6 +25,10 @@ public abstract class PartyMember {
 
     public String displayName() {
         return this.displayName;
+    }
+
+    public int color() {
+        return this.color;
     }
 
     public PartyMember.State state() {

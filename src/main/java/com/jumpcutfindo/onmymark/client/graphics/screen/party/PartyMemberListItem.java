@@ -61,8 +61,8 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         Text displayName = Text.literal(StringUtils.truncatedName(this.item.displayName(), 14));
 
         // Draw marker color
-        int markerColor = ColorUtils.getColorOfIndex(this.index);
-        context.fill(x + 3, y + 3, x + 8, y + 15, markerColor << 7);
+        int markerColor = this.item.color();
+        context.fill(x + 3, y + 3, x + 8, y + 15, 0xFF000000);
         context.fill(x + 4, y + 4, x + 7, y + 14, markerColor);
 
         // Draw player icon

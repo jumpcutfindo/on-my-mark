@@ -18,19 +18,21 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
     public PartyMember decode(PacketByteBuf buf) {
         UUID playerId = buf.readUuid();
         String playerName = buf.readString();
+        int color = buf.readInt();
         boolean isPartyLeader = buf.readBoolean();
         PartyMember.State state = buf.readEnumConstant(PartyMember.State.class);
 
         GameProfile gameProfile = new GameProfile(playerId, playerName);
         gameProfile.getProperties().putAll(PacketCodecs.PROPERTY_MAP.decode(buf));
 
-        return new ClientPartyMember(playerId, playerName, isPartyLeader, state, gameProfile);
+        return new ClientPartyMember(playerId, playerName, isPartyLeader, color, state, gameProfile);
     }
 
     @Override
     public void encode(PacketByteBuf buf, PartyMember partyMember) {
         buf.writeUuid(partyMember.id());
         buf.writeString(partyMember.displayName());
+        buf.writeInt(partyMember.color());
         buf.writeBoolean(partyMember.isPartyLeader());
         buf.writeEnumConstant(partyMember.state());
 

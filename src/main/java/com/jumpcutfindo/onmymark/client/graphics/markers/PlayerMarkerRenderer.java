@@ -67,7 +67,7 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
 
     @Override
     int getPointerColor() {
-        return ColorUtils.getColorOfIndex(((ClientPartyMember) this.playerMarker.owner()).getPartyIndex());
+        return playerMarker.owner().color();
     }
 
     @Override

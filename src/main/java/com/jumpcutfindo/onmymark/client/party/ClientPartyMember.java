@@ -12,8 +12,8 @@ public class ClientPartyMember extends PartyMember {
 
     private final GameProfile gameProfile;
 
-    public ClientPartyMember(UUID playerId, String displayName, boolean isPartyLeader, PartyMember.State state, GameProfile gameProfile) {
-        super(playerId, displayName, state);
+    public ClientPartyMember(UUID playerId, String displayName, boolean isPartyLeader, int color, PartyMember.State state, GameProfile gameProfile) {
+        super(playerId, displayName, color, state);
 
         this.isPartyLeader = isPartyLeader;
 
