@@ -1,15 +1,20 @@
 package com.jumpcutfindo.onmymark.client.graphics.screen.party;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
+import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ColorUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.function.Function;
@@ -17,16 +22,24 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class MarkerColorWindow extends OnMyMarkWindow {
-    public static final int WINDOW_WIDTH = 138, WINDOW_HEIGHT = 92;
+    public static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/marker_color_window.png");
+    public static final int TEXTURE_WIDTH = 256, TEXTURE_HEIGHT = 256;
+
+    public static final int WINDOW_WIDTH = 178, WINDOW_HEIGHT = 153;
 
     private final int initialColor;
 
+    private final ButtonWidget submitButton;
     private final ColorSliderWithField redWidget, greenWidget, blueWidget;
 
     public MarkerColorWindow(OnMyMarkScreen screen, int initialColor) {
-        super(screen, Text.literal("Select a color"), WINDOW_WIDTH, WINDOW_HEIGHT);
+        super(screen, Text.translatable("onmymark.menu.selectMarkerColor.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         this.initialColor = initialColor;
+
+        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.selectMarkerColor.submitButton"), (widget) -> {
+            this.screen.setActiveWindow(null);
+        });
 
         this.redWidget = new ColorSliderWithField(screen.getTextRenderer(), SliderType.RED, initialColor);
         this.greenWidget = new ColorSliderWithField(screen.getTextRenderer(), SliderType.GREEN, initialColor);
@@ -34,15 +47,27 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     }
 
     @Override
+    public void renderBackground(DrawContext context) {
+        super.renderBackground(context);
+        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+    }
+
+    @Override
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
         super.renderContent(context, mouseX, mouseY);
 
         int color = ColorUtils.fromRgba(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue(), 255);
-        DrawUtils.drawQuad(context, x, y, x + 168, y, x + 168, y + 40, x, y + 40, color);
+        DrawUtils.drawQuad(context, x + 7, y + 21, x + 171, y + 21, x + 171, y + 59, x + 7, y + 59, color);
 
-        this.redWidget.render(context, x, y + 20, mouseX, mouseY);
-        this.greenWidget.render(context, x, y + 40, mouseX, mouseY);
-        this.blueWidget.render(context, x, y + 60, mouseX, mouseY);
+        int widgetX = x + 6;
+        int widgetY = y + 64;
+
+        this.redWidget.render(context, widgetX, widgetY, mouseX, mouseY);
+        this.greenWidget.render(context, widgetX, widgetY + 20, mouseX, mouseY);
+        this.blueWidget.render(context, widgetX, widgetY + 40, mouseX, mouseY);
+
+        this.submitButton.setPosition(x + 108, y + 126);
+        this.submitButton.render(context, mouseX, mouseY, 0);
     }
 
     @Override
@@ -82,7 +107,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
             this.field.setText(Integer.toString(colorValue));
             this.field.setTextPredicate(COLOR_VALUE_PREDICATE);
 
-            this.slider = new ColorSlider(SLIDER_WIDTH, SLIDER_HEIGHT, Text.literal(sliderType.label), colorValue / 255d);
+            this.slider = new ColorSlider(SLIDER_WIDTH, SLIDER_HEIGHT, sliderType.getLabel(), colorValue / 255d);
 
             this.slider.setChangedListener(this::onSliderChanged);
             this.field.setChangedListener(this::onFieldChanged);
@@ -126,21 +151,20 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     }
 
     private enum SliderType {
-        // TODO: Move labels to translateables
-        RED("Red", (color) -> ColorUtils.toArgb(color)[1]),
-        GREEN("Green", (color) -> ColorUtils.toArgb(color)[2]),
-        BLUE("Blue", (color) -> ColorUtils.toArgb(color)[3]);
+        RED("onmymark.menu.selectMarkerColor.red", (color) -> ColorUtils.toArgb(color)[1]),
+        GREEN("onmymark.menu.selectMarkerColor.green", (color) -> ColorUtils.toArgb(color)[2]),
+        BLUE("onmymark.menu.selectMarkerColor.blue", (color) -> ColorUtils.toArgb(color)[3]);
 
-        private final String label;
+        private final String labelKey;
         private final Function<Integer, Integer> valueFromColor;
 
-        SliderType(String label, Function<Integer, Integer> valueFromColor) {
-            this.label = label;
+        SliderType(String labelKey, Function<Integer, Integer> valueFromColor) {
+            this.labelKey = labelKey;
             this.valueFromColor = valueFromColor;
         }
 
-        String getLabel() {
-            return this.label;
+        Text getLabel() {
+            return Text.translatable(labelKey);
         }
 
         int colorValue(int color) {

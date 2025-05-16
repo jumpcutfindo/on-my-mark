@@ -2,7 +2,9 @@ package com.jumpcutfindo.onmymark.client.graphics.screen.components;
 
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ColorSlider extends SliderWidget {
@@ -12,7 +14,7 @@ public class ColorSlider extends SliderWidget {
     Consumer<Integer> changedListener;
 
     public ColorSlider(int width, int height, Text label, double value) {
-        super(0, 0, width, height, Text.literal(""), value);
+        super(0, 0, width, height, label, value);
 
         this.label = label;
         this.colorValue = (int) (this.value * 255);
@@ -29,7 +31,7 @@ public class ColorSlider extends SliderWidget {
 
     @Override
     public Text getMessage() {
-        return Text.literal(String.format("%s: %d", label.getLiteralString(), this.colorValue));
+        return Texts.join(List.of(label, Text.literal(Integer.toString(colorValue))), Text.literal(": "));
     }
 
     @Override

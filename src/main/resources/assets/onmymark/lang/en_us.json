@@ -26,6 +26,11 @@
   "onmymark.menu.partyInvite.invitationMessage": "%s would like you to join their party %s",
   "onmymark.menu.partyInvite.acceptButton": "Accept",
   "onmymark.menu.partyInvite.rejectButton": "Reject",
+  "onmymark.menu.selectMarkerColor.windowTitle": "Select marker color",
+  "onmymark.menu.selectMarkerColor.red": "Red",
+  "onmymark.menu.selectMarkerColor.green": "Green",
+  "onmymark.menu.selectMarkerColor.blue": "Blue",
+  "onmymark.menu.selectMarkerColor.submitButton": "Set Color",
 
   "onmymark.toast.partyInvite.title": "New party invitation",
   "onmymark.toast.partyInvite.description": "%s wants you to join their party",
