@@ -41,6 +41,13 @@ public class ClientNetworkSender implements ClientModInitializer {
         ClientPlayNetworking.send(new KickPlayerC2SPacket(buf));
     }
 
+    public static void updateMarkerColor(int color) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(color);
+
+        ClientPlayNetworking.send(new UpdateColorC2SPacket(buf));
+    }
+
     public static void sendInvitationResponse(boolean isAccept) {
         ClientPlayNetworking.send(InvitePlayerDecisionC2SPacket.create(isAccept));
     }

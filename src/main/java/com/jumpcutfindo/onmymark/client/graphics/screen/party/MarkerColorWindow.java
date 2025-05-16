@@ -6,6 +6,7 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
+import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
@@ -57,7 +58,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
         super.renderContent(context, mouseX, mouseY);
 
-        int color = ColorHelper.getArgb(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue());
+        int color = this.getSelectedColor();
         DrawUtils.drawQuad(context, x + 7, y + 21, x + 171, y + 21, x + 171, y + 59, x + 7, y + 59, color);
 
         int widgetX = x + 6;
@@ -72,7 +73,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     }
 
     private void onSelectMarkerColor() {
-
+        ClientNetworkSender.updateMarkerColor(this.getSelectedColor());
     }
 
     @Override
@@ -80,6 +81,10 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         return Stream.of(redWidget.getWidgets(), greenWidget.getWidgets(), blueWidget.getWidgets(), List.of(submitButton))
                 .flatMap(List::stream)
                 .toList();
+    }
+
+    public int getSelectedColor() {
+        return ColorHelper.getArgb(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue());
     }
 
     private static class ColorSliderWithField {

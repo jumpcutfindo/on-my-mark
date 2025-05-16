@@ -31,6 +31,10 @@ public abstract class PartyMember {
         return this.color;
     }
 
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public PartyMember.State state() {
         return state;
     }

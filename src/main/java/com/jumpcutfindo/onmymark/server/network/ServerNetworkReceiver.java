@@ -14,6 +14,8 @@ public class ServerNetworkReceiver implements ModInitializer {
     private final CreatePartyC2SHandler createPartyHandler = new CreatePartyC2SHandler();
     private final LeavePartyC2SHandler leavePartyHandler = new LeavePartyC2SHandler();
     private final KickPlayerC2SHandler kickPlayerHandler = new KickPlayerC2SHandler();
+    private final UpdateColorC2SHandler updateColorHandler = new UpdateColorC2SHandler();
+
     private final InvitePlayerRequestC2SHandler invitePlayerRequestHandler = new InvitePlayerRequestC2SHandler();
     private final InvitePlayerDecisionC2SHandler invitePlayerDecisionHandler = new InvitePlayerDecisionC2SHandler();
 
@@ -28,6 +30,7 @@ public class ServerNetworkReceiver implements ModInitializer {
         register(CreatePartyC2SPacket.PACKET_ID, CreatePartyC2SPacket.PACKET_CODEC, createPartyHandler);
         register(LeavePartyC2SPacket.PACKET_ID, LeavePartyC2SPacket.PACKET_CODEC, leavePartyHandler);
         register(KickPlayerC2SPacket.PACKET_ID, KickPlayerC2SPacket.PACKET_CODEC, kickPlayerHandler);
+        register(UpdateColorC2SPacket.PACKET_ID, UpdateColorC2SPacket.PACKET_CODEC, updateColorHandler);
 
         register(InvitePlayerRequestC2SPacket.PACKET_ID, InvitePlayerRequestC2SPacket.PACKET_CODEC, invitePlayerRequestHandler);
         register(InvitePlayerDecisionC2SPacket.PACKET_ID, InvitePlayerDecisionC2SPacket.PACKET_CODEC, invitePlayerDecisionHandler);

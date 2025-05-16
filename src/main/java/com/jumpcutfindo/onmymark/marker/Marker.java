@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public abstract class Marker {
     private final UUID id;
-    private final PartyMember owner;
+    private PartyMember owner;
     private final RegistryKey<World> worldRegistryKey;
     // TODO: Add handling for marker expiry
 //    private final long expiryTick;
@@ -35,6 +35,10 @@ public abstract class Marker {
 
     public PartyMember owner() {
         return this.owner;
+    }
+
+    public void setOwner(PartyMember partyMember) {
+        this.owner = partyMember;
     }
 
     public RegistryKey<World> worldRegistryKey() {
