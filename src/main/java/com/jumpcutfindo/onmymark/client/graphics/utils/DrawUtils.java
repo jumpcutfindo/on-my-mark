@@ -92,7 +92,7 @@ public class DrawUtils {
     /**
      * Draws a diamond with the specified dimensions.
      */
-    public static void drawDiamond(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int argb) {
+    public static void drawQuad(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int argb) {
         Matrix4f transformationMatrix = drawContext.getMatrices().peek().getPositionMatrix();
         Tessellator tessellator = Tessellator.getInstance();
 

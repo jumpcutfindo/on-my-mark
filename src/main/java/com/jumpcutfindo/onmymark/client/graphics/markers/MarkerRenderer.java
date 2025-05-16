@@ -214,7 +214,7 @@ public abstract class MarkerRenderer {
             float x4 = this.screenPos.x + width / 2F;
             float y4 = this.screenPos.y - height / 2F;
 
-            DrawUtils.drawDiamond(drawContext, x1, y1, x2, y2, x3, y3, x4, y4, color);
+            DrawUtils.drawQuad(drawContext, x1, y1, x2, y2, x3, y3, x4, y4, color);
         }
 
     }
@@ -286,7 +286,7 @@ public abstract class MarkerRenderer {
             Vector2f left = new Vector2f(perpendicular).mul(-hw).add(centerX, centerY);
             Vector2f right = new Vector2f(perpendicular).mul(hw).add(centerX, centerY);
 
-            DrawUtils.drawDiamond(drawContext,
+            DrawUtils.drawQuad(drawContext,
                     top.x, top.y,
                     right.x, right.y,
                     bottom.x, bottom.y,
