@@ -5,7 +5,8 @@
 	"mixins": [
 		"VehicleEntityMixin",
 		"AbstractBlockMixin",
-		"EntityMixin"
+		"EntityMixin",
+		"ItemScattererMixin"
 	],
 	"client": [
 		"DrawContextMixin",
