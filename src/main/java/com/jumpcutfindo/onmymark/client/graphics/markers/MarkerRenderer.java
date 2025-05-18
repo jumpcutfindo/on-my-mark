@@ -319,12 +319,42 @@ public abstract class MarkerRenderer {
         drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, 0xFFFFFF, true);
     }
 
+    protected abstract LabelDisplayType getLabelDisplayType();
+
     public int getLabelWidth() {
-        return client.textRenderer.getWidth(this.getName());
+        LabelDisplayType displayType = this.getLabelDisplayType();
+
+        switch (displayType) {
+            case ICON -> {
+                return (int) MarkerRenderer.ICON_SIZE;
+            }
+            case TEXT -> {
+                return client.textRenderer.getWidth(this.getName());
+            }
+            case CUSTOM -> {
+                throw new RuntimeException("You need to provide a custom width function for custom labels");
+            }
+        }
+
+        throw new RuntimeException("Unhandled label type");
     }
 
     public int getLabelHeight() {
-        return client.textRenderer.fontHeight;
+        LabelDisplayType displayType = this.getLabelDisplayType();
+
+        switch (displayType) {
+            case ICON -> {
+                return (int) MarkerRenderer.ICON_SIZE;
+            }
+            case TEXT -> {
+                return client.textRenderer.fontHeight;
+            }
+            case CUSTOM -> {
+                throw new RuntimeException("You need to provide a custom height function for custom labels");
+            }
+        }
+
+        throw new RuntimeException("Unhandled label type");
     }
 
     public abstract long getLifetimeMs();
@@ -335,5 +365,9 @@ public abstract class MarkerRenderer {
 
     public enum PointerShape {
         TRIANGLE, DIAMOND
+    }
+
+    public enum LabelDisplayType {
+        ICON, TEXT, CUSTOM
     }
 }

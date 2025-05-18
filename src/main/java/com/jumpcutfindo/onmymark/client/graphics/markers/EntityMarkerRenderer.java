@@ -14,23 +14,23 @@ import net.minecraft.util.math.Vec3d;
 public class EntityMarkerRenderer extends MarkerRenderer {
     private final EntityMarker entityMarker;
 
-    private LabelType labelType;
+    private final LabelDisplayType labelDisplayType;
 
     public EntityMarkerRenderer(MinecraftClient client, EntityMarker entityMarker) {
         super(client, entityMarker, PointerShape.TRIANGLE);
 
         this.entityMarker = entityMarker;
 
-        this.determineLabelType();
+        this.labelDisplayType = this.determineLabelType();
     }
 
-    private void determineLabelType() {
+    private LabelDisplayType determineLabelType() {
         Entity entity = entityMarker.entity();
 
         if (entity instanceof VehicleEntity || entity instanceof ItemEntity) {
-            labelType = LabelType.ICON;
+            return LabelDisplayType.ICON;
         } else {
-            labelType = LabelType.TEXT;
+            return LabelDisplayType.TEXT;
         }
     }
 
@@ -80,6 +80,11 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    protected LabelDisplayType getLabelDisplayType() {
+        return this.labelDisplayType;
+    }
+
+    @Override
     boolean isMoving() {
         if (this.entityMarker.liveness() == Marker.Liveness.DORMANT) {
             return false;
@@ -106,22 +111,8 @@ public class EntityMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
-    public int getLabelWidth() {
-        return this.labelType == LabelType.ICON ? (int) MarkerRenderer.ICON_SIZE : super.getLabelWidth();
-    }
-
-    @Override
-    public int getLabelHeight() {
-        return this.labelType == LabelType.ICON ? (int) MarkerRenderer.ICON_SIZE : super.getLabelHeight();
-    }
-
-    @Override
     public long getLifetimeMs() {
         // TODO: Change to server configurable value
         return 120000L;
-    }
-
-    public enum LabelType {
-        TEXT, ICON
     }
 }

@@ -10,26 +10,33 @@ import net.minecraft.util.math.Vec3d;
 public class BlockMarkerRenderer extends MarkerRenderer {
     private final BlockMarker blockMarker;
 
+    private final boolean hasIcon;
+
     public BlockMarkerRenderer(MinecraftClient client, BlockMarker blockMarker) {
         super(client, blockMarker, PointerShape.TRIANGLE);
 
         this.blockMarker = blockMarker;
+
+        ItemStack blockItem = this.blockMarker.block().asItem().getDefaultStack();
+        this.hasIcon = !blockItem.isEmpty();
     }
 
     @Override
     public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
         ItemStack blockItem = this.blockMarker.block().asItem().getDefaultStack();
-        DrawUtils.drawItemOutlined(drawContext, blockItem, (int) screenX, (int) screenY, this.getPointerColor());
+
+        if (blockItem.isEmpty()) {
+            super.drawLabel(drawContext, screenX, screenY, isOutlined);
+        } else {
+
+            DrawUtils.drawItemOutlined(drawContext, blockItem, (int) screenX, (int) screenY, this.getPointerColor());
+        }
+
     }
 
     @Override
-    public int getLabelWidth() {
-        return (int) MarkerRenderer.ICON_SIZE;
-    }
-
-    @Override
-    public int getLabelHeight() {
-        return (int) MarkerRenderer.ICON_SIZE;
+    protected LabelDisplayType getLabelDisplayType() {
+        return this.hasIcon ? LabelDisplayType.ICON : LabelDisplayType.TEXT;
     }
 
     @Override

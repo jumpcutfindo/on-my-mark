@@ -34,8 +34,18 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
     }
 
     @Override
+    protected LabelDisplayType getLabelDisplayType() {
+        return LabelDisplayType.CUSTOM;
+    }
+
+    @Override
     public int getLabelWidth() {
         return client.textRenderer.getWidth(this.getName()) + PLAYER_HEAD_SIZE + 4;
+    }
+
+    @Override
+    public int getLabelHeight() {
+        return client.textRenderer.fontHeight;
     }
 
     @Override
