@@ -3,10 +3,11 @@
 	"package": "com.jumpcutfindo.onmymark.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"VehicleEntityMixin",
 		"AbstractBlockMixin",
+		"BlockMixin",
 		"EntityMixin",
-		"ItemScattererMixin"
+		"ItemScattererMixin",
+		"VehicleEntityMixin"
 	],
 	"client": [
 		"DrawContextMixin",
