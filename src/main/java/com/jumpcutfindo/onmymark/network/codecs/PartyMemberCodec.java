@@ -36,7 +36,11 @@ public class PartyMemberCodec implements PacketCodec<PacketByteBuf, PartyMember>
         buf.writeBoolean(partyMember.isPartyLeader());
         buf.writeEnumConstant(partyMember.state());
 
-        GameProfile gameProfile = ((ServerPartyMember) partyMember).player().getGameProfile();
+        GameProfile gameProfile = new GameProfile(partyMember.id(), partyMember.displayName());
+        if (partyMember instanceof ServerPartyMember) {
+            gameProfile = ((ServerPartyMember) partyMember).player().getGameProfile();
+        }
+
         PacketCodecs.PROPERTY_MAP.encode(buf, gameProfile.getProperties());
     }
 }
