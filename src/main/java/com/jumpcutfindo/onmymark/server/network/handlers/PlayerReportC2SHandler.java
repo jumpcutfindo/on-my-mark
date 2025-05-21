@@ -12,7 +12,7 @@ import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.server.party.exceptions.PartyNotFoundException;
-import net.minecraft.server.world.ServerWorld;
+import com.jumpcutfindo.onmymark.utils.StringUtils;
 import net.minecraft.text.Text;
 
 public class PlayerReportC2SHandler implements ServerPacketHandler<PlayerReportC2SPacket> {
@@ -24,13 +24,20 @@ public class PlayerReportC2SHandler implements ServerPacketHandler<PlayerReportC
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
-            ServerWorld world = context.player().getServerWorld();
 
             PlayerMarker playerMarker = new PlayerMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), context.player().getUuid(), context.player().getDisplayName().getString(), context.player().getPos());
             serverMarkerManager.addMarker(party, playerMarker);
 
             for (ServerPartyMember partyMember : party.partyMembers()) {
                 ServerNetworkSender.sendPlayerMarker(partyMember.player(), markerPartyMember, playerMarker);
+                ServerNetworkSender.sendMessageToPlayer(
+                        partyMember.player(),
+                        Text.translatable(
+                                "onmymark.action.playerReport.playerLocation",
+                                markerPartyMember.displayName(),
+                                StringUtils.coordinatesAsFancyText(context.player().getX(), context.player().getY(), context.player().getZ(), markerPartyMember.color())
+                        )
+                );
             }
         } catch (PartyNotFoundException e) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));

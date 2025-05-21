@@ -38,6 +38,7 @@
   "onmymark.action.placeMarker.notInParty": "You need to be in a party before you can place a marker",
 
   "onmymark.action.playerReport.notInParty": "You need to be in a party before you can report your location",
+  "onmymark.action.playerReport.playerLocation": "%s reported in at %s",
 
   "onmymark.action.onCreateParty": "Created party \"%s\"",
   "onmymark.action.onLeaveParty.self": "You have left the party",
