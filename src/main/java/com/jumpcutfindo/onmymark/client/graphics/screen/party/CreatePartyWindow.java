@@ -24,14 +24,14 @@ public class CreatePartyWindow extends OnMyMarkWindow {
     private final OnMyMarkButton submitButton;
 
     public CreatePartyWindow(OnMyMarkScreen screen) {
-        super(screen, Text.translatable("onmymark.menu.createParty.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
+        super(screen, Text.translatable("gui.onmymark.createParty.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // Create text field
-        this.partyNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("onmymark.menu.createParty.textWidget"));
+        this.partyNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("gui.onmymark.createParty.textWidget"));
         this.partyNameField.setMaxLength(20);
         this.partyNameField.setEditableColor(16777215);
 
-        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.createParty.submitButton"), (widget) -> {
+        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("gui.onmymark.createParty.submitButton"), (widget) -> {
             this.createParty();
             this.screen.setActiveWindow(null);
         });
@@ -48,7 +48,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
         super.renderContent(context, mouseX, mouseY);
 
         // Party name entry
-        context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.createParty.partyNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.createParty.partyNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
 
         this.partyNameField.setX(x + 7);
         this.partyNameField.setY(y + 36);

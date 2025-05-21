@@ -36,16 +36,16 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     private final SkinTextures inviterSkinTextures;
 
     public PartyInviteWindow(OnMyMarkScreen screen, PartyInvite<ClientPartyMember> partyInvite) {
-        super(screen, Text.translatable("onmymark.menu.partyInvite.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
+        super(screen, Text.translatable("gui.onmymark.partyInvite.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         this.partyInvite = partyInvite;
 
-        this.acceptButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.partyInvite.acceptButton"), (widget) -> {
+        this.acceptButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("gui.onmymark.partyInvite.acceptButton"), (widget) -> {
             this.respondToInvitation(true);
             this.screen.setActiveWindow(null);
         });
 
-        this.rejectButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.partyInvite.rejectButton"), (widget) -> {
+        this.rejectButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("gui.onmymark.partyInvite.rejectButton"), (widget) -> {
             this.respondToInvitation(false);
             this.screen.setActiveWindow(null);
         });
@@ -77,7 +77,7 @@ public class PartyInviteWindow extends OnMyMarkWindow {
         int inviterNameWidth = textRenderer.getWidth(inviterName);
         context.drawText(this.screen.getTextRenderer(), inviterName, (x + (WINDOW_WIDTH - inviterNameWidth) / 2), (y + 40), Colors.BLACK, false);
 
-        Text invitationMessage = Text.translatable("onmymark.menu.partyInvite.invitationMessage");
+        Text invitationMessage = Text.translatable("gui.onmymark.partyInvite.invitationMessage");
 
         List<OrderedText> lines = textRenderer.wrapLines(invitationMessage, WINDOW_WIDTH - 24);
         int lineOffset = 54;

@@ -32,7 +32,7 @@ public class PlayerReportInputHandler extends InputHandler {
         }
 
         if (!this.clientPartyManager.isInParty()) {
-            client.player.sendMessage(Text.translatable("onmymark.action.playerReport.notInParty"), false);
+            client.player.sendMessage(Text.translatable("text.action.onmymark.playerReport.notInParty"), false);
             return false;
         }
 

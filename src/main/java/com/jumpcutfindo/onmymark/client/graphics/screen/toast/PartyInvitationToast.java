@@ -40,8 +40,8 @@ public class PartyInvitationToast implements Toast {
     private Visibility visibility = Visibility.HIDE;
 
     private PartyInvitationToast(PartyInvite<ClientPartyMember> partyInvite) {
-        this.title = Text.translatable("onmymark.toast.partyInvite.title", partyInvite.from().displayName());
-        this.description = Text.translatable("onmymark.toast.partyInvite.description");
+        this.title = Text.translatable("gui.toast.onmymark.partyInvite.title", partyInvite.from().displayName());
+        this.description = Text.translatable("gui.toast.onmymark.partyInvite.description");
 
         TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         this.lines = textRenderer.wrapLines(description, 160);
@@ -52,6 +52,24 @@ public class PartyInvitationToast implements Toast {
                 134,
                 30 + Math.max(textRenderer.getWidth(title), description == null ? 0 : descriptionLength)
         );
+    }
+
+    public static void add(ToastManager manager, PartyInvite<ClientPartyMember> partyInvite) {
+        manager.add(new PartyInvitationToast(partyInvite));
+    }
+
+    public static void show(ToastManager manager, PartyInvite<ClientPartyMember> partyInvite) {
+        PartyInvitationToast PartyInvitationToast = manager.getToast(PartyInvitationToast.class, TOAST_ID);
+        if (PartyInvitationToast == null) {
+            add(manager, partyInvite);
+        }
+    }
+
+    public static void hide(ToastManager manager) {
+        PartyInvitationToast PartyInvitationToast = manager.getToast(PartyInvitationToast.class, TOAST_ID);
+        if (PartyInvitationToast != null) {
+            PartyInvitationToast.hide();
+        }
     }
 
     @Override
@@ -93,24 +111,6 @@ public class PartyInvitationToast implements Toast {
 
         for (int i = 0; i < this.lines.size(); i++) {
             context.drawText(textRenderer, this.lines.get(i), 26, 18 + i * 12, Colors.BLACK, false);
-        }
-    }
-
-    public static void add(ToastManager manager, PartyInvite<ClientPartyMember> partyInvite) {
-        manager.add(new PartyInvitationToast(partyInvite));
-    }
-
-    public static void show(ToastManager manager, PartyInvite<ClientPartyMember> partyInvite) {
-        PartyInvitationToast PartyInvitationToast = manager.getToast(PartyInvitationToast.class, TOAST_ID);
-        if (PartyInvitationToast == null) {
-            add(manager, partyInvite);
-        }
-    }
-
-    public static void hide(ToastManager manager) {
-        PartyInvitationToast PartyInvitationToast = manager.getToast(PartyInvitationToast.class, TOAST_ID);
-        if (PartyInvitationToast != null) {
-            PartyInvitationToast.hide();
         }
     }
 }

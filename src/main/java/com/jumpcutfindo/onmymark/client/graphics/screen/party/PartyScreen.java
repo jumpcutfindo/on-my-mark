@@ -39,18 +39,18 @@ public class PartyScreen extends OnMyMarkScreen {
         // Recreate the relevant views
         this.partyMemberListView = new PartyMemberListView(this, this.party, x, y);
 
-        this.createPartyButton = new IconButton(this, 0, 16, this::onCreateParty, Text.translatable("onmymark.menu.createParty.tooltip"));
-        this.leavePartyButton = new IconButton(this, 16, 16, this::onLeaveParty, Text.translatable("onmymark.menu.leaveParty.tooltip"));
-        this.invitePlayerButton = new IconButton(this, 32, 16, this::onInvitePlayer, Text.translatable("onmymark.menu.invitePlayer.tooltip"));
+        this.createPartyButton = new IconButton(this, 0, 16, this::onCreateParty, Text.translatable("gui.onmymark.createParty.tooltip"));
+        this.leavePartyButton = new IconButton(this, 16, 16, this::onLeaveParty, Text.translatable("gui.onmymark.leaveParty.tooltip"));
+        this.invitePlayerButton = new IconButton(this, 32, 16, this::onInvitePlayer, Text.translatable("gui.onmymark.invitePlayer.tooltip"));
         this.kickPlayerButton = new IconButton(this, 48, 16, () -> {
             List<PartyMemberListItem> selectedPartyMembers = this.partyMemberListView.getSelectedItems();
             if (selectedPartyMembers.isEmpty()) {
                 return;
             }
             this.onKickPlayer(selectedPartyMembers.getFirst().getItem());
-        }, Text.translatable("onmymark.menu.kickPlayer.tooltip"));
+        }, Text.translatable("gui.onmymark.kickPlayer.tooltip"));
 
-        this.selectMarkerColorButton = new IconButton(this, 64, 16, this::onSelectMarkerColor, Text.translatable("onmymark.menu.selectMarkerColor.tooltip"));
+        this.selectMarkerColorButton = new IconButton(this, 64, 16, this::onSelectMarkerColor, Text.translatable("gui.onmymark.selectMarkerColor.tooltip"));
 
         // If there is a pending invite, we show immediately
         PartyInvite<ClientPartyMember> existingPartyInvite = OnMyMarkClient.INSTANCE.clientPartyManager().partyInvite();

@@ -44,6 +44,23 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
                 );
     }
 
+    /**
+     * Derived from PlayerListEntry#texturesSupplier
+     */
+    private static Supplier<SkinTextures> texturesSupplier(GameProfile profile) {
+        MinecraftClient minecraftClient = MinecraftClient.getInstance();
+        PlayerSkinProvider playerSkinProvider = minecraftClient.getSkinProvider();
+
+        CompletableFuture<Optional<SkinTextures>> completableFuture = playerSkinProvider.fetchSkinTextures(profile);
+        boolean bl = !minecraftClient.uuidEquals(profile.getId());
+        SkinTextures skinTextures = DefaultSkinHelper.getSkinTextures(profile);
+
+        return () -> {
+            SkinTextures skinTextures2 = completableFuture.getNow(Optional.empty()).orElse(skinTextures);
+            return bl && !skinTextures2.secure() ? skinTextures : skinTextures2;
+        };
+    }
+
     @Override
     public void render(DrawContext context, int x, int y, int mouseX, int mouseY) {
         this.renderBackground(context, x, y, mouseX, mouseY);
@@ -81,7 +98,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
             ) {
                 context.draw();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                context.drawTooltip(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.party.partyLeader"), mouseX, mouseY);
+                context.drawTooltip(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.party.partyLeader"), mouseX, mouseY);
             }
         }
 
@@ -97,23 +114,5 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     @Override
     public boolean canSelect() {
         return !this.item.isPartyLeader();
-    }
-
-    /**
-     * Derived from PlayerListEntry#texturesSupplier
-     *
-     */
-    private static Supplier<SkinTextures> texturesSupplier(GameProfile profile) {
-        MinecraftClient minecraftClient = MinecraftClient.getInstance();
-        PlayerSkinProvider playerSkinProvider = minecraftClient.getSkinProvider();
-
-        CompletableFuture<Optional<SkinTextures>> completableFuture = playerSkinProvider.fetchSkinTextures(profile);
-        boolean bl = !minecraftClient.uuidEquals(profile.getId());
-        SkinTextures skinTextures = DefaultSkinHelper.getSkinTextures(profile);
-
-        return () -> {
-            SkinTextures skinTextures2 = completableFuture.getNow(Optional.empty()).orElse(skinTextures);
-            return bl && !skinTextures2.secure() ? skinTextures : skinTextures2;
-        };
     }
 }

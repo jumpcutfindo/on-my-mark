@@ -1,10 +1,10 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
-import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.KickPlayerC2SPacket;
+import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
-import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.server.party.exceptions.InvalidPartyPermissionsException;
@@ -26,7 +26,7 @@ public class KickPlayerC2SHandler implements ServerPacketHandler<KickPlayerC2SPa
         ServerPlayerEntity otherPlayer = ServerEntityUtils.getPlayerById(context, payload.playerId());
 
         if (otherPlayer == null) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.playerNotFound"));
             return;
         }
 
@@ -37,19 +37,19 @@ public class KickPlayerC2SHandler implements ServerPacketHandler<KickPlayerC2SPa
             // Remove player's markers
             ServerNetworkSender.removeMarker(party, otherPlayer);
 
-            ServerNetworkSender.sendMessageToPlayer(otherPlayer, Text.translatable("onmymark.action.onKickFromParty.self"));
+            ServerNetworkSender.sendMessageToPlayer(otherPlayer, Text.translatable("text.action.onmymark.onKickFromParty.self"));
             ServerNetworkSender.removePartyInfo(otherPlayer);
 
-            ServerNetworkSender.sendMessageToParty(party, Text.translatable("onmymark.action.onKickFromParty.other", otherPlayer.getName()));
+            ServerNetworkSender.sendMessageToParty(party, Text.translatable("text.action.onmymark.onKickFromParty.other", otherPlayer.getName()));
             ServerNetworkSender.sendPartyInfo(party);
         } catch (PartyNotFoundException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidParty"));
         } catch (RemovePartyLeaderException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.removePartyLeader"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.removePartyLeader"));
         } catch (PlayerNotInPartyException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.playerNotFound"));
         } catch (InvalidPartyPermissionsException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidPermissions"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidPermissions"));
         }
     }
 }

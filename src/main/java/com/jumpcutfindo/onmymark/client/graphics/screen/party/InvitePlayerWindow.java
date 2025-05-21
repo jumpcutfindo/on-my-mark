@@ -24,14 +24,14 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
     private final OnMyMarkButton submitButton;
 
     public InvitePlayerWindow(OnMyMarkScreen screen) {
-        super(screen, Text.translatable("onmymark.menu.invitePlayer.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
+        super(screen, Text.translatable("gui.onmymark.invitePlayer.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         // Create text field
-        this.playerNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("onmymark.menu.invitePlayer.textWidget"));
+        this.playerNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("gui.onmymark.invitePlayer.textWidget"));
         this.playerNameField.setMaxLength(20);
         this.playerNameField.setEditableColor(16777215);
 
-        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.invitePlayer.submitButton"), (widget) -> {
+        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("gui.onmymark.invitePlayer.submitButton"), (widget) -> {
             this.createParty();
             this.screen.setActiveWindow(null);
         });
@@ -50,7 +50,7 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
         super.renderContent(context, mouseX, mouseY);
 
         // Party name entry
-        context.drawText(this.screen.getTextRenderer(), Text.translatable("onmymark.menu.invitePlayer.playerNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.invitePlayer.playerNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
 
         this.playerNameField.setX(x + 7);
         this.playerNameField.setY(y + 36);

@@ -34,11 +34,11 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     private final ColorSliderWithField redWidget, greenWidget, blueWidget;
 
     public MarkerColorWindow(OnMyMarkScreen screen, int initialColor) {
-        super(screen, Text.translatable("onmymark.menu.selectMarkerColor.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
+        super(screen, Text.translatable("gui.onmymark.selectMarkerColor.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
 
         this.initialColor = initialColor;
 
-        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("onmymark.menu.selectMarkerColor.submitButton"), (widget) -> {
+        this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("gui.onmymark.selectMarkerColor.submitButton"), (widget) -> {
             this.screen.setActiveWindow(null);
             this.onSelectMarkerColor();
         });
@@ -87,6 +87,28 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         return ColorHelper.getArgb(this.redWidget.getColorValue(), this.greenWidget.getColorValue(), this.blueWidget.getColorValue());
     }
 
+    private enum SliderType {
+        RED("gui.onmymark.selectMarkerColor.red", ColorHelper::getRed),
+        GREEN("gui.onmymark.selectMarkerColor.green", ColorHelper::getGreen),
+        BLUE("gui.onmymark.selectMarkerColor.blue", ColorHelper::getBlue);
+
+        private final String labelKey;
+        private final Function<Integer, Integer> valueFromColor;
+
+        SliderType(String labelKey, Function<Integer, Integer> valueFromColor) {
+            this.labelKey = labelKey;
+            this.valueFromColor = valueFromColor;
+        }
+
+        Text getLabel() {
+            return Text.translatable(labelKey);
+        }
+
+        int colorValue(int color) {
+            return valueFromColor.apply(color);
+        }
+    }
+
     private static class ColorSliderWithField {
         public static final int SLIDER_WIDTH = 128, SLIDER_HEIGHT = 18, FIELD_WIDTH = 36;
 
@@ -130,7 +152,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         }
 
         public void onFieldChanged(String value) {
-             if (!COLOR_VALUE_PREDICATE.test(value)) {
+            if (!COLOR_VALUE_PREDICATE.test(value)) {
                 return;
             }
 
@@ -157,28 +179,6 @@ public class MarkerColorWindow extends OnMyMarkWindow {
 
         public int getColorValue() {
             return this.slider.getColorValue();
-        }
-    }
-
-    private enum SliderType {
-        RED("onmymark.menu.selectMarkerColor.red", ColorHelper::getRed),
-        GREEN("onmymark.menu.selectMarkerColor.green", ColorHelper::getGreen),
-        BLUE("onmymark.menu.selectMarkerColor.blue", ColorHelper::getBlue);
-
-        private final String labelKey;
-        private final Function<Integer, Integer> valueFromColor;
-
-        SliderType(String labelKey, Function<Integer, Integer> valueFromColor) {
-            this.labelKey = labelKey;
-            this.valueFromColor = valueFromColor;
-        }
-
-        Text getLabel() {
-            return Text.translatable(labelKey);
-        }
-
-        int colorValue(int color) {
-            return valueFromColor.apply(color);
         }
     }
 }

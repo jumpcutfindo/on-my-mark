@@ -4,7 +4,6 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.MarkEntityC2SPacket;
 import com.jumpcutfindo.onmymark.party.Party;
-import com.jumpcutfindo.onmymark.server.party.exceptions.PartyNotFoundException;
 import com.jumpcutfindo.onmymark.server.marker.ServerMarkerManager;
 import com.jumpcutfindo.onmymark.server.marker.exceptions.UnhandledMarkerException;
 import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
@@ -12,6 +11,7 @@ import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
+import com.jumpcutfindo.onmymark.server.party.exceptions.PartyNotFoundException;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -43,7 +43,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
                 ServerNetworkSender.sendEntityMarker(partyMember.player(), markerPartyMember, entityMarker);
             }
         } catch (PartyNotFoundException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidParty"));
         } catch (UnhandledMarkerException e) {
             OnMyMarkMod.LOGGER.error("Unhandled marker type");
         }

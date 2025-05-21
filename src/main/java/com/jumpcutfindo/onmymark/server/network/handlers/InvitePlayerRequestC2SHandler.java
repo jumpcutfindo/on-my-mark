@@ -1,10 +1,10 @@
 package com.jumpcutfindo.onmymark.server.network.handlers;
 
-import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.InvitePlayerRequestC2SPacket;
+import com.jumpcutfindo.onmymark.party.Party;
+import com.jumpcutfindo.onmymark.server.network.ServerNetworkSender;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketContext;
 import com.jumpcutfindo.onmymark.server.network.ServerPacketHandler;
-import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyManager;
 import com.jumpcutfindo.onmymark.server.party.ServerPartyMember;
 import com.jumpcutfindo.onmymark.server.party.exceptions.AlreadyInPartyException;
@@ -25,7 +25,7 @@ public class InvitePlayerRequestC2SHandler implements ServerPacketHandler<Invite
         ServerPlayerEntity invitee = ServerEntityUtils.getPlayerByName(context, payload.playerName());
 
         if (invitee == null) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.playerNotFound"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.playerNotFound"));
             ServerNetworkSender.sendPlayerInviteResponse(context.player(), false);
             return;
         }
@@ -38,22 +38,22 @@ public class InvitePlayerRequestC2SHandler implements ServerPacketHandler<Invite
 
             // Inform the requester of the result
             ServerNetworkSender.sendPlayerInviteResponse(context.player(), true);
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.onInviteToParty.successful", invitee.getName().getLiteralString()));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.onInviteToParty.successful", invitee.getName().getLiteralString()));
 
             // Inform invitee of invitation
             ServerNetworkSender.sendPlayerInvitation(invitee, party);
-            ServerNetworkSender.sendMessageToPlayer(invitee, Text.translatable("onmymark.action.onInviteToParty.gotInvited", context.player().getName()));
+            ServerNetworkSender.sendMessageToPlayer(invitee, Text.translatable("text.action.onmymark.onInviteToParty.gotInvited", context.player().getName()));
         } catch (PartyNotFoundException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidParty"));
             ServerNetworkSender.sendPlayerInviteResponse(context.player(), false);
         } catch (InvalidPartyPermissionsException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidPermissions"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidPermissions"));
             ServerNetworkSender.sendPlayerInviteResponse(context.player(), false);
         } catch (ExistingInviteException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.existingInvite"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.existingInvite"));
             ServerNetworkSender.sendPlayerInviteResponse(context.player(), false);
         } catch (AlreadyInPartyException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.alreadyInParty"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.alreadyInParty"));
             ServerNetworkSender.sendPlayerInviteResponse(context.player(), false);
         }
     }

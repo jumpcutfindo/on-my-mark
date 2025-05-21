@@ -43,7 +43,7 @@ public class PlaceMarkerInputHandler extends InputHandler {
         }
 
         if (!this.clientPartyManager.isInParty()) {
-            client.player.sendMessage(Text.translatable("onmymark.action.placeMarker.notInParty"), false);
+            client.player.sendMessage(Text.translatable("text.action.onmymark.placeMarker.notInParty"), false);
             return false;
         }
 

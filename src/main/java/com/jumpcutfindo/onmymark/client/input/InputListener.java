@@ -14,28 +14,28 @@ import org.lwjgl.glfw.GLFW;
 public class InputListener {
     public static final KeyBinding GUI_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
-                    "onmymark.keybind.party",
+                    "key.onmymark.party",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_O,
-                    "category.onmymark.keybinds"
+                    "key.categories.onmymark.onmymark"
             )
     );
 
     private static final KeyBinding MARK_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
-                    "onmymark.keybind.mark",
+                    "key.onmymark.mark",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_R,
-                    "category.onmymark.keybinds"
+                    "key.categories.onmymark.onmymark"
             )
     );
 
     private static final KeyBinding PLAYER_REPORT_BINDING = KeyBindingHelper.registerKeyBinding(
             new KeyBinding(
-                    "onmymark.keybind.playerReport",
+                    "key.onmymark.playerReport",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_U,
-                    "category.onmymark.keybinds"
+                    "key.categories.onmymark.onmymark"
             )
     );
 

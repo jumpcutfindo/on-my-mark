@@ -30,14 +30,14 @@ public class UpdateColorC2SHandler implements ServerPacketHandler<UpdateColorC2S
             // Send a message indicating the update
             ServerNetworkSender.sendMessageToParty(partyMember.currentParty(),
                     Text.translatable(
-                            "onmymark.action.onChangeColor",
+                            "text.action.onmymark.onChangeColor",
                             Text.literal(partyMember.displayName()),
                             Text.literal(StringUtils.intToHexColor(oldColor)).styled(style -> style.withColor(oldColor)),
                             Text.literal(StringUtils.intToHexColor(payload.color())).styled(style -> style.withColor(payload.color()))
                     )
             );
         } catch (PartyNotFoundException e) {
-            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("onmymark.action.exception.invalidParty"));
+            ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidParty"));
         }
     }
 }

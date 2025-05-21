@@ -1,18 +1,18 @@
 {
   "place_marker": {
-    "subtitle": "onmymark.sound.placeMarker",
+    "subtitle": "subtitles.onmymark.placeMarker",
     "sounds": [
       "onmymark:place_marker"
     ]
   },
   "other_marker": {
-    "subtitle": "onmymark.sound.otherMarker",
+    "subtitle": "subtitles.onmymark.otherMarker",
     "sounds": [
       "onmymark:other_marker"
     ]
   },
   "player_report": {
-    "subtitle": "onmymark.sound.playerReport",
+    "subtitle": "subtitles.onmymark.playerReport",
     "sounds": [
       "onmymark:player_report"
     ]
