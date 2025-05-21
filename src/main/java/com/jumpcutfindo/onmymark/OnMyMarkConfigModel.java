@@ -1,9 +1,6 @@
 package com.jumpcutfindo.onmymark;
 
-import com.jumpcutfindo.onmymark.client.graphics.markers.BlockMarkerRenderer;
-import com.jumpcutfindo.onmymark.client.graphics.markers.EntityMarkerRenderer;
-import com.jumpcutfindo.onmymark.client.graphics.markers.MarkerRenderer;
-import com.jumpcutfindo.onmymark.client.graphics.markers.PlayerMarkerRenderer;
+import com.jumpcutfindo.onmymark.client.graphics.markers.*;
 import io.wispforest.owo.config.Option;
 import io.wispforest.owo.config.annotation.*;
 
@@ -12,13 +9,13 @@ import io.wispforest.owo.config.annotation.*;
 public class OnMyMarkConfigModel {
 
     @SectionHeader("markerDrawingSection")
-    public MarkerRenderer.ClampType markerClampType = MarkerRenderer.DEFAULT_CLAMP_TYPE;
+    public ClampType markerClampType = ClampType.DEFAULT_CLAMP_TYPE;
 
     @RangeConstraint(min = 0, max = 100)
-    public int ovalClampPadding = MarkerRenderer.DEFAULT_OVAL_CLAMP_PADDING;
+    public int ovalClampPadding = ClampType.DEFAULT_OVAL_CLAMP_PADDING;
 
     @RangeConstraint(min = 256, max = 768)
-    public int circleClampDiameter = MarkerRenderer.DEFAULT_OVAL_CLAMP_PADDING;
+    public int circleClampDiameter = ClampType.DEFAULT_OVAL_CLAMP_PADDING;
 
     @SectionHeader("markerPointerSection")
 

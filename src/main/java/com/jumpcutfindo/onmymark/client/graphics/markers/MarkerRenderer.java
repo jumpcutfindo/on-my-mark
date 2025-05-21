@@ -16,8 +16,6 @@ import java.time.Instant;
 
 public abstract class MarkerRenderer {
     public static final int DEFAULT_POINTER_WIDTH = 6, DEFAULT_POINTER_HEIGHT = 6;
-    public static final ClampType DEFAULT_CLAMP_TYPE = ClampType.OVAL;
-    public static final int DEFAULT_OVAL_CLAMP_PADDING = 50, DEFAULT_CIRCLE_CLAMP_DIAMETER = 100;
     public static final float DEFAULT_LABEL_SCALE = 0.65F;
 
     public static final float ICON_SIZE = 16F;
@@ -355,15 +353,4 @@ public abstract class MarkerRenderer {
 
     public abstract long getLifetimeMs();
 
-    public enum ClampType {
-        CIRCLE, OVAL
-    }
-
-    public enum PointerShape {
-        TRIANGLE, DIAMOND
-    }
-
-    public enum LabelDisplayType {
-        ICON, TEXT, CUSTOM
-    }
 }
