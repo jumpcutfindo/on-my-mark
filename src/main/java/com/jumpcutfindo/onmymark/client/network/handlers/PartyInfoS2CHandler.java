@@ -16,23 +16,27 @@ public class PartyInfoS2CHandler implements ClientPacketHandler<PartyInfoS2CPack
     @Override
     public void handle(PartyInfoS2CPacket payload, ClientPacketContext context) {
         ClientPartyManager partyManager = context.partyManager();
-        Party<ClientPartyMember> party = payload.toParty();
+        Party<ClientPartyMember> newParty = payload.toParty();
 
-        partyManager.setParty(party);
+        this.updateMarkerOwners(context, newParty);
 
+        partyManager.setParty(newParty);
+
+        // Update screen if the player is looking
+        if (context.client().currentScreen instanceof PartyScreen partyScreen) {
+            partyScreen.setParty(newParty);
+        }
+    }
+
+    private void updateMarkerOwners(ClientPacketContext context, Party<ClientPartyMember> newParty) {
         // Update marker owners
         ClientMarkerManager markerManager = context.markerManager();
 
         for (Marker marker : markerManager.markers()) {
             UUID ownerId = marker.owner().id();
 
-            ClientPartyMember newMember = party.getMemberWithId(ownerId);
+            ClientPartyMember newMember = newParty.getMemberWithId(ownerId);
             marker.setOwner(newMember);
-        }
-
-        // Update screen if the player is looking
-        if (context.client().currentScreen instanceof PartyScreen partyScreen) {
-            partyScreen.setParty(party);
         }
     }
 }
