@@ -23,7 +23,7 @@
   "onmymark.menu.invitePlayer.textWidget": "Player name field",
   "onmymark.menu.invitePlayer.submitButton": "Invite",
   "onmymark.menu.partyInvite.windowTitle": "Party invitation",
-  "onmymark.menu.partyInvite.invitationMessage": "%s would like you to join their party %s",
+  "onmymark.menu.partyInvite.invitationMessage": "invites you to join their party",
   "onmymark.menu.partyInvite.acceptButton": "Accept",
   "onmymark.menu.partyInvite.rejectButton": "Reject",
   "onmymark.menu.selectMarkerColor.windowTitle": "Select marker color",

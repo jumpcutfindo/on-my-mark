@@ -8,11 +8,17 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButto
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.util.SkinTextures;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
@@ -22,10 +28,12 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     public static final Identifier TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/party_invitation_window.png");
     public static final int TEXTURE_WIDTH = 256, TEXTURE_HEIGHT = 256;
 
-    public static final int WINDOW_WIDTH = 160, WINDOW_HEIGHT = 92;
+    public static final int WINDOW_WIDTH = 160, WINDOW_HEIGHT = 128;
     private final OnMyMarkButton acceptButton, rejectButton;
 
     private final PartyInvite<ClientPartyMember> partyInvite;
+
+    private final SkinTextures inviterSkinTextures;
 
     public PartyInviteWindow(OnMyMarkScreen screen, PartyInvite<ClientPartyMember> partyInvite) {
         super(screen, Text.translatable("onmymark.menu.partyInvite.windowTitle"), WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -41,6 +49,12 @@ public class PartyInviteWindow extends OnMyMarkWindow {
             this.respondToInvitation(false);
             this.screen.setActiveWindow(null);
         });
+
+        this.inviterSkinTextures = MinecraftClient.getInstance()
+                .getSkinProvider()
+                .getSkinTextures(
+                        partyInvite.from().gameProfile()
+                );
     }
 
     @Override
@@ -51,29 +65,40 @@ public class PartyInviteWindow extends OnMyMarkWindow {
 
     @Override
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
-        super.renderContent(context, mouseX, mouseY);
-        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
+        TextRenderer textRenderer = this.screen.getTextRenderer();
 
-        context.drawWrappedText(
-                this.screen.getTextRenderer(),
-                Text.translatable(
-                        "onmymark.menu.partyInvite.invitationMessage",
-                        this.getInviterNameStyled(partyInvite.from().displayName()), this.getPartyNameStyled(partyInvite.party().partyName())),
-                (x + this.titleX),
-                (y + 25),
-                WINDOW_WIDTH,
-                0x404040,
-                false
-        );
+        context.getMatrices().push();
+        context.getMatrices().scale(2F, 2F, 1.0F);
+
+        PlayerSkinDrawer.draw(context, this.inviterSkinTextures.texture(), (x + (WINDOW_WIDTH - 24) / 2) / 2, (y + 10) / 2, 12, false, false, -1);
+        context.getMatrices().pop();
+
+        Text inviterName = Text.literal(this.partyInvite.from().displayName()).styled(style -> style.withBold(true));
+        int inviterNameWidth = textRenderer.getWidth(inviterName);
+        context.drawText(this.screen.getTextRenderer(), inviterName, (x + (WINDOW_WIDTH - inviterNameWidth) / 2), (y + 40), Colors.BLACK, false);
+
+        Text invitationMessage = Text.translatable("onmymark.menu.partyInvite.invitationMessage");
+
+        List<OrderedText> lines = textRenderer.wrapLines(invitationMessage, WINDOW_WIDTH - 24);
+        int lineOffset = 54;
+        for (OrderedText text : lines) {
+            context.drawText(textRenderer, text, (x + (WINDOW_WIDTH - textRenderer.getWidth(text)) / 2), y + lineOffset, Colors.BLACK, false);
+            lineOffset += textRenderer.fontHeight;
+        }
+
+        Text partyName = Text.literal(this.partyInvite.party().partyName()).styled(style -> style.withBold(true).withFormatting(Formatting.BLUE));
+        int partyNameWidth = textRenderer.getWidth(partyName);
+        context.drawText(this.screen.getTextRenderer(), partyName, (x + (WINDOW_WIDTH - partyNameWidth) / 2), (y + 80), Colors.BLACK, false);
 
         // Button rendering
-        this.acceptButton.setX(x + 10);
-        this.acceptButton.setY(y + 64);
+        this.rejectButton.setX(x + 10);
+        this.rejectButton.setY(y + 98);
+        this.rejectButton.render(context, mouseX, mouseY, 0);
+
+        this.acceptButton.setX(x + 86);
+        this.acceptButton.setY(y + 98);
         this.acceptButton.render(context, mouseX, mouseY, 0);
 
-        this.rejectButton.setX(x + 86);
-        this.rejectButton.setY(y + 64);
-        this.rejectButton.render(context, mouseX, mouseY, 0);
     }
 
     @Override
