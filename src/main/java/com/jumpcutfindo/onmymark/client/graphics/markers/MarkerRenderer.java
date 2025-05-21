@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.RenderMath;
 import com.jumpcutfindo.onmymark.marker.Marker;
@@ -14,28 +15,22 @@ import org.joml.Vector4f;
 import java.time.Instant;
 
 public abstract class MarkerRenderer {
-    // TODO(preference): Implement adjusting of pointer dimensions
-    public static final float POINTER_WIDTH = 6F;
-    public static final float POINTER_HEIGHT = 6F;
+    public static final int DEFAULT_POINTER_WIDTH = 6, DEFAULT_POINTER_HEIGHT = 6;
+    public static final ClampType DEFAULT_CLAMP_TYPE = ClampType.OVAL;
+    public static final int DEFAULT_OVAL_CLAMP_PADDING = 50, DEFAULT_CIRCLE_CLAMP_DIAMETER = 100;
+    public static final float DEFAULT_LABEL_SCALE = 0.65F;
 
     public static final float ICON_SIZE = 16F;
-
+    private final Instant creationTime;
+    private final PointerShape pointerShape;
     protected MinecraftClient client;
     protected Marker marker;
-
-    private final Instant creationTime;
-    private long existTimeMs;
-
-    // TODO(preference): Implement switching of player selection between circle and oval
-    private ClampType clampType;
-    private boolean isClamped;
-    private float clampWidth, clampHeight;
-
     protected Vector4f screenPos, prevScreenPos;
     protected Vector2f screenPosNormal;
     protected double distanceFromPlayer;
-
-    private final PointerShape pointerShape;
+    private long existTimeMs;
+    private boolean isClamped;
+    private float clampWidth, clampHeight;
 
     protected MarkerRenderer(MinecraftClient client, Marker marker, PointerShape pointerShape) {
         this.client = client;
@@ -43,8 +38,6 @@ public abstract class MarkerRenderer {
 
         this.screenPos = null;
         this.prevScreenPos = null;
-
-        this.clampType = ClampType.OVAL;
 
         this.pointerShape = pointerShape;
 
@@ -56,6 +49,9 @@ public abstract class MarkerRenderer {
     }
 
     public void renderTick(DrawContext drawContext, float tickDelta, float fovDegrees, boolean isFovChanging) {
+        // Retrieve config values
+        ClampType clampType = OnMyMarkMod.CONFIG.markerClampType();
+
         this.existTimeMs = Instant.now().toEpochMilli() - creationTime.toEpochMilli();
 
         // Calculate screen position
@@ -99,11 +95,13 @@ public abstract class MarkerRenderer {
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
-        // TODO(preference): Implement radius width selection
         int windowWidth = drawContext.getScaledWindowWidth();
         int windowHeight = drawContext.getScaledWindowHeight();
 
-        float diameter = Math.min(windowWidth, windowHeight) / 3f;
+        int smaller = Math.min(windowWidth, windowHeight);
+        int larger = Math.max(windowWidth, windowHeight);
+
+        float diameter = Math.clamp(OnMyMarkMod.CONFIG.circleClampDiameter(), 256, larger);
 
         this.clampWidth = diameter;
         this.clampHeight = diameter;
@@ -114,8 +112,7 @@ public abstract class MarkerRenderer {
     }
 
     private void clampScreenPosToOval(DrawContext drawContext) {
-        // TODO (preference): Implement padding value selection
-        int padding = 50;
+        int padding = OnMyMarkMod.CONFIG.ovalClampPadding();
 
         int ellipseWidth = (drawContext.getScaledWindowWidth() - 2 * padding);
         int ellipseHeight = drawContext.getScaledWindowHeight() - 2 * padding;
@@ -147,7 +144,7 @@ public abstract class MarkerRenderer {
 
     public void draw(DrawContext drawContext) {
         // Calculate distance label variables
-        float distanceLabelScale = 0.65F; // TODO(preference): Implement adjusting of distance label size
+        float distanceLabelScale = OnMyMarkMod.CONFIG.distanceLabelScale();
         String distanceLabelString = this.getDistanceLabelString();
 
         int distanceLabelWidth = (int) ((float) client.textRenderer.getWidth(distanceLabelString) * distanceLabelScale);
@@ -155,17 +152,16 @@ public abstract class MarkerRenderer {
 
         // Calculate pointer values
         float pointerSizeModifier = existTimeMs >= 1100L ? 1.0F : (float) (Math.abs(Math.sin((((float) existTimeMs / 10F) / 20F)))) * 1.3F;
-        float pointerWidth = POINTER_WIDTH * pointerSizeModifier;
-        float pointerHeight = POINTER_HEIGHT * pointerSizeModifier;
+        float pointerWidth = OnMyMarkMod.CONFIG.markerPointerWidth() * pointerSizeModifier;
+        float pointerHeight = OnMyMarkMod.CONFIG.markerPointerHeight() * pointerSizeModifier;
         int pointerColor = ColorHelper.withAlpha((int) Math.min((float) existTimeMs / 20, 1.0F) * 255, this.getPointerColor());
 
-        // TODO(preference): Implement toggling of pointer
         if (this.isClamped) {
 
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
-            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(),  16F + distanceLabelHeight * screenPosNormal.y);
+            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 16F + distanceLabelHeight * screenPosNormal.y);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y(), true);
 
             this.drawDistanceLabel(drawContext, iconPos.x() + getLabelWidth() / 2F - distanceLabelWidth / 2F, iconPos.y() + getLabelHeight() + 4F, distanceLabelScale);
@@ -175,11 +171,11 @@ public abstract class MarkerRenderer {
             this.drawPointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
             float screenX = screenPos.x() - this.getLabelWidth() / 2F;
-            float screenY = screenPos.y() - POINTER_HEIGHT - getLabelHeight() - 4F;
+            float screenY = screenPos.y() - OnMyMarkMod.CONFIG.markerPointerHeight() - getLabelHeight() - 4F;
 
             this.drawLabel(drawContext, screenX, screenY, true);
 
-            this.drawDistanceLabel(drawContext, screenPos.x() - distanceLabelWidth / 2F, screenPos.y()  - POINTER_HEIGHT - distanceLabelHeight - 24F, distanceLabelScale);
+            this.drawDistanceLabel(drawContext, screenPos.x() - distanceLabelWidth / 2F, screenPos.y() - OnMyMarkMod.CONFIG.markerPointerHeight() - distanceLabelHeight - 24F, distanceLabelScale);
         }
 
     }
@@ -304,8 +300,8 @@ public abstract class MarkerRenderer {
         inwardNormal.negate();
 
         // Compute the center of the icon along the inward direction
-        float labelCenterX = offsetPos.x + inwardNormal.x * POINTER_WIDTH + inwardNormal.x * labelWidth / 2;
-        float labelCenterY = offsetPos.y + inwardNormal.y * POINTER_HEIGHT + inwardNormal.y * labelHeight / 2;
+        float labelCenterX = offsetPos.x + inwardNormal.x * OnMyMarkMod.CONFIG.markerPointerWidth() + inwardNormal.x * labelWidth / 2;
+        float labelCenterY = offsetPos.y + inwardNormal.y * OnMyMarkMod.CONFIG.markerPointerHeight() + inwardNormal.y * labelHeight / 2;
 
         // Compute the top-left corner to draw the icon centered at that point
         int iconX = (int) (labelCenterX - labelWidth / 2F);

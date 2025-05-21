@@ -1,37 +1,38 @@
 {
-	"schemaVersion": 1,
-	"id": "on-my-mark",
-	"version": "${version}",
-	"name": "On My Mark",
-	"description": "Find and locate your friends more easily on your mark!",
-	"authors": [
-		"jumpcutfindo"
-	],
-	"contact": {
-		"homepage": "https://github.com/jumpcutfindo"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/onmymark/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.jumpcutfindo.onmymark.server.OnMyMarkServer",
-			"com.jumpcutfindo.onmymark.server.network.ServerNetworkReceiver",
-			"com.jumpcutfindo.onmymark.server.network.ServerNetworkSender"
-		],
-		"client": [
-			"com.jumpcutfindo.onmymark.client.OnMyMarkClient",
-			"com.jumpcutfindo.onmymark.client.network.ClientNetworkReceiver",
-			"com.jumpcutfindo.onmymark.client.network.ClientNetworkSender"
-		]
-	},
-	"mixins": [
-      "onmymark.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21.4",
-		"java": ">=21",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "on-my-mark",
+  "version": "${version}",
+  "name": "On My Mark",
+  "description": "Find and locate your friends more easily on your mark!",
+  "authors": [
+    "jumpcutfindo"
+  ],
+  "contact": {
+    "homepage": "https://github.com/jumpcutfindo"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/onmymark/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jumpcutfindo.onmymark.OnMyMarkMod",
+      "com.jumpcutfindo.onmymark.server.OnMyMarkServer",
+      "com.jumpcutfindo.onmymark.server.network.ServerNetworkReceiver",
+      "com.jumpcutfindo.onmymark.server.network.ServerNetworkSender"
+    ],
+    "client": [
+      "com.jumpcutfindo.onmymark.client.OnMyMarkClient",
+      "com.jumpcutfindo.onmymark.client.network.ClientNetworkReceiver",
+      "com.jumpcutfindo.onmymark.client.network.ClientNetworkSender"
+    ]
+  },
+  "mixins": [
+    "onmymark.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
 }
