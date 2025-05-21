@@ -40,6 +40,8 @@ dependencies {
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 
     // For owo-config
+    modImplementation "io.wispforest:owo-lib:${project.owo_version}"
+    include "io.wispforest:owo-sentinel:${project.owo_version}"
     annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 }
 
