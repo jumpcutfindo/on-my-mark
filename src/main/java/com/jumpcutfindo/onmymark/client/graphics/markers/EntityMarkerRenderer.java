@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.marker.EntityMarker;
 import com.jumpcutfindo.onmymark.marker.Marker;
@@ -12,6 +13,8 @@ import net.minecraft.entity.vehicle.VehicleEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityMarkerRenderer extends MarkerRenderer {
+    public static final long DEFAULT_LIFETIME_SECS = 120L;
+
     private final EntityMarker entityMarker;
 
     private final LabelDisplayType labelDisplayType;
@@ -112,7 +115,7 @@ public class EntityMarkerRenderer extends MarkerRenderer {
 
     @Override
     public long getLifetimeMs() {
-        // TODO: Change to server configurable value
-        return 120000L;
+        long configuredLifetime = OnMyMarkMod.CONFIG.entityMarkerLifetimeSecs() * 1000;
+        return configuredLifetime <= 0L ? DEFAULT_LIFETIME_SECS * 1000 : configuredLifetime;
     }
 }

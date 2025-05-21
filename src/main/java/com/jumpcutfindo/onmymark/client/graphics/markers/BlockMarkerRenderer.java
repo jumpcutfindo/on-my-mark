@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.markers;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.marker.BlockMarker;
 import net.minecraft.client.MinecraftClient;
@@ -8,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 
 public class BlockMarkerRenderer extends MarkerRenderer {
+    public static final long DEFAULT_LIFETIME_SECS = 120L;
     private final BlockMarker blockMarker;
 
     private final boolean hasIcon;
@@ -41,8 +43,8 @@ public class BlockMarkerRenderer extends MarkerRenderer {
 
     @Override
     public long getLifetimeMs() {
-        // TODO: Change to server configurable value
-        return 120000L;
+        long configuredLifetime = OnMyMarkMod.CONFIG.blockMarkerLifetimeSecs() * 1000;
+        return configuredLifetime <= 0L ? DEFAULT_LIFETIME_SECS * 1000 : configuredLifetime;
     }
 
     @Override

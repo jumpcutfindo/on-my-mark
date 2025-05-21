@@ -11,12 +11,9 @@ import java.util.UUID;
 
 public abstract class Marker {
     private final UUID id;
-    private PartyMember owner;
     private final RegistryKey<World> worldRegistryKey;
-    // TODO: Add handling for marker expiry
-//    private final long expiryTick;
-
     private final Vec3d initialPos;
+    private PartyMember owner;
     private Vec3d lastPos;
 
     private Liveness liveness;

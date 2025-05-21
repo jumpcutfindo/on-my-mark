@@ -1,7 +1,7 @@
 package com.jumpcutfindo.onmymark.server.network;
 
-import com.jumpcutfindo.onmymark.server.OnMyMarkServer;
 import com.jumpcutfindo.onmymark.network.packets.serverbound.*;
+import com.jumpcutfindo.onmymark.server.OnMyMarkServer;
 import com.jumpcutfindo.onmymark.server.network.handlers.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
