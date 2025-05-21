@@ -1,14 +1,10 @@
 package com.jumpcutfindo.onmymark.server.party;
 
-import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
 import com.jumpcutfindo.onmymark.server.party.exceptions.*;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ColorCode;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.ColorHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +13,7 @@ import java.util.UUID;
 
 public class ServerPartyManager {
     // Derived from concrete colors
-    private static final int[] DEFAULT_COLORS = new int[] {
+    private static final int[] DEFAULT_COLORS = new int[]{
             0xFFD1D7D8, 0xFFE26200, 0xFFAA2DA0, 0xFF1F8BC9, 0xFFF0AF0D, 0xFF60AB14, 0xFFD76590, 0xFF33373B, 0xFF7E7E74, 0xFF0D7788, 0xFF651A9E, 0xFF282A90, 0xFF603919, 0xFF485B1F, 0xFF8F1A1A
     };
 
@@ -44,8 +40,6 @@ public class ServerPartyManager {
         partyLeader.setCurrentParty(party);
         partyLeader.setState(PartyMember.State.IN_PARTY);
         party.addPartyMember(partyLeader);
-
-        OnMyMarkMod.LOGGER.info("\"{}\" created a new party \"{}\"", partyLeader.displayName(), party.partyName());
 
         return party;
     }
@@ -98,8 +92,6 @@ public class ServerPartyManager {
 
         party.removePartyMember(partyMember);
         partyMember.removeCurrentParty();
-
-        OnMyMarkMod.LOGGER.info("\"{}\" left party \"{}\"", partyMember.displayName(), party.partyName());
 
         // Disband party if:
         // - Member who left is the party leader
