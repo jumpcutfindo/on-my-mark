@@ -3,7 +3,7 @@ package com.jumpcutfindo.onmymark.client.network.handlers;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
 import com.jumpcutfindo.onmymark.client.graphics.screen.party.PartyInviteWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.party.PartyScreen;
-import com.jumpcutfindo.onmymark.client.graphics.screen.toast.OnMyMarkToast;
+import com.jumpcutfindo.onmymark.client.graphics.screen.toast.PartyInvitationToast;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketContext;
 import com.jumpcutfindo.onmymark.client.network.ClientPacketHandler;
 import com.jumpcutfindo.onmymark.network.packets.clientbound.InvitePlayerInvitationS2CPacket;
@@ -18,7 +18,7 @@ public class InvitePlayerInvitationS2CHandler implements ClientPacketHandler<Inv
 
         partyManager.setPartyInvite(partyInvite);
 
-        OnMyMarkToast.addPartyInvitationToast(context.client(), partyInvite);
+        PartyInvitationToast.add(context.client().getToastManager(), partyInvite);
 
         // Update screen if the player is looking
         if (context.client().currentScreen instanceof PartyScreen partyScreen) {
@@ -26,3 +26,4 @@ public class InvitePlayerInvitationS2CHandler implements ClientPacketHandler<Inv
         }
     }
 }
+

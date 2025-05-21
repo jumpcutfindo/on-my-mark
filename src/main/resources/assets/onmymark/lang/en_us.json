@@ -32,8 +32,8 @@
   "onmymark.menu.selectMarkerColor.blue": "Blue",
   "onmymark.menu.selectMarkerColor.submitButton": "Set Color",
 
-  "onmymark.toast.partyInvite.title": "New party invitation",
-  "onmymark.toast.partyInvite.description": "%s wants you to join their party",
+  "onmymark.toast.partyInvite.title": "Party invitation from %s",
+  "onmymark.toast.partyInvite.description": "Open the party window to see the invite",
 
   "onmymark.action.placeMarker.notInParty": "You need to be in a party before you can place a marker",
 
