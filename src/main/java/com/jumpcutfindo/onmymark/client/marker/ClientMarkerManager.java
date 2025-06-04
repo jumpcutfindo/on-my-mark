@@ -59,5 +59,6 @@ public class ClientMarkerManager {
 
     public void removeMarkerOf(PartyMember partyMember) {
         this.markerMap.remove(partyMember);
+        this.playerMarkerMap.remove(partyMember);
     }
 }
