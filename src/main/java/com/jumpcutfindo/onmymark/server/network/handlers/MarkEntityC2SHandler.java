@@ -28,7 +28,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
-            ServerWorld world = context.player().getServerWorld();
+            ServerWorld world = context.player().getWorld();
 
             Entity entity = world.getEntity(payload.entityId());
 

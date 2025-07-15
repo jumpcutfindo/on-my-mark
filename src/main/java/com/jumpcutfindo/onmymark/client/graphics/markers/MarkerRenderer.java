@@ -219,10 +219,10 @@ public abstract class MarkerRenderer {
     }
 
     private void drawDistanceLabel(DrawContext drawContext, float screenX, float screenY, float scale) {
-        drawContext.getMatrices().push();
-        drawContext.getMatrices().scale(scale, scale, scale);
+        drawContext.getMatrices().pushMatrix();
+        drawContext.getMatrices().scale(scale, scale);
         drawContext.drawText(this.client.textRenderer, getDistanceLabelString(), (int) (screenX / scale), (int) (screenY / scale), 0xFFFFFFFF, true);
-        drawContext.getMatrices().pop();
+        drawContext.getMatrices().popMatrix();
     }
 
     /**

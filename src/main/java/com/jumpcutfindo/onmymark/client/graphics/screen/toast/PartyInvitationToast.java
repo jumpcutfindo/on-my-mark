@@ -5,8 +5,8 @@ import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.toast.Toast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.OrderedText;
@@ -105,9 +105,9 @@ public class PartyInvitationToast implements Toast {
 
     @Override
     public void draw(DrawContext context, TextRenderer textRenderer, long startTime) {
-        context.drawGuiTexture(RenderLayer::getGuiTextured, BASE_TEXTURE, 0, 0, this.getWidth(), this.getHeight());
+        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, BASE_TEXTURE, 0, 0, this.getWidth(), this.getHeight());
         context.drawText(textRenderer, this.title, 26, 7, Colors.BLUE, false);
-        context.drawTexture(RenderLayer::getGuiTextured, TOAST_TEXTURE, 4, (this.getHeight() / 2) - 10, 0, 0, 20, 20, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TOAST_TEXTURE, 4, (this.getHeight() / 2) - 10, 0, 0, 20, 20, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
         for (int i = 0; i < this.lines.size(); i++) {
             context.drawText(textRenderer, this.lines.get(i), 26, 18 + i * 12, Colors.BLACK, false);

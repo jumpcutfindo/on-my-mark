@@ -7,11 +7,10 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.utils.StringUtils;
 import com.mojang.authlib.GameProfile;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.texture.PlayerSkinProvider;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.SkinTextures;
@@ -65,7 +64,6 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     public void render(DrawContext context, int x, int y, int mouseX, int mouseY) {
         this.renderBackground(context, x, y, mouseX, mouseY);
         if (this.item.isOffline()) {
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
             this.renderContent(context, x, y, mouseX, mouseY);
         } else {
             this.renderContent(context, x, y, mouseX, mouseY);
@@ -90,14 +88,12 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         if (this.item.isPartyLeader()) {
             int displayNameWidth = this.screen.getTextRenderer().getWidth(displayName);
             int partyLeaderCrownX = x + displayNameWidth + 27, partyLeaderCrownY = y;
-            context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, partyLeaderCrownX, partyLeaderCrownY, 180, 178, 16, 16, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, partyLeaderCrownX, partyLeaderCrownY, 180, 178, 16, 16, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
             if (
                     !this.screen.isWindowOpen()
                             && ScreenUtils.isWithin(mouseX, mouseY, partyLeaderCrownX, partyLeaderCrownY, 16, 16)
             ) {
-                context.draw();
-                RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 context.drawTooltip(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.party.partyLeader"), mouseX, mouseY);
             }
         }
@@ -108,7 +104,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
 
     @Override
     public void renderSelectedBackground(DrawContext context, int x, int y, int mouseX, int mouseY) {
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 196, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 196, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override

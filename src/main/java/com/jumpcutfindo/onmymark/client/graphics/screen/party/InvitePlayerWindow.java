@@ -5,10 +5,11 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -42,7 +43,7 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
     @Override
     public void renderBackground(DrawContext context) {
         super.renderBackground(context);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class InvitePlayerWindow extends OnMyMarkWindow {
         super.renderContent(context, mouseX, mouseY);
 
         // Party name entry
-        context.drawText(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.invitePlayer.playerNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
+        context.drawText(MinecraftClient.getInstance().textRenderer, Text.translatable("gui.onmymark.invitePlayer.playerNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
 
         this.playerNameField.setX(x + 7);
         this.playerNameField.setY(y + 36);

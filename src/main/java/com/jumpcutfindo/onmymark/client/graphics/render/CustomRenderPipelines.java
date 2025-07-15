@@ -14,9 +14,9 @@ public class CustomRenderPipelines {
      */
     public static final RenderPipeline SOLID_ENTITY_COLOR = RenderPipeline
             .builder()
-            .withUniform("ModelViewMat", UniformType.MATRIX4X4)
-            .withUniform("ProjMat", UniformType.MATRIX4X4)
-            .withUniform("ColorModulator", UniformType.VEC4)
+            .withUniform("ModelViewMat", UniformType.UNIFORM_BUFFER)
+            .withUniform("ProjMat", UniformType.UNIFORM_BUFFER)
+            .withUniform("ColorModulator", UniformType.UNIFORM_BUFFER)
             .withLocation(Identifier.of(OnMyMarkMod.MOD_ID, "pipeline/solid_entity_color"))
             .withVertexShader(Identifier.of(OnMyMarkMod.MOD_ID, "core/solid_color"))
             .withFragmentShader(Identifier.of(OnMyMarkMod.MOD_ID, "core/solid_color"))

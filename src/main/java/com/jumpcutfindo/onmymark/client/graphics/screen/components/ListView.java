@@ -4,8 +4,8 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.client.sounds.SoundPlayer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -28,19 +28,14 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
     protected int listX, listY;
     protected int scrollbarWidth, scrollbarHeight, scrollbarU, scrollbarV, scrollbarX, scrollbarY;
     protected int maxItems;
-
+    protected List<T> listItems;
+    protected List<T> visibleItems;
     private SelectType selectType;
-
     private int step;
     private int maxSteps;
     private float stepAmount;
-
     private float scrollPosition; // Range from 0.0 to 1.0
     private boolean scrolling;
-
-    protected List<T> listItems;
-    protected List<T> visibleItems;
-
     private Set<T> selectedItems;
     private Set<Integer> selectedIndices;
 
@@ -101,7 +96,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
     }
 
     public void renderBackground(DrawContext context, int mouseX, int mouseY) {
-        context.drawTexture(RenderLayer::getGuiTextured, this.texture, x, y, this.textureU, this.textureV, this.width, this.height, this.textureWidth, this.textureHeight);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, this.texture, x, y, this.textureU, this.textureV, this.width, this.height, this.textureWidth, this.textureHeight);
         this.renderScrollbar(context, mouseX, mouseY);
     }
 
@@ -123,7 +118,7 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
     private void renderScrollbar(DrawContext context, int mouseX, int mouseY) {
         if (!this.hasScrollbar()) return;
 
-        context.drawTexture(RenderLayer::getGuiTextured, this.texture, x + scrollbarX, y + scrollbarY + (int) (this.scrollPosition * (scrollbarHeight - 15)), scrollbarU, scrollbarV, 13, 15, this.textureWidth, this.textureHeight);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, this.texture, x + scrollbarX, y + scrollbarY + (int) (this.scrollPosition * (scrollbarHeight - 15)), scrollbarU, scrollbarV, 13, 15, this.textureWidth, this.textureHeight);
     }
 
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
@@ -228,19 +223,19 @@ public abstract class ListView<T extends ListItem<?>> implements Interactable {
     }
 
     public boolean isAnySelected() {
-       return selectedItems.size() > 0;
+        return selectedItems.size() > 0;
     }
 
     public boolean isAllSelected() {
         return selectedItems.size() == listItems.size();
     }
 
-    public void setLastToggledIndex(int lastToggledIndex) {
-        this.lastToggledIndex = lastToggledIndex;
-    }
-
     public int getLastToggledIndex() {
         return lastToggledIndex;
+    }
+
+    public void setLastToggledIndex(int lastToggledIndex) {
+        this.lastToggledIndex = lastToggledIndex;
     }
 
     public List<T> getSelectedItems() {

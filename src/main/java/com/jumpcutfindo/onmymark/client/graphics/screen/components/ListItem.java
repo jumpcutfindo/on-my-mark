@@ -2,8 +2,8 @@ package com.jumpcutfindo.onmymark.client.graphics.screen.components;
 
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 /**
@@ -14,10 +14,10 @@ public abstract class ListItem<T> {
     protected OnMyMarkScreen screen;
     protected T item;
     protected int index;
-    private Identifier texture;
-    private int textureWidth, textureHeight;
     protected int u, v, width, height;
     protected boolean isSelected;
+    private Identifier texture;
+    private int textureWidth, textureHeight;
 
     public ListItem(OnMyMarkScreen screen, T item, int index) {
         this.screen = screen;
@@ -47,12 +47,12 @@ public abstract class ListItem<T> {
         return height;
     }
 
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
-    }
-
     public boolean isSelected() {
         return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 
     public void render(DrawContext context, int x, int y, int mouseX, int mouseY) {
@@ -72,16 +72,16 @@ public abstract class ListItem<T> {
             renderHoveredBackground(context, x, y, mouseX, mouseY);
         } else {
             // Normal
-            context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, this.u, this.v, this.width, this.height, this.textureWidth, this.textureHeight);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, this.u, this.v, this.width, this.height, this.textureWidth, this.textureHeight);
         }
     }
 
     public void renderSelectedBackground(DrawContext context, int x, int y, int mouseX, int mouseY) {
-        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, this.u, this.v, this.width, this.height, this.textureWidth, this.textureHeight);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, this.u, this.v, this.width, this.height, this.textureWidth, this.textureHeight);
     }
 
     public void renderHoveredBackground(DrawContext context, int x, int y, int mouseX, int mouseY) {
-        context.drawTexture(RenderLayer::getGuiTextured, texture, x, y, this.u, this.v, this.width, this.height, this.textureWidth, this.textureHeight);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, texture, x, y, this.u, this.v, this.width, this.height, this.textureWidth, this.textureHeight);
     }
 
     public abstract void renderContent(DrawContext context, int x, int y, int mouseX, int mouseY);
