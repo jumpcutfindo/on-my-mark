@@ -191,7 +191,7 @@ public abstract class MarkerRenderer {
             float x3 = this.screenPos.x + width / 2F;
             float y3 = this.screenPos.y - height;
 
-            DrawUtils.drawTriangle(drawContext, x1, y1, x2, y2, x3, y3, color);
+            DrawUtils.drawTriangle(drawContext, (int) x1, (int) y1, (int) x2, (int) y2, (int) x3, (int) y3, color);
         } else {
             float x2 = this.screenPos.x - width / 2F;
             float y2 = this.screenPos.y - height / 2F;
@@ -202,7 +202,7 @@ public abstract class MarkerRenderer {
             float x4 = this.screenPos.x + width / 2F;
             float y4 = this.screenPos.y - height / 2F;
 
-            DrawUtils.drawQuad(drawContext, x1, y1, x2, y2, x3, y3, x4, y4, color);
+            DrawUtils.drawQuad(drawContext, (int) x1, (int) y1, (int) x2, (int) y2, (int) x3, (int) y3, (int) x4, (int) y4, color);
         }
 
     }
@@ -259,7 +259,7 @@ public abstract class MarkerRenderer {
             float baseRightX = baseCenterX + baseOffsetX;
             float baseRightY = baseCenterY + baseOffsetY;
 
-            DrawUtils.drawTriangle(drawContext, tipX, tipY, baseLeftX, baseLeftY, baseRightX, baseRightY, color);
+            DrawUtils.drawTriangle(drawContext, (int) tipX, (int) tipY, (int) baseRightX, (int) baseRightY, (int) baseLeftX, (int) baseLeftY, color);
         } else {
             float centerX = tipX - normal.x * height / 2;
             float centerY = tipY - normal.y * height / 2;
@@ -275,10 +275,10 @@ public abstract class MarkerRenderer {
             Vector2f right = new Vector2f(perpendicular).mul(hw).add(centerX, centerY);
 
             DrawUtils.drawQuad(drawContext,
-                    top.x, top.y,
-                    right.x, right.y,
-                    bottom.x, bottom.y,
-                    left.x, left.y,
+                    (int) top.x, (int) top.y,
+                    (int) right.x, (int) right.y,
+                    (int) bottom.x, (int) bottom.y,
+                    (int) left.x, (int) left.y,
                     color
             );
         }

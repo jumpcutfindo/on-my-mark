@@ -1,12 +1,12 @@
 package com.jumpcutfindo.onmymark.client.graphics.utils;
 
 import com.jumpcutfindo.onmymark.client.graphics.render.CustomRenderLayers;
+import com.jumpcutfindo.onmymark.client.graphics.render.SolidQuadGuiElementRenderState;
+import com.jumpcutfindo.onmymark.client.graphics.render.SolidTriangleGuiElementRenderState;
 import com.jumpcutfindo.onmymark.mixin.ItemRenderStateMixin;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.render.state.ItemGuiElementRenderState;
-import net.minecraft.client.render.*;
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemDisplayContext;
@@ -65,41 +65,24 @@ public class DrawUtils {
         }
     }
 
-
     /**
      * Draws a triangle with the specified dimensions.
      */
-    public static void drawTriangle(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, int argb) {
-        Matrix3x2f transformationMatrix = drawContext.getMatrices();
-        Tessellator tessellator = Tessellator.getInstance();
-
-        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-
-        buffer.vertex(transformationMatrix, x1, y1, 5).color(argb);
-        buffer.vertex(transformationMatrix, x2, y2, 5).color(argb);
-        buffer.vertex(transformationMatrix, x3, y3, 5).color(argb);
-
-        try (BuiltBuffer builtBuffer = buffer.end()) {
-            RenderLayer.getDebugTriangleFan().draw(builtBuffer);
-        }
+    public static void drawTriangle(DrawContext drawContext, int x0, int y0, int x1, int y1, int x2, int y2, int argb) {
+        var triangle = new SolidTriangleGuiElementRenderState(
+                new Matrix3x2f(drawContext.getMatrices()), x0, y0, x1, y1, x2, y2, argb, drawContext.scissorStack.peekLast()
+        );
+        drawContext.state.addSimpleElement(triangle);
     }
 
     /**
-     * Draws a diamond with the specified dimensions.
+     * Draws a quad with the specified dimensions.
      */
-    public static void drawQuad(DrawContext drawContext, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, int argb) {
-        Matrix3x2f transformationMatrix = drawContext.getMatrices();
-        Tessellator tessellator = Tessellator.getInstance();
-
-        BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.TRIANGLE_STRIP, VertexFormats.POSITION_COLOR);
-
-        buffer.vertex(transformationMatrix, x1, y1, 5).color(argb);
-        buffer.vertex(transformationMatrix, x2, y2, 5).color(argb);
-        buffer.vertex(transformationMatrix, x3, y3, 5).color(argb);
-        buffer.vertex(transformationMatrix, x4, y4, 5).color(argb);
-
-        try (BuiltBuffer builtBuffer = buffer.end()) {
-            RenderLayer.getDebugTriangleFan().draw(builtBuffer);
-        }
+    public static void drawQuad(DrawContext drawContext, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int argb) {
+        // Create simple element
+        var quad = new SolidQuadGuiElementRenderState(
+                new Matrix3x2f(drawContext.getMatrices()), x0, y0, x1, y1, x2, y2, x3, y3, argb, drawContext.scissorStack.peekLast()
+        );
+        drawContext.state.addSimpleElement(quad);
     }
 }
