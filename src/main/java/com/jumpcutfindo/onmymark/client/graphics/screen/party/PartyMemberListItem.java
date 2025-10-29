@@ -15,7 +15,9 @@ import net.minecraft.client.texture.PlayerSkinProvider;
 import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.text.Text;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -99,7 +101,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         }
 
         // Draw name
-        context.drawText(this.screen.getTextRenderer(), displayName, (x + 27), (y + 5), 0x282828, false);
+        context.drawText(this.screen.getTextRenderer(), displayName, (x + 27), (y + 5), ColorHelper.withAlpha(0xAA, Colors.BLACK), false);
     }
 
     @Override

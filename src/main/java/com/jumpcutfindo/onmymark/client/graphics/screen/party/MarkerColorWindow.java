@@ -5,7 +5,6 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
-import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gl.RenderPipelines;
@@ -59,7 +58,9 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         super.renderContent(context, mouseX, mouseY);
 
         int color = this.getSelectedColor();
-        DrawUtils.drawQuad(context, x + 7, y + 21, x + 171, y + 21, x + 171, y + 59, x + 7, y + 59, color);
+
+        // Draw color preview
+        context.fill(x + 7, y + 21, x + 171, y + 59, color);
 
         int widgetX = x + 6;
         int widgetY = y + 64;

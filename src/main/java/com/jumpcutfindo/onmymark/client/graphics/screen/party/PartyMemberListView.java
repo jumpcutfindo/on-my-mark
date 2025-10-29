@@ -10,6 +10,7 @@ import com.jumpcutfindo.onmymark.party.PartyMember;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class PartyMemberListView extends ListView<PartyMemberListItem> {
     private int titleX, titleY;
     private Text title;
 
-public PartyMemberListView(OnMyMarkScreen screen, Party<ClientPartyMember> party, int x, int y) {
+    public PartyMemberListView(OnMyMarkScreen screen, Party<ClientPartyMember> party, int x, int y) {
         super(screen);
 
         this.party = party;
@@ -44,11 +45,25 @@ public PartyMemberListView(OnMyMarkScreen screen, Party<ClientPartyMember> party
                 .setSelectType(SelectType.SINGLE);
     }
 
+    private static List<PartyMemberListItem> createItems(OnMyMarkScreen screen, Party<ClientPartyMember> party) {
+        List<PartyMemberListItem> items = new ArrayList<>();
+
+        if (party == null) {
+            return items;
+        }
+
+        for (int i = 0; i < party.partyMembers().size(); i++) {
+            items.add(new PartyMemberListItem(screen, (ClientPartyMember) party.partyMembers().get(i), i));
+        }
+
+        return items;
+    }
+
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY) {
         super.renderBackground(context, mouseX, mouseY);
 
-        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), Colors.DARK_GRAY, false);
     }
 
     @Override
@@ -79,28 +94,13 @@ public PartyMemberListView(OnMyMarkScreen screen, Party<ClientPartyMember> party
         this.setList(createItems(this.screen, party), MAX_ITEMS);
     }
 
-    private static List<PartyMemberListItem> createItems(OnMyMarkScreen screen, Party<ClientPartyMember> party) {
-        List<PartyMemberListItem> items = new ArrayList<>();
-
-        if (party == null) {
-            return items;
-        }
-
-        for (int i = 0; i < party.partyMembers().size(); i++) {
-            items.add(new PartyMemberListItem(screen, (ClientPartyMember) party.partyMembers().get(i), i));
-        }
-
-        return items;
-    }
-
     @Override
     public boolean canSelect() {
         PartyMember partyMember = OnMyMarkClient.INSTANCE.clientPartyManager().self();
 
         if (partyMember == null) {
             return true;
-        }
-        else {
+        } else {
             return partyMember.isPartyLeader();
         }
     }

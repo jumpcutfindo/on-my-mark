@@ -10,6 +10,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
         // Create text field
         this.partyNameField = new TextFieldWidget(screen.getTextRenderer(), 0, 0, 124, 18, Text.translatable("gui.onmymark.createParty.textWidget"));
         this.partyNameField.setMaxLength(20);
-        this.partyNameField.setEditableColor(16777215);
+        this.partyNameField.setEditableColor(Colors.WHITE);
 
         this.submitButton = new OnMyMarkButton(0, 0, 64, 20, Text.translatable("gui.onmymark.createParty.submitButton"), (widget) -> {
             this.createParty();
@@ -48,7 +49,7 @@ public class CreatePartyWindow extends OnMyMarkWindow {
         super.renderContent(context, mouseX, mouseY);
 
         // Party name entry
-        context.drawText(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.createParty.partyNameLabel"), (x + this.titleX), (y + 25), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), Text.translatable("gui.onmymark.createParty.partyNameLabel"), (x + this.titleX), (y + 25), Colors.DARK_GRAY, false);
 
         this.partyNameField.setX(x + 7);
         this.partyNameField.setY(y + 36);

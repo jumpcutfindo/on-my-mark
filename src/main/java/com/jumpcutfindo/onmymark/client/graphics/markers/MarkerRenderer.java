@@ -6,6 +6,7 @@ import com.jumpcutfindo.onmymark.client.graphics.utils.RenderMath;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.util.Colors;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -221,7 +222,7 @@ public abstract class MarkerRenderer {
     private void drawDistanceLabel(DrawContext drawContext, float screenX, float screenY, float scale) {
         drawContext.getMatrices().pushMatrix();
         drawContext.getMatrices().scale(scale, scale);
-        drawContext.drawText(this.client.textRenderer, getDistanceLabelString(), (int) (screenX / scale), (int) (screenY / scale), 0xFFFFFFFF, true);
+        drawContext.drawText(this.client.textRenderer, getDistanceLabelString(), (int) (screenX / scale), (int) (screenY / scale), Colors.WHITE, true);
         drawContext.getMatrices().popMatrix();
     }
 
@@ -310,7 +311,7 @@ public abstract class MarkerRenderer {
 
     public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
         // Draw the name of the object by default
-        drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, 0xFFFFFF, true);
+        drawContext.drawText(client.textRenderer, this.getName(), (int) screenX, (int) screenY, Colors.WHITE, true);
     }
 
     protected abstract LabelDisplayType getLabelDisplayType();

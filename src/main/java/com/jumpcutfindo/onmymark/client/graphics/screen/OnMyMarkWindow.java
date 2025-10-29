@@ -26,6 +26,10 @@ public abstract class OnMyMarkWindow extends AbstractParentElement {
         this.y = screen.getWindowY(height);
     }
 
+    private static Text getStyledTitle(MutableText text) {
+        return text.styled((style) -> style.withBold(true));
+    }
+
     public void render(DrawContext context, int mouseX, int mouseY) {
         this.renderBackground(context);
         this.renderContent(context, mouseX, mouseY);
@@ -57,7 +61,7 @@ public abstract class OnMyMarkWindow extends AbstractParentElement {
     }
 
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0x404040, false);
+        context.drawText(this.screen.getTextRenderer(), this.title, (x + this.titleX), (y + this.titleY), 0xFF404040, false);
     }
 
     public void tick() {
@@ -66,9 +70,5 @@ public abstract class OnMyMarkWindow extends AbstractParentElement {
 
     private void renderBackgroundGradient(DrawContext context) {
         screen.drawBackgroundGradient(context);
-    }
-
-    private static Text getStyledTitle(MutableText text) {
-        return text.styled((style) -> style.withBold(true));
     }
 }
