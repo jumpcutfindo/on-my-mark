@@ -3,9 +3,12 @@ package com.jumpcutfindo.onmymark.client.graphics.markers;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.client.graphics.utils.RenderMath;
+import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.PlayerSkinDrawer;
+import net.minecraft.client.util.SkinTextures;
 import net.minecraft.util.Colors;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -31,6 +34,8 @@ public abstract class MarkerRenderer {
     private boolean isClamped;
     private float clampWidth, clampHeight;
 
+    private final SkinTextures playerSkinTextures;
+
     protected MarkerRenderer(MinecraftClient client, Marker marker, PointerShape pointerShape) {
         this.client = client;
         this.marker = marker;
@@ -41,6 +46,12 @@ public abstract class MarkerRenderer {
         this.pointerShape = pointerShape;
 
         this.creationTime = Instant.now();
+
+        this.playerSkinTextures = MinecraftClient.getInstance()
+                .getSkinProvider()
+                .getSkinTextures(
+                        ((ClientPartyMember)marker.owner()).gameProfile()
+                );
     }
 
     public Vector4f screenPos() {
@@ -156,14 +167,13 @@ public abstract class MarkerRenderer {
         int pointerColor = ColorHelper.withAlpha((int) Math.min((float) existTimeMs / 20, 1.0F) * 255, this.getPointerColor());
 
         if (this.isClamped) {
-
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
             Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 16F + distanceLabelHeight * screenPosNormal.y);
             this.drawLabel(drawContext, iconPos.x(), iconPos.y(), true);
-
             this.drawDistanceLabel(drawContext, iconPos.x() + getLabelWidth() / 2F - distanceLabelWidth / 2F, iconPos.y() + getLabelHeight() + 4F, distanceLabelScale);
+            this.drawPlayerIcon(drawContext, iconPos.x() - 12, iconPos.y() + (float) (getLabelHeight() / 2) - 4, distanceLabelScale);
         } else {
             // Draw pointer that points directly toward object
 
@@ -223,6 +233,16 @@ public abstract class MarkerRenderer {
         drawContext.getMatrices().pushMatrix();
         drawContext.getMatrices().scale(scale, scale);
         drawContext.drawText(this.client.textRenderer, getDistanceLabelString(), (int) (screenX / scale), (int) (screenY / scale), Colors.WHITE, true);
+        drawContext.getMatrices().popMatrix();
+    }
+
+    private void drawPlayerIcon(DrawContext drawContext, float screenX, float screenY, float scale) {
+        drawContext.getMatrices().pushMatrix();
+        drawContext.getMatrices().scale(scale, scale);
+        // Draw player icon
+        if (this.playerSkinTextures != null) {
+            PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures.texture(), (int) (screenX / scale), (int) (screenY / scale), 12, false, false, -1);
+        }
         drawContext.getMatrices().popMatrix();
     }
 

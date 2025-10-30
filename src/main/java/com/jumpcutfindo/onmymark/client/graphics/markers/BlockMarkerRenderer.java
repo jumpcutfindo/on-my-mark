@@ -30,7 +30,6 @@ public class BlockMarkerRenderer extends MarkerRenderer {
         if (blockItem.isEmpty()) {
             super.drawLabel(drawContext, screenX, screenY, isOutlined);
         } else {
-
             DrawUtils.drawItemTiled(drawContext, blockItem, (int) screenX, (int) screenY, this.getPointerColor());
         }
 
