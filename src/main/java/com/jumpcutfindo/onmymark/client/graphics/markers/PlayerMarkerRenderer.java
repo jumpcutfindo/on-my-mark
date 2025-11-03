@@ -21,7 +21,7 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
 
     @Override
     public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
-        super.drawLabel(drawContext, screenX + PLAYER_HEAD_SIZE + 4, screenY, isOutlined);
+        super.drawLabel(drawContext, screenX, screenY, isOutlined);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
 
     @Override
     public int getLabelWidth() {
-        return client.textRenderer.getWidth(this.getName()) + PLAYER_HEAD_SIZE + 4;
+        return client.textRenderer.getWidth(this.getName());
     }
 
     @Override
