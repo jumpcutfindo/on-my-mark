@@ -34,6 +34,13 @@ public class OnMyMarkConfigModel {
     @Sync(Option.SyncMode.NONE)
     public int markerPointerHeight = MarkerRenderer.DEFAULT_POINTER_HEIGHT;
 
+    @Sync(Option.SyncMode.NONE)
+    public boolean isPlayerHeadEnabled = true;
+
+    @RangeConstraint(min = 0.60F, max = 1.50F)
+    @Sync(Option.SyncMode.NONE)
+    public float playerHeadScale = 1.0F;
+
     @SectionHeader("markerLifetimeSection")
 
     @RangeConstraint(min = 1, max = 86400)

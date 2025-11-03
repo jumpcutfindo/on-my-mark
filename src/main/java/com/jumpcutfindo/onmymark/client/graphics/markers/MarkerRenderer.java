@@ -166,25 +166,39 @@ public abstract class MarkerRenderer {
         float pointerHeight = OnMyMarkMod.CONFIG.markerPointerHeight() * pointerSizeModifier;
         int pointerColor = ColorHelper.withAlpha((int) Math.min((float) existTimeMs / 20, 1.0F) * 255, this.getPointerColor());
 
+        // Calculate label width
+        int labelWidth = this.getLabelWidth();
+        int labelHeight = this.getLabelHeight();
+
+        float playerHeadScale = OnMyMarkMod.CONFIG.playerHeadScale();
+
         if (this.isClamped) {
             // Draw edge pointer if the marker has been clamped
             this.drawEdgePointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
-            Vector2f iconPos = this.getClampedLabelPos(this.getLabelWidth(), this.getLabelHeight(), 16F + distanceLabelHeight * screenPosNormal.y);
-            this.drawLabel(drawContext, iconPos.x(), iconPos.y(), true);
-            this.drawDistanceLabel(drawContext, iconPos.x() + getLabelWidth() / 2F - distanceLabelWidth / 2F, iconPos.y() + getLabelHeight() + 4F, distanceLabelScale);
-            this.drawPlayerIcon(drawContext, iconPos.x() - 12, iconPos.y() + (float) (getLabelHeight() / 2) - 4, distanceLabelScale);
+            Vector2f labelPos = this.getClampedLabelPos(labelWidth, labelHeight, 16F + distanceLabelHeight * screenPosNormal.y);
+
+            this.drawLabel(drawContext, labelPos.x(), labelPos.y(), true);
+            this.drawDistanceLabel(drawContext, labelPos.x() + labelWidth / 2F - distanceLabelWidth / 2F, labelPos.y() + labelHeight + 4F, distanceLabelScale);
+
+            if (OnMyMarkMod.CONFIG.isPlayerHeadEnabled()) {
+                // Draw player head to the left of the marker
+                this.drawPlayerHead(drawContext, labelPos.x() - 4F, labelPos.y() + labelHeight / 2F, playerHeadScale);
+            }
         } else {
             // Draw pointer that points directly toward object
-
             this.drawPointer(drawContext, pointerWidth, pointerHeight, pointerColor);
 
-            float screenX = screenPos.x() - this.getLabelWidth() / 2F;
-            float screenY = screenPos.y() - OnMyMarkMod.CONFIG.markerPointerHeight() - getLabelHeight() - 4F;
+            float screenX = screenPos.x() - labelWidth / 2F;
+            float screenY = screenPos.y() - OnMyMarkMod.CONFIG.markerPointerHeight() - labelHeight - 4F;
 
             this.drawLabel(drawContext, screenX, screenY, true);
-
             this.drawDistanceLabel(drawContext, screenPos.x() - distanceLabelWidth / 2F, screenPos.y() - OnMyMarkMod.CONFIG.markerPointerHeight() - distanceLabelHeight - 24F, distanceLabelScale);
+
+            if (OnMyMarkMod.CONFIG.isPlayerHeadEnabled()) {
+                // Draw player head above the marker
+                this.drawPlayerHead(drawContext, screenX - 4F, screenY + labelHeight / 2F, playerHeadScale);
+            }
         }
 
     }
@@ -236,14 +250,15 @@ public abstract class MarkerRenderer {
         drawContext.getMatrices().popMatrix();
     }
 
-    private void drawPlayerIcon(DrawContext drawContext, float screenX, float screenY, float scale) {
-        drawContext.getMatrices().pushMatrix();
-        drawContext.getMatrices().scale(scale, scale);
-        // Draw player icon
+    private void drawPlayerHead(DrawContext drawContext, float screenX, float screenY, float scale) {
+        float headSize = 8 * scale;
+
+        int headScreenX = (int) (screenX - headSize);
+        int headScreenY = (int) (screenY - headSize / 2);
+
         if (this.playerSkinTextures != null) {
-            PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures.texture(), (int) (screenX / scale), (int) (screenY / scale), 12, false, false, -1);
+            PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures.texture(), headScreenX, headScreenY, (int) headSize, false, false, -1);
         }
-        drawContext.getMatrices().popMatrix();
     }
 
     /**
