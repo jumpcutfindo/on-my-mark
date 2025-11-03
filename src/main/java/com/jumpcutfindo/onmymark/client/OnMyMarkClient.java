@@ -1,16 +1,15 @@
 package com.jumpcutfindo.onmymark.client;
 
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
+import com.jumpcutfindo.onmymark.client.graphics.OnMyMarkRenderer;
+import com.jumpcutfindo.onmymark.client.input.InputListener;
 import com.jumpcutfindo.onmymark.client.marker.ClientMarkerManager;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyManager;
-import com.jumpcutfindo.onmymark.client.input.InputListener;
-import com.jumpcutfindo.onmymark.client.graphics.OnMyMarkRenderer;
 import com.jumpcutfindo.onmymark.client.sounds.CustomSoundEvents;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 
@@ -41,13 +40,7 @@ public class OnMyMarkClient implements ClientModInitializer {
     }
 
     private void registerRenderer() {
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawer ->
-                layeredDrawer.attachLayerAfter(
-                        IdentifiedLayer.MISC_OVERLAYS,
-                        Identifier.of(OnMyMarkMod.MOD_ID, "render_overlay"),
-                        renderer::render
-                )
-        );
+        HudElementRegistry.addLast(Identifier.of(OnMyMarkMod.MOD_ID, "render_overlay"), renderer::render);
     }
 
     private void registerInputListener() {

@@ -10,10 +10,10 @@ import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
@@ -60,18 +60,18 @@ public class PartyInviteWindow extends OnMyMarkWindow {
     @Override
     public void renderBackground(DrawContext context) {
         super.renderBackground(context);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override
     public void renderContent(DrawContext context, int mouseX, int mouseY) {
         TextRenderer textRenderer = this.screen.getTextRenderer();
 
-        context.getMatrices().push();
-        context.getMatrices().scale(2F, 2F, 1.0F);
+        context.getMatrices().pushMatrix();
+        context.getMatrices().scale(2F, 2F);
 
         PlayerSkinDrawer.draw(context, this.inviterSkinTextures.texture(), (x + (WINDOW_WIDTH - 24) / 2) / 2, (y + 10) / 2, 12, false, false, -1);
-        context.getMatrices().pop();
+        context.getMatrices().popMatrix();
 
         Text inviterName = Text.literal(this.partyInvite.from().displayName()).styled(style -> style.withBold(true));
         int inviterNameWidth = textRenderer.getWidth(inviterName);

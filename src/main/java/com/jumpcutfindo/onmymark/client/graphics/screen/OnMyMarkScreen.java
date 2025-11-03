@@ -1,10 +1,8 @@
 package com.jumpcutfindo.onmymark.client.graphics.screen;
 
-import com.jumpcutfindo.onmymark.client.input.InputListener;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.jumpcutfindo.onmymark.client.input.InputListener;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,12 +21,12 @@ public abstract class OnMyMarkScreen extends Screen {
         super(title);
     }
 
-    public void setStandalone(boolean standalone) {
-        isStandalone = standalone;
-    }
-
     public boolean isStandalone() {
         return isStandalone;
+    }
+
+    public void setStandalone(boolean standalone) {
+        isStandalone = standalone;
     }
 
     @Override
@@ -107,13 +105,12 @@ public abstract class OnMyMarkScreen extends Screen {
     }
 
     public void drawBackgroundGradient(DrawContext context) {
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         context.fillGradient(0, 0, this.width, this.height, -1072689136, -804253680);
-        context.draw();
+
     }
 
-    public void drawGradient(DrawContext context, int x, int y, int endX, int endY, int colorStart, int colorEnd, int z) {
-        context.fillGradient(x, y, endX, endY, colorStart, colorEnd, z);
+    public OnMyMarkWindow getActiveWindow() {
+        return activeWindow;
     }
 
     public void setActiveWindow(OnMyMarkWindow window) {
@@ -123,10 +120,6 @@ public abstract class OnMyMarkScreen extends Screen {
         if (window == null) return;
 
         // this.activeWindow.getWidgets().forEach(this::addSelectableChild);
-    }
-
-    public OnMyMarkWindow getActiveWindow() {
-        return activeWindow;
     }
 
     public int getWindowX(int windowWidth) {
@@ -150,9 +143,5 @@ public abstract class OnMyMarkScreen extends Screen {
 
     public PlayerEntity getPlayer() {
         return client.player;
-    }
-
-    public TextRenderer getTextRenderer() {
-        return this.textRenderer;
     }
 }

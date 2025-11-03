@@ -8,7 +8,7 @@ import io.wispforest.owo.config.annotation.*;
 @Config(name = OnMyMarkMod.MOD_ID, wrapperName = "OnMyMarkConfig")
 public class OnMyMarkConfigModel {
 
-    @SectionHeader("markerDrawingSection")
+    @SectionHeader("markerPositionSection")
     @Sync(Option.SyncMode.NONE)
     public ClampType markerClampType = ClampType.DEFAULT_CLAMP_TYPE;
 
@@ -20,7 +20,7 @@ public class OnMyMarkConfigModel {
     @Sync(Option.SyncMode.NONE)
     public int circleClampDiameter = ClampType.DEFAULT_OVAL_CLAMP_PADDING;
 
-    @SectionHeader("markerPointerSection")
+    @SectionHeader("markerStyleSection")
 
     @RangeConstraint(min = 0.60F, max = 1.00F)
     @Sync(Option.SyncMode.NONE)
@@ -33,6 +33,18 @@ public class OnMyMarkConfigModel {
     @RangeConstraint(min = 4, max = 16)
     @Sync(Option.SyncMode.NONE)
     public int markerPointerHeight = MarkerRenderer.DEFAULT_POINTER_HEIGHT;
+
+    @Sync(Option.SyncMode.NONE)
+    public boolean isIconTileVisible = true;
+
+    @Sync(Option.SyncMode.NONE)
+    public boolean isPlayerHeadEnabled = true;
+
+    @RangeConstraint(min = 0.60F, max = 1.50F)
+    @Sync(Option.SyncMode.NONE)
+    public float playerHeadScale = 1.0F;
+
+    @SectionHeader("markerLifetimeSection")
 
     @RangeConstraint(min = 1, max = 86400)
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)

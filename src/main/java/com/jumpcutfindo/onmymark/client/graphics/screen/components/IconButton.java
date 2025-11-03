@@ -4,10 +4,9 @@ import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.client.sounds.SoundPlayer;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.MutableText;
 import net.minecraft.util.Identifier;
 
@@ -15,16 +14,14 @@ public class IconButton implements Interactable {
     private static final Identifier BUTTONS_TEXTURE = Identifier.of(OnMyMarkMod.MOD_ID, "textures/gui/buttons.png");
     private static final int BUTTONS_TEXTURE_WIDTH = 256;
     private static final int BUTTONS_TEXTURE_HEIGHT = 256;
-    
+
     private final OnMyMarkScreen screen;
-    private int x, y;
     private final int u, v;
     private final int width, height;
-
-    private boolean active, disabled;
     private final Runnable action;
-
     private final MutableText tooltip;
+    private int x, y;
+    private boolean active, disabled;
 
     public IconButton(OnMyMarkScreen screen, int u, int v, Runnable action, MutableText tooltip) {
         this.screen = screen;
@@ -45,7 +42,6 @@ public class IconButton implements Interactable {
         this.x = x;
         this.y = y;
 
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         if (isDisabled()) {
             // Disabled
             this.drawDefaultBase(context);
@@ -71,7 +67,6 @@ public class IconButton implements Interactable {
     }
 
     public boolean renderTooltip(DrawContext context, int mouseX, int mouseY, int delta) {
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         if (isMouseWithin(mouseX, mouseY)) {
             context.drawTooltip(this.screen.getTextRenderer(), tooltip, mouseX, mouseY);
             return true;
@@ -79,20 +74,20 @@ public class IconButton implements Interactable {
         return false;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public boolean isActive() {
         return active;
     }
 
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public boolean isDisabled() {
         return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     @Override
@@ -130,26 +125,26 @@ public class IconButton implements Interactable {
     }
 
     private void drawDefaultBase(DrawContext drawContext) {
-        drawContext.drawTexture(RenderLayer::getGuiTextured, BUTTONS_TEXTURE, x, y, 0, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
+        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTONS_TEXTURE, x, y, 0, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
     }
 
     private void drawActiveBase(DrawContext drawContext) {
-        drawContext.drawTexture(RenderLayer::getGuiTextured, BUTTONS_TEXTURE, x, y, 32, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
+        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTONS_TEXTURE, x, y, 32, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
     }
 
     private void drawDisabledBase(DrawContext drawContext) {
-        drawContext.drawTexture(RenderLayer::getGuiTextured, BUTTONS_TEXTURE, x, y, 0, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
+        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTONS_TEXTURE, x, y, 0, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
     }
 
     private void drawHoveredBase(DrawContext drawContext) {
-        drawContext.drawTexture(RenderLayer::getGuiTextured, BUTTONS_TEXTURE, x, y, 16, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
+        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTONS_TEXTURE, x, y, 16, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
     }
 
     private void drawDisabledOverlay(DrawContext drawContext) {
-        drawContext.drawTexture(RenderLayer::getGuiTextured, BUTTONS_TEXTURE, x, y, 48, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
+        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTONS_TEXTURE, x, y, 48, 0, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
     }
 
     private void drawIcon(DrawContext drawContext) {
-        drawContext.drawTexture(RenderLayer::getGuiTextured, BUTTONS_TEXTURE, x, y, u, v, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
+        drawContext.drawTexture(RenderPipelines.GUI_TEXTURED, BUTTONS_TEXTURE, x, y, u, v, width, height, BUTTONS_TEXTURE_WIDTH, BUTTONS_TEXTURE_HEIGHT);
     }
 }

@@ -73,10 +73,10 @@ public class EntityMarkerRenderer extends MarkerRenderer {
         Entity entity = this.entityMarker.entity();
 
         if (entity instanceof ItemEntity item) {
-            DrawUtils.drawItemOutlined(drawContext, item.getStack(), (int) screenX, (int) screenY, this.getPointerColor());
+            DrawUtils.drawItemTiled(drawContext, item.getStack(), (int) screenX, (int) screenY, this.getPointerColor());
             drawContext.drawStackOverlay(MinecraftClient.getInstance().textRenderer, item.getStack(), (int) screenX, (int) screenY);
         } else if (entity instanceof VehicleEntity vehicle) {
-            DrawUtils.drawItemOutlined(drawContext, ((VehicleEntityMixin) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY, this.getPointerColor());
+            DrawUtils.drawItemTiled(drawContext, ((VehicleEntityMixin) vehicle).asItem().getDefaultStack(), (int) screenX, (int) screenY, this.getPointerColor());
         } else {
             super.drawLabel(drawContext, screenX, screenY, isOutlined);
         }

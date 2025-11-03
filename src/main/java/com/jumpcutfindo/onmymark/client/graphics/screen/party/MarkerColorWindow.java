@@ -5,14 +5,13 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkScreen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.OnMyMarkWindow;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.ColorSlider;
 import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButton;
-import com.jumpcutfindo.onmymark.client.graphics.utils.DrawUtils;
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
@@ -51,7 +50,7 @@ public class MarkerColorWindow extends OnMyMarkWindow {
     @Override
     public void renderBackground(DrawContext context) {
         super.renderBackground(context);
-        context.drawTexture(RenderLayer::getGuiTextured, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE, x, y, 0, 0, this.width, this.height, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 
     @Override
@@ -59,7 +58,9 @@ public class MarkerColorWindow extends OnMyMarkWindow {
         super.renderContent(context, mouseX, mouseY);
 
         int color = this.getSelectedColor();
-        DrawUtils.drawQuad(context, x + 7, y + 21, x + 171, y + 21, x + 171, y + 59, x + 7, y + 59, color);
+
+        // Draw color preview
+        context.fill(x + 7, y + 21, x + 171, y + 59, color);
 
         int widgetX = x + 6;
         int widgetY = y + 64;

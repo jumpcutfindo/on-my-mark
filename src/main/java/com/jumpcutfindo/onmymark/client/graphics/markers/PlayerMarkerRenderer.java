@@ -3,11 +3,8 @@ package com.jumpcutfindo.onmymark.client.graphics.markers;
 import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.marker.Marker;
 import com.jumpcutfindo.onmymark.marker.PlayerMarker;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.util.SkinTextures;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayerMarkerRenderer extends MarkerRenderer {
@@ -15,24 +12,16 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
     private static final int PLAYER_HEAD_SIZE = 8;
 
     private final PlayerMarker playerMarker;
-    private final SkinTextures playerSkinTextures;
 
     public PlayerMarkerRenderer(MinecraftClient client, PlayerMarker marker) {
         super(client, marker, PointerShape.DIAMOND);
 
         this.playerMarker = marker;
-
-        this.playerSkinTextures = MinecraftClient.getInstance()
-                .getSkinProvider()
-                .getSkinTextures(
-                        new GameProfile(playerMarker.playerId(), playerMarker.playerName())
-                );
     }
 
     @Override
     public void drawLabel(DrawContext drawContext, float screenX, float screenY, boolean isOutlined) {
-        PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures, (int) screenX, (int) screenY, PLAYER_HEAD_SIZE);
-        super.drawLabel(drawContext, screenX + PLAYER_HEAD_SIZE + 4, screenY, isOutlined);
+        super.drawLabel(drawContext, screenX, screenY, isOutlined);
     }
 
     @Override
@@ -42,7 +31,7 @@ public class PlayerMarkerRenderer extends MarkerRenderer {
 
     @Override
     public int getLabelWidth() {
-        return client.textRenderer.getWidth(this.getName()) + PLAYER_HEAD_SIZE + 4;
+        return client.textRenderer.getWidth(this.getName());
     }
 
     @Override

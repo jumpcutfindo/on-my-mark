@@ -1,21 +1,20 @@
 {
-	"required": true,
-	"package": "com.jumpcutfindo.onmymark.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"AbstractBlockMixin",
-		"BlockMixin",
-		"EntityMixin",
-		"ItemScattererMixin",
-		"VehicleEntityMixin"
-	],
-	"client": [
-		"DrawContextMixin",
-		"ItemRenderStateMixin"
-	],
-	"server": [
-	],
-	"injectors": {
-		"defaultRequire": 1
-	}
+  "required": true,
+  "package": "com.jumpcutfindo.onmymark.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AbstractBlockMixin",
+    "BlockMixin",
+    "EntityMixin",
+    "ItemScattererMixin",
+    "VehicleEntityMixin"
+  ],
+  "client": [
+    "ItemRenderStateMixin"
+  ],
+  "server": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
