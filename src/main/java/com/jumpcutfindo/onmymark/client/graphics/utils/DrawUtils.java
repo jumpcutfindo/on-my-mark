@@ -1,5 +1,6 @@
 package com.jumpcutfindo.onmymark.client.graphics.utils;
 
+import com.jumpcutfindo.onmymark.OnMyMarkMod;
 import com.jumpcutfindo.onmymark.client.graphics.render.SolidQuadGuiElementRenderState;
 import com.jumpcutfindo.onmymark.client.graphics.render.SolidTriangleGuiElementRenderState;
 import net.minecraft.client.gui.DrawContext;
@@ -22,8 +23,10 @@ public class DrawUtils {
         int borderColor = (outlineColor & 0x00FFFFFF) | (borderAlpha << 24);
 
         // Draw a square outline
-        drawContext.fill(x - 1, y - 1, x + 17, y + 17, backgroundColor);
-        drawContext.drawBorder(x - 1, y - 1, 18, 18, borderColor);
+        if (OnMyMarkMod.CONFIG.isIconTileVisible()) {
+            drawContext.fill(x - 1, y - 1, x + 17, y + 17, backgroundColor);
+            drawContext.drawBorder(x - 1, y - 1, 18, 18, borderColor);
+        }
 
         // Draw item normally
         drawContext.drawItem(stack, x, y);

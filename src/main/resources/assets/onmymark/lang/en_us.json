@@ -74,6 +74,8 @@
   "text.config.onmymark.option.isPlayerHeadEnabled.tooltip": "Determines whether the player who placed the marker should have their head\ndrawn alongside the marker.",
   "text.config.onmymark.option.playerHeadScale": "Player head scale",
   "text.config.onmymark.option.playerHeadScale.tooltip": "Determines the size of the player head drawn.",
+  "text.config.onmymark.option.isIconTileVisible": "Enable colored icon tiles",
+  "text.config.onmymark.option.isIconTileVisible.tooltip": "Determines whether the colored background should be drawn for items.",
   "text.config.onmymark.option.ovalClampPadding": "Oval clamp padding",
   "text.config.onmymark.option.ovalClampPadding.tooltip": "Determines how padded you prefer the oval clamp to be.\nA larger value will cause the oval to be smaller in size, and vice versa.",
   "text.config.onmymark.option.playerMarkerLifetimeSecs": "Block marker timeout (s)",

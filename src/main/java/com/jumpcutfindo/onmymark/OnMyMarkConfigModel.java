@@ -35,6 +35,9 @@ public class OnMyMarkConfigModel {
     public int markerPointerHeight = MarkerRenderer.DEFAULT_POINTER_HEIGHT;
 
     @Sync(Option.SyncMode.NONE)
+    public boolean isIconTileVisible = true;
+
+    @Sync(Option.SyncMode.NONE)
     public boolean isPlayerHeadEnabled = true;
 
     @RangeConstraint(min = 0.60F, max = 1.50F)
