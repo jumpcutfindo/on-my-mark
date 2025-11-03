@@ -74,7 +74,8 @@
   "text.config.onmymark.option.ovalClampPadding.tooltip": "Determines how padded you prefer the oval clamp to be.\nA larger value will cause the oval to be smaller in size, and vice versa.",
   "text.config.onmymark.option.playerMarkerLifetimeSecs": "Block marker timeout (s)",
   "text.config.onmymark.option.playerMarkerLifetimeSecs.tooltip": "Determines how long the player's marker will stay on your screen (when a player reports in), in seconds.\nThis value is overriden by the server.",
-  "text.config.onmymark.section.markerDrawingSection": "Marker Drawing",
-  "text.config.onmymark.section.markerPointerSection": "Marker Pointer",
+  "text.config.onmymark.section.markerPositionSection": "Marker Position",
+  "text.config.onmymark.section.markerStyleSection": "Marker Style",
+  "text.config.onmymark.section.markerLifetimeSection": "Marker Lifetime",
   "text.config.onmymark.title": "On My Mark Configuration"
 }
