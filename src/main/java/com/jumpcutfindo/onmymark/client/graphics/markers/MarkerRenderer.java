@@ -182,7 +182,6 @@ public abstract class MarkerRenderer {
             this.drawDistanceLabel(drawContext, labelPos.x() + labelWidth / 2F - distanceLabelWidth / 2F, labelPos.y() + labelHeight + 4F, distanceLabelScale);
 
             if (OnMyMarkMod.CONFIG.isPlayerHeadEnabled()) {
-                // Draw player head to the left of the marker
                 this.drawPlayerHead(drawContext, labelPos.x() - 4F, labelPos.y() + labelHeight / 2F, playerHeadScale);
             }
         } else {
@@ -196,7 +195,6 @@ public abstract class MarkerRenderer {
             this.drawDistanceLabel(drawContext, screenPos.x() - distanceLabelWidth / 2F, screenPos.y() - OnMyMarkMod.CONFIG.markerPointerHeight() - distanceLabelHeight - 24F, distanceLabelScale);
 
             if (OnMyMarkMod.CONFIG.isPlayerHeadEnabled()) {
-                // Draw player head above the marker
                 this.drawPlayerHead(drawContext, screenX - 4F, screenY + labelHeight / 2F, playerHeadScale);
             }
         }
