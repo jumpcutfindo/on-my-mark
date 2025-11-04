@@ -3,8 +3,11 @@ package com.jumpcutfindo.onmymark.client.graphics.screen;
 import com.jumpcutfindo.onmymark.client.graphics.screen.utils.ScreenUtils;
 import com.jumpcutfindo.onmymark.client.input.InputListener;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.input.CharInput;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
@@ -43,21 +46,21 @@ public abstract class OnMyMarkScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         if (this.activeWindow != null) {
-            return this.activeWindow.mouseClicked((int) mouseX, (int) mouseY, button);
+            return this.activeWindow.mouseClicked(click, doubled);
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, doubled);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (this.activeWindow != null) {
-            return this.activeWindow.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+            return this.activeWindow.mouseDragged(click, offsetX, offsetY);
         }
 
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(click, offsetX, offsetY);
     }
 
     @Override
@@ -70,32 +73,32 @@ public abstract class OnMyMarkScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.activeWindow != null) {
+    public boolean keyPressed(KeyInput input) {
+        if (input.getKeycode() == GLFW.GLFW_KEY_ESCAPE && this.activeWindow != null) {
             if (isStandalone) close();
             this.activeWindow = null;
             return true;
         }
 
-        if (keyCode == KeyBindingHelper.getBoundKeyOf(InputListener.GUI_BINDING).getCode() && this.activeWindow == null) {
+        if (input.getKeycode() == KeyBindingHelper.getBoundKeyOf(InputListener.GUI_BINDING).getCode() && this.activeWindow == null) {
             close();
             return true;
         }
 
         if (this.activeWindow != null) {
-            return this.activeWindow.keyPressed(keyCode, scanCode, modifiers);
+            return this.activeWindow.keyPressed(input);
         }
 
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(input);
     }
 
     @Override
-    public boolean charTyped(char chr, int modifiers) {
+    public boolean charTyped(CharInput charInput) {
         if (this.activeWindow != null) {
-            return this.activeWindow.charTyped(chr, modifiers);
+            return this.activeWindow.charTyped(charInput);
         }
 
-        return super.charTyped(chr, modifiers);
+        return super.charTyped(charInput);
     }
 
     @Override

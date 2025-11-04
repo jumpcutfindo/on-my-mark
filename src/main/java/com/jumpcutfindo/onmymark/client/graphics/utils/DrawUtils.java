@@ -25,7 +25,7 @@ public class DrawUtils {
         // Draw a square outline
         if (OnMyMarkMod.CONFIG.isIconTileVisible()) {
             drawContext.fill(x - 1, y - 1, x + 17, y + 17, backgroundColor);
-            drawContext.drawBorder(x - 1, y - 1, 18, 18, borderColor);
+            drawContext.drawStrokedRectangle(x - 1, y - 1, 18, 18, borderColor);
         }
 
         // Draw item normally

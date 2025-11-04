@@ -25,7 +25,7 @@ public class PlayerReportC2SHandler implements ServerPacketHandler<PlayerReportC
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
 
-            PlayerMarker playerMarker = new PlayerMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), context.player().getUuid(), context.player().getDisplayName().getString(), context.player().getPos());
+            PlayerMarker playerMarker = new PlayerMarker(markerPartyMember, context.player().getEntityWorld().getRegistryKey(), context.player().getUuid(), context.player().getDisplayName().getString(), context.player().getEntityPos());
             serverMarkerManager.addMarker(party, playerMarker);
 
             for (ServerPartyMember partyMember : party.partyMembers()) {

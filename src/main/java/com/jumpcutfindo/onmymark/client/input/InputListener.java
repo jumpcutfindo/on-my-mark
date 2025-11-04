@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class InputListener {
@@ -17,7 +18,7 @@ public class InputListener {
                     "key.onmymark.party",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_O,
-                    "key.categories.onmymark.onmymark"
+                    new KeyBinding.Category(Identifier.of("key.categories.onmymark.onmymark"))
             )
     );
 
@@ -26,7 +27,7 @@ public class InputListener {
                     "key.onmymark.mark",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_R,
-                    "key.categories.onmymark.onmymark"
+                    new KeyBinding.Category(Identifier.of("key.categories.onmymark.onmymark"))
             )
     );
 
@@ -35,7 +36,7 @@ public class InputListener {
                     "key.onmymark.playerReport",
                     InputUtil.Type.KEYSYM,
                     GLFW.GLFW_KEY_U,
-                    "key.categories.onmymark.onmymark"
+                    new KeyBinding.Category(Identifier.of("key.categories.onmymark.onmymark"))
             )
     );
 

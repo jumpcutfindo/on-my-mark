@@ -47,9 +47,9 @@ public class EntityMarker extends Marker {
         Entity entity = this.entity();
 
         if (entity != null) {
-            this.setLastPos(entity.getPos());
+            this.setLastPos(entity.getEntityPos());
         }
 
-        return entity != null ? entity.getPos() : this.lastPos();
+        return entity != null ? entity.getEntityPos() : this.lastPos();
     }
 }

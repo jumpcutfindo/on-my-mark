@@ -29,10 +29,10 @@ public class MarkBlockC2SHandler implements ServerPacketHandler<MarkBlockC2SPack
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
 
-            World markerWorld = context.player().getWorld();
+            World markerWorld = context.player().getEntityWorld();
             BlockState blockState = markerWorld.getBlockState(payload.blockPos());
 
-            BlockMarker blockMarker = new BlockMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), payload.blockPos(), blockState.getBlock());
+            BlockMarker blockMarker = new BlockMarker(markerPartyMember, context.player().getEntityWorld().getRegistryKey(), payload.blockPos(), blockState.getBlock());
 
             serverMarkerManager.addMarker(party, blockMarker);
 

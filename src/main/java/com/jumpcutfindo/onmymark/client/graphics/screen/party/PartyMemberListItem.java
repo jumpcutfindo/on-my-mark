@@ -13,7 +13,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.texture.PlayerSkinProvider;
 import net.minecraft.client.util.DefaultSkinHelper;
-import net.minecraft.client.util.SkinTextures;
+import net.minecraft.entity.player.SkinTextures;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
@@ -38,9 +38,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         this.item = partyMember;
         this.index = index;
 
-        this.playerSkinTextures = MinecraftClient.getInstance()
-                .getSkinProvider()
-                .getSkinTextures(
+        this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(
                         partyMember.gameProfile()
                 );
     }
@@ -53,7 +51,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         PlayerSkinProvider playerSkinProvider = minecraftClient.getSkinProvider();
 
         CompletableFuture<Optional<SkinTextures>> completableFuture = playerSkinProvider.fetchSkinTextures(profile);
-        boolean bl = !minecraftClient.uuidEquals(profile.getId());
+        boolean bl = !minecraftClient.uuidEquals(profile.id());
         SkinTextures skinTextures = DefaultSkinHelper.getSkinTextures(profile);
 
         return () -> {
@@ -83,7 +81,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
 
         // Draw player icon
         if (this.playerSkinTextures != null) {
-            PlayerSkinDrawer.draw(context, this.playerSkinTextures.texture(), x + 11, y + 3, 12, false, false, -1);
+            PlayerSkinDrawer.draw(context, this.playerSkinTextures.body().texturePath(), x + 11, y + 3, 12, false, false, -1);
         }
 
         // Draw crown if party leader

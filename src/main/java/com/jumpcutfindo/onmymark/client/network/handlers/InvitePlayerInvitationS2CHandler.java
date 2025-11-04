@@ -14,7 +14,7 @@ public class InvitePlayerInvitationS2CHandler implements ClientPacketHandler<Inv
     @Override
     public void handle(InvitePlayerInvitationS2CPacket payload, ClientPacketContext context) {
         ClientPartyManager partyManager = context.partyManager();
-        PartyInvite<ClientPartyMember> partyInvite = payload.toPartyInvite(context.player().getWorld(), context.player());
+        PartyInvite<ClientPartyMember> partyInvite = payload.toPartyInvite(context.player().getEntityWorld(), context.player());
 
         partyManager.setPartyInvite(partyInvite);
 

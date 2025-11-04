@@ -63,7 +63,7 @@ public abstract class Marker {
     }
 
     public boolean isSameDimension(PlayerEntity player) {
-        return player.getWorld().getRegistryKey().equals(worldRegistryKey);
+        return player.getEntityWorld().getRegistryKey().equals(worldRegistryKey);
     }
 
     /**

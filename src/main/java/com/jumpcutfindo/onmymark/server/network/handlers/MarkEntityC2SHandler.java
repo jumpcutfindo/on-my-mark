@@ -28,7 +28,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
-            ServerWorld world = context.player().getWorld();
+            ServerWorld world = context.player().getEntityWorld();
 
             Entity entity = world.getEntity(payload.entityId());
 
@@ -36,7 +36,7 @@ public class MarkEntityC2SHandler implements ServerPacketHandler<MarkEntityC2SPa
                 return;
             }
 
-            EntityMarker entityMarker = new EntityMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), entity.getUuid(), entity.getName().getString(), entity.getPos());
+            EntityMarker entityMarker = new EntityMarker(markerPartyMember, context.player().getEntityWorld().getRegistryKey(), entity.getUuid(), entity.getName().getString(), entity.getEntityPos());
             serverMarkerManager.addMarker(party, entityMarker);
 
             for (ServerPartyMember partyMember : party.partyMembers()) {

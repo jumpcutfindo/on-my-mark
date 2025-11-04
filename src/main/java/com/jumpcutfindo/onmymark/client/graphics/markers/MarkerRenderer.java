@@ -8,7 +8,8 @@ import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.util.SkinTextures;
+import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.entity.player.SkinTextures;
 import net.minecraft.util.Colors;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -47,9 +48,7 @@ public abstract class MarkerRenderer {
 
         this.creationTime = Instant.now();
 
-        this.playerSkinTextures = MinecraftClient.getInstance()
-                .getSkinProvider()
-                .getSkinTextures(
+        this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(
                         ((ClientPartyMember)marker.owner()).gameProfile()
                 );
     }
@@ -101,7 +100,7 @@ public abstract class MarkerRenderer {
         screenPosNormal = RenderMath.getNormalToEllipse(centerX, centerY, clampWidth / 2f, clampHeight / 2f, screenPos.x(), screenPos.y());
 
         // Calculate and store distance from player
-        this.distanceFromPlayer = this.client.player.getPos().distanceTo(this.getWorldPos());
+        this.distanceFromPlayer = this.client.player.getEntityPos().distanceTo(this.getWorldPos());
     }
 
     private void clampScreenPosToCircle(DrawContext drawContext) {
@@ -255,7 +254,7 @@ public abstract class MarkerRenderer {
         int headScreenY = (int) (screenY - headSize / 2);
 
         if (this.playerSkinTextures != null) {
-            PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures.texture(), headScreenX, headScreenY, (int) headSize, false, false, -1);
+            PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures.body().texturePath(), headScreenX, headScreenY, (int) headSize, false, false, -1);
         }
     }
 
