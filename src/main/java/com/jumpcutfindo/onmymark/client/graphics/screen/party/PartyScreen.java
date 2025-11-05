@@ -9,6 +9,7 @@ import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.Party;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
 import com.jumpcutfindo.onmymark.party.PartyMember;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
@@ -143,30 +144,30 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(Click click, boolean doubled) {
         if (isWindowOpen()) {
-            return super.mouseClicked(mouseX, mouseY, button);
+            return super.mouseClicked(click, doubled);
         }
 
-        if (isMouseInList(mouseX, mouseY)) {
-            return this.partyMemberListView.mouseClicked((int) mouseX, (int) mouseY, button);
+        if (isMouseInList(click.x(), click.y())) {
+            return this.partyMemberListView.mouseClicked((int) click.x(), (int) click.y(), click.button());
         }
 
         switch (this.state) {
             case NO_PARTY -> {
-                return this.createPartyButton.mouseClicked((int) mouseX, (int) mouseY, button);
+                return this.createPartyButton.mouseClicked((int) click.x(), (int) click.y(), click.button());
             }
             case IN_PARTY_AS_MEMBER -> {
-                return this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button)
-                        || this.selectMarkerColorButton.mouseClicked((int) mouseX, (int) mouseY, button);
+                return this.leavePartyButton.mouseClicked((int) click.x(), (int) click.y(), click.button())
+                        || this.selectMarkerColorButton.mouseClicked((int) click.x(), (int) click.y(), click.button());
             }
             case IN_PARTY_AS_LEADER -> {
-                return this.invitePlayerButton.mouseClicked((int) mouseX, (int) mouseY, button)
-                        || this.leavePartyButton.mouseClicked((int) mouseX, (int) mouseY, button)
-                        || this.selectMarkerColorButton.mouseClicked((int) mouseX, (int) mouseY, button);
+                return this.invitePlayerButton.mouseClicked((int) click.x(), (int) click.y(), click.button())
+                        || this.leavePartyButton.mouseClicked((int) click.x(), (int) click.y(), click.button())
+                        || this.selectMarkerColorButton.mouseClicked((int) click.x(), (int) click.y(), click.button());
             }
             case IN_PARTY_AS_LEADER_MEMBER_SELECTED -> {
-                return this.kickPlayerButton.mouseClicked((int) mouseX, (int) mouseY, button);
+                return this.kickPlayerButton.mouseClicked((int) click.x(), (int) click.y(), click.button());
             }
         }
 
@@ -174,13 +175,13 @@ public class PartyScreen extends OnMyMarkScreen {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+    public boolean mouseDragged(Click click, double offsetX, double offsetY) {
         if (isWindowOpen()) {
-            return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+            return super.mouseDragged(click, offsetX, offsetY);
         }
 
-        if (isMouseInList(mouseX, mouseY)) {
-            return this.partyMemberListView.mouseDragged((int) mouseX, (int) mouseY, button, deltaX, deltaY);
+        if (isMouseInList(click.x(), click.y())) {
+            return this.partyMemberListView.mouseDragged((int) click.x(), (int) click.y(), click.button(), offsetX, offsetY);
         }
 
         return false;

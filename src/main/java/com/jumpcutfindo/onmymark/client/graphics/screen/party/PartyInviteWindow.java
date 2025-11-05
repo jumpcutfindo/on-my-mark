@@ -8,13 +8,13 @@ import com.jumpcutfindo.onmymark.client.graphics.screen.components.OnMyMarkButto
 import com.jumpcutfindo.onmymark.client.network.ClientNetworkSender;
 import com.jumpcutfindo.onmymark.client.party.ClientPartyMember;
 import com.jumpcutfindo.onmymark.party.PartyInvite;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.util.SkinTextures;
+import net.minecraft.client.util.DefaultSkinHelper;
+import net.minecraft.entity.player.SkinTextures;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
@@ -50,9 +50,7 @@ public class PartyInviteWindow extends OnMyMarkWindow {
             this.screen.setActiveWindow(null);
         });
 
-        this.inviterSkinTextures = MinecraftClient.getInstance()
-                .getSkinProvider()
-                .getSkinTextures(
+        this.inviterSkinTextures = DefaultSkinHelper.getSkinTextures(
                         partyInvite.from().gameProfile()
                 );
     }
@@ -70,7 +68,7 @@ public class PartyInviteWindow extends OnMyMarkWindow {
         context.getMatrices().pushMatrix();
         context.getMatrices().scale(2F, 2F);
 
-        PlayerSkinDrawer.draw(context, this.inviterSkinTextures.texture(), (x + (WINDOW_WIDTH - 24) / 2) / 2, (y + 10) / 2, 12, false, false, -1);
+        PlayerSkinDrawer.draw(context, this.inviterSkinTextures.body().texturePath(), (x + (WINDOW_WIDTH - 24) / 2) / 2, (y + 10) / 2, 12, false, false, -1);
         context.getMatrices().popMatrix();
 
         Text inviterName = Text.literal(this.partyInvite.from().displayName()).styled(style -> style.withBold(true));

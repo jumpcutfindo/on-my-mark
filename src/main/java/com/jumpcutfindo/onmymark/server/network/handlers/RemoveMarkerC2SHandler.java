@@ -24,7 +24,7 @@ public class RemoveMarkerC2SHandler implements ServerPacketHandler<RemoveMarkerC
         try {
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
 
-            ServerWorld world = context.player().getWorld();
+            ServerWorld world = context.player().getEntityWorld();
             PlayerEntity markerPlayer = world.getPlayerByUuid(payload.markerPlayerId());
 
             for (ServerPartyMember partyMember : party.partyMembers()) {

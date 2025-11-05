@@ -80,6 +80,8 @@
   "text.config.onmymark.option.ovalClampPadding.tooltip": "Determines how padded you prefer the oval clamp to be.\nA larger value will cause the oval to be smaller in size, and vice versa.",
   "text.config.onmymark.option.playerMarkerLifetimeSecs": "Block marker timeout (s)",
   "text.config.onmymark.option.playerMarkerLifetimeSecs.tooltip": "Determines how long the player's marker will stay on your screen (when a player reports in), in seconds.\nThis value is overriden by the server.",
+  "text.config.onmymark.option.enableReportingMessages": "Enable player reporting in messages",
+  "text.config.onmymark.option.enableReportingMessages.tooltip": "Determines whether player reporting in messages should be sent.\nThis value is overriden by the server.",
   "text.config.onmymark.section.markerPositionSection": "Marker Position",
   "text.config.onmymark.section.markerStyleSection": "Marker Style",
   "text.config.onmymark.section.markerLifetimeSection": "Marker Lifetime",

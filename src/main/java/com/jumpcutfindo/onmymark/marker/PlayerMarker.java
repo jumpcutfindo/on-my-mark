@@ -36,10 +36,10 @@ public class PlayerMarker extends Marker {
     @Override
     public Vec3d getExactPosition(World world) {
         if (this.player != null) {
-            this.setLastPos(player.getPos());
+            this.setLastPos(player.getEntityPos());
         }
 
-        return player != null ? player.getPos() : this.lastPos();
+        return player != null ? player.getEntityPos() : this.lastPos();
     }
 
     @Override

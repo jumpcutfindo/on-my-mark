@@ -25,19 +25,22 @@ public class PlayerReportC2SHandler implements ServerPacketHandler<PlayerReportC
             Party<ServerPartyMember> party = serverPartyManager.getPartyOfPlayer(context.player());
             ServerPartyMember markerPartyMember = serverPartyManager.getOrCreatePlayer(context.player());
 
-            PlayerMarker playerMarker = new PlayerMarker(markerPartyMember, context.player().getWorld().getRegistryKey(), context.player().getUuid(), context.player().getDisplayName().getString(), context.player().getPos());
+            PlayerMarker playerMarker = new PlayerMarker(markerPartyMember, context.player().getEntityWorld().getRegistryKey(), context.player().getUuid(), context.player().getDisplayName().getString(), context.player().getEntityPos());
             serverMarkerManager.addMarker(party, playerMarker);
 
             for (ServerPartyMember partyMember : party.partyMembers()) {
                 ServerNetworkSender.sendPlayerMarker(partyMember.player(), markerPartyMember, playerMarker);
-                ServerNetworkSender.sendMessageToPlayer(
-                        partyMember.player(),
-                        Text.translatable(
-                                "text.action.onmymark.playerReport.playerLocation",
-                                markerPartyMember.displayName(),
-                                StringUtils.coordinatesAsFancyText(context.player().getX(), context.player().getY(), context.player().getZ(), markerPartyMember.color())
-                        )
-                );
+
+                if (OnMyMarkMod.CONFIG.enableReportingMessages()) {
+                    ServerNetworkSender.sendMessageToPlayer(
+                            partyMember.player(),
+                            Text.translatable(
+                                    "text.action.onmymark.playerReport.playerLocation",
+                                    markerPartyMember.displayName(),
+                                    StringUtils.coordinatesAsFancyText(context.player().getX(), context.player().getY(), context.player().getZ(), markerPartyMember.color())
+                            )
+                    );
+                }
             }
         } catch (PartyNotFoundException e) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidParty"));

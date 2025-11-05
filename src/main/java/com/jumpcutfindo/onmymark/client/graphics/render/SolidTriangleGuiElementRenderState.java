@@ -33,11 +33,11 @@ public record SolidTriangleGuiElementRenderState(Matrix3x2f pose,
     }
 
     @Override
-    public void setupVertices(VertexConsumer vertices, float depth) {
-        vertices.vertex(this.pose(), (float) this.x0(), (float) this.y0(), depth).color(this.argb());
-        vertices.vertex(this.pose(), (float) this.x2(), (float) this.y2(), depth).color(this.argb());
-        vertices.vertex(this.pose(), (float) this.x1(), (float) this.y1(), depth).color(this.argb());
-        vertices.vertex(this.pose(), (float) this.x1(), (float) this.y1(), depth).color(this.argb());
+    public void setupVertices(VertexConsumer vertices) {
+        vertices.vertex(this.pose(), (float) this.x0(), (float) this.y0()).color(this.argb());
+        vertices.vertex(this.pose(), (float) this.x2(), (float) this.y2()).color(this.argb());
+        vertices.vertex(this.pose(), (float) this.x1(), (float) this.y1()).color(this.argb());
+        vertices.vertex(this.pose(), (float) this.x1(), (float) this.y1()).color(this.argb());
     }
 
     @Override
