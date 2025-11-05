@@ -30,14 +30,17 @@ public class PlayerReportC2SHandler implements ServerPacketHandler<PlayerReportC
 
             for (ServerPartyMember partyMember : party.partyMembers()) {
                 ServerNetworkSender.sendPlayerMarker(partyMember.player(), markerPartyMember, playerMarker);
-                ServerNetworkSender.sendMessageToPlayer(
-                        partyMember.player(),
-                        Text.translatable(
-                                "text.action.onmymark.playerReport.playerLocation",
-                                markerPartyMember.displayName(),
-                                StringUtils.coordinatesAsFancyText(context.player().getX(), context.player().getY(), context.player().getZ(), markerPartyMember.color())
-                        )
-                );
+
+                if (OnMyMarkMod.CONFIG.enableReportingMessages()) {
+                    ServerNetworkSender.sendMessageToPlayer(
+                            partyMember.player(),
+                            Text.translatable(
+                                    "text.action.onmymark.playerReport.playerLocation",
+                                    markerPartyMember.displayName(),
+                                    StringUtils.coordinatesAsFancyText(context.player().getX(), context.player().getY(), context.player().getZ(), markerPartyMember.color())
+                            )
+                    );
+                }
             }
         } catch (PartyNotFoundException e) {
             ServerNetworkSender.sendMessageToPlayer(context.player(), Text.translatable("text.action.onmymark.exception.invalidParty"));

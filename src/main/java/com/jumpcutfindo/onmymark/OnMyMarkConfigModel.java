@@ -57,4 +57,7 @@ public class OnMyMarkConfigModel {
     @RangeConstraint(min = 1, max = 86400)
     @Sync(Option.SyncMode.OVERRIDE_CLIENT)
     public long playerMarkerLifetimeSecs = PlayerMarkerRenderer.DEFAULT_LIFETIME_SECS;
+
+    @Sync(Option.SyncMode.OVERRIDE_CLIENT)
+    public boolean enableReportingMessages = true;
 }
