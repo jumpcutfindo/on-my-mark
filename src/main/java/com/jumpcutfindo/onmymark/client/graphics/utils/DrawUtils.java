@@ -26,6 +26,8 @@ public class DrawUtils {
         if (OnMyMarkMod.CONFIG.isIconTileVisible()) {
             drawContext.fill(x - 1, y - 1, x + 17, y + 17, backgroundColor);
             drawContext.drawStrokedRectangle(x - 1, y - 1, 18, 18, borderColor);
+
+            drawContext.drawDeferredElements();
         }
 
         // Draw item normally
