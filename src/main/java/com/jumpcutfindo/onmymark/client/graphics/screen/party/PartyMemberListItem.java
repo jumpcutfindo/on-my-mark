@@ -28,7 +28,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
     private static final int TEXTURE_WIDTH = 256;
     private static final int TEXTURE_HEIGHT = 256;
 
-    private final SkinTextures playerSkinTextures;
+    private final Supplier<SkinTextures> playerSkinTexturesSupplier;
 
     public PartyMemberListItem(OnMyMarkScreen screen, ClientPartyMember partyMember, int index) {
         super(screen, partyMember, index);
@@ -38,9 +38,7 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         this.item = partyMember;
         this.index = index;
 
-        this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(
-                        partyMember.gameProfile()
-                );
+        this.playerSkinTexturesSupplier = MinecraftClient.getInstance().getSkinProvider().supplySkinTextures(partyMember.gameProfile(), false);
     }
 
     /**
@@ -80,8 +78,9 @@ public class PartyMemberListItem extends ListItem<ClientPartyMember> {
         context.fill(x + 4, y + 4, x + 7, y + 14, markerColor);
 
         // Draw player icon
-        if (this.playerSkinTextures != null) {
-            PlayerSkinDrawer.draw(context, this.playerSkinTextures.body().texturePath(), x + 11, y + 3, 12, false, false, -1);
+        if (this.playerSkinTexturesSupplier != null) {
+            SkinTextures playerSkinTextures = this.playerSkinTexturesSupplier.get();
+            PlayerSkinDrawer.draw(context, playerSkinTextures.body().texturePath(), x + 11, y + 3, 12, false, false, -1);
         }
 
         // Draw crown if party leader

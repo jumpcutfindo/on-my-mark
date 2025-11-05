@@ -8,7 +8,6 @@ import com.jumpcutfindo.onmymark.marker.Marker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.entity.player.SkinTextures;
 import net.minecraft.util.Colors;
 import net.minecraft.util.math.ColorHelper;
@@ -18,6 +17,7 @@ import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import java.time.Instant;
+import java.util.function.Supplier;
 
 public abstract class MarkerRenderer {
     public static final int DEFAULT_POINTER_WIDTH = 6, DEFAULT_POINTER_HEIGHT = 6;
@@ -35,7 +35,7 @@ public abstract class MarkerRenderer {
     private boolean isClamped;
     private float clampWidth, clampHeight;
 
-    private final SkinTextures playerSkinTextures;
+    private final Supplier<SkinTextures> playerSkinTexturesSupplier;
 
     protected MarkerRenderer(MinecraftClient client, Marker marker, PointerShape pointerShape) {
         this.client = client;
@@ -48,9 +48,9 @@ public abstract class MarkerRenderer {
 
         this.creationTime = Instant.now();
 
-        this.playerSkinTextures = DefaultSkinHelper.getSkinTextures(
-                        ((ClientPartyMember)marker.owner()).gameProfile()
-                );
+        this.playerSkinTexturesSupplier = client.getSkinProvider().supplySkinTextures(
+                ((ClientPartyMember) marker.owner()).gameProfile(), false
+        );
     }
 
     public Vector4f screenPos() {
@@ -253,8 +253,9 @@ public abstract class MarkerRenderer {
         int headScreenX = (int) (screenX - headSize);
         int headScreenY = (int) (screenY - headSize / 2);
 
-        if (this.playerSkinTextures != null) {
-            PlayerSkinDrawer.draw(drawContext, this.playerSkinTextures.body().texturePath(), headScreenX, headScreenY, (int) headSize, false, false, -1);
+        if (this.playerSkinTexturesSupplier != null) {
+            SkinTextures playerSkinTextures = this.playerSkinTexturesSupplier.get();
+            PlayerSkinDrawer.draw(drawContext, playerSkinTextures.body().texturePath(), headScreenX, headScreenY, (int) headSize, false, false, -1);
         }
     }
 
